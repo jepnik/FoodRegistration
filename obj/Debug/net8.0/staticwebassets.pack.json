@@ -13,6 +13,14 @@
       "PackagePath": "staticwebassets\\favicon.ico"
     },
     {
+      "Id": "C:\\Users\\tine_\\OneDrive\\Skrivebord\\ITPE-Eksamen\\FoodRegistration\\wwwroot\\images\\biff.jpg",
+      "PackagePath": "staticwebassets\\images\\biff.jpg"
+    },
+    {
+      "Id": "C:\\Users\\tine_\\OneDrive\\Skrivebord\\ITPE-Eksamen\\FoodRegistration\\wwwroot\\images\\potet_.jpg",
+      "PackagePath": "staticwebassets\\images\\potet_.jpg"
+    },
+    {
       "Id": "C:\\Users\\tine_\\OneDrive\\Skrivebord\\ITPE-Eksamen\\FoodRegistration\\wwwroot\\js\\site.js",
       "PackagePath": "staticwebassets\\js\\site.js"
     },

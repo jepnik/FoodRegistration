@@ -18,6 +18,10 @@ build_property.GenerateRazorMetadataSourceChecksumAttributes =
 build_property.MSBuildProjectDirectory = C:\Users\tine_\OneDrive\Skrivebord\ITPE-Eksamen\FoodRegistration
 build_property._RazorSourceGeneratorDebug = 
 
+[C:/Users/tine_/OneDrive/Skrivebord/ITPE-Eksamen/FoodRegistration/Views/Home/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxEZXRhaWxzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/tine_/OneDrive/Skrivebord/ITPE-Eksamen/FoodRegistration/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 

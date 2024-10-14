@@ -1,0 +1,14 @@
+@model FoodRegistration.Models.Item
+
+<h3 class="my-5">
+    @Model.Name
+</h3>
+
+<div class="row gx-5">
+    <img alt="@Model.Name" src="@Model.ImageUrl" class="img-fluid col-5" />
+    <div class="col-7">
+        <h5>@Model.Category</h5>
+        <h3 class="pull-right">@Model.ItemId</h3>
+        <p><a href="/Home/Index">Back to Index View</a></p>
+        </div>
+</div>
