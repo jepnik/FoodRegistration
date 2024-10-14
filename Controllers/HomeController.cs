@@ -11,32 +11,34 @@ using FoodRegistration.ViewModels; */
 namespace FoodRegistration.Controllers
 {
     public class HomeController : Controller
-        {
+    {
 
-                public IActionResult Index()
+        private readonly ItemDbContext _itemDbContext; // Legger til ItemDbContext
+
+        // Konstruktør for avhengighetsinjeksjon
+        public HomeController(ItemDbContext itemDbContext)
         {
-            var items = GetItems();
+            _itemDbContext = itemDbContext;
+        }
+
+         public IActionResult Index()
+        {
+            // Hent alle varer fra databasen
+            var items = _itemDbContext.Items.ToList();
             ViewBag.CurrentViewName = "";
             return View(items);
         }
-
-  
-     /*    public IActionResult Grid()
+     
+     public IActionResult Details(int id)
         {
-            var items = GetItems();
-            var itemsViewModel = new ItemsViewModel(items, "Grid"); // Create ViewModel for the Grid view
-            return View(itemsViewModel); // Return the ViewModel
-        } */
-
-        public IActionResult Details(int id)
-        {
-            var items = GetItems(); // Fetch items
-            var item = items.FirstOrDefault(i => i.ItemId == id); // Find the item by ID
+            // Hent alle varer fra databasen
+            var items = _itemDbContext.Items.ToList();
+            var item = items.FirstOrDefault(i => i.ItemId == id); // Finn varen med ID
 
             if (item == null)
-                return NotFound(); // Return Not Found if the item does not exist
+                return NotFound(); // Returner Not Found hvis varen ikke finnes
 
-            return View(item); // Return the found item to the Details view
+            return View(item); // Returner den funne varen til Details-vyn
         }
 
 
@@ -72,5 +74,23 @@ namespace FoodRegistration.Controllers
 
             return items; // Returnerer listen
         }
+
+           [HttpGet]
+    public IActionResult Create()
+    {
+        return View();
+    }
+
+    [HttpPost]
+    public IActionResult Create(Item item)
+    {
+        if (ModelState.IsValid)
+        {
+            _itemDbContext.Items.Add(item);
+            _itemDbContext.SaveChanges();
+            return RedirectToAction(nameof(Index));
+        }
+        return View(item);
+    }
     }
 }
