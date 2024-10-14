@@ -1,0 +1,72 @@
+@model FoodTracking.Models.Item
+
+
+<h2>Create New Item</h2>
+
+<form asp-action="Create">
+    <!-- ID for produktet -->
+    <div class="form-group">
+        <label asp-for="ItemId">ID number</label><span class="text-danger">*</span>
+        <input asp-for="ItemId" class="form-control" />
+        <span asp-validation-for="ItemId" class="text-danger"></span>
+    </div>
+
+    <!-- Navn på produktet -->
+    <div class="form-group">
+        <label asp-for="Name">Name</label><span class="text-danger">*</span>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+    <!-- Kategori -->
+    <div class="form-group">
+        <label asp-for="Category">Category</label><span class="text-danger">*</span>
+        <input asp-for="Category" class="form-control" />
+        <span asp-validation-for="Category" class="text-danger"></span>
+    </div>
+
+    <!-- Sertifikat -->
+    <div class="form-group">
+        <label asp-for="Sertifikat"></label>
+        <input asp-for="Sertifikat" class="form-control" />
+        <span asp-validation-for="Sertifikat" class="text-danger"></span>
+    </div>
+
+    <!-- Image URL -->
+    <div class="form-group">
+        <label asp-for="ImageUrl">Bilde linke</label>
+        <input asp-for="ImageUrl" class="form-control" />
+        <span asp-validation-for="ImageUrl" class="text-danger"></span>
+    </div>
+
+    <!-- Ernæringsverdier -->
+   @*  <h3>Nutrition Information</h3>
+
+    <div class="form-group">
+        <label asp-for="Calories"></label><span class="text-danger">*</span>
+        <input asp-for="Calories" class="form-control" />
+        <span asp-validation-for="Calories" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Protein"></label><span class="text-danger">*</span>
+        <input asp-for="Protein" class="form-control" />
+        <span asp-validation-for="Protein" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Fat"></label><span class="text-danger">*</span>
+        <input asp-for="Fat" class="form-control" />
+        <span asp-validation-for="Fat" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Carbohydrates"></label><span class="text-danger">*</span>
+        <input asp-for="Carbohydrates" class="form-control" />
+        <span asp-validation-for="Carbohydrates" class="text-danger"></span>
+    </div>
+    *@
+
+    <button type="submit" class="btn btn-primary">Create</button>
+    <a href="Index" class="btn btn-secondary">Go back to home page</a>
+</form>
