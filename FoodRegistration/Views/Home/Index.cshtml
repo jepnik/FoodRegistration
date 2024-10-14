@@ -1,0 +1,62 @@
+﻿@model IEnumerable<FoodRegistration.Models.Item>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+
+@* Overskrift *@
+<div class="text-center">
+    <h1 class="display-4">Table over tracked food items</h1>
+</div>
+
+
+@* Table over food items alredy tracked *@
+<body>
+    <div class="container">
+        <h1>@ViewBag.CurrentViewName</h1>
+        <table class='table table-striped'>
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th>Sertifikat</th>
+                    <th>Image</th>
+                </tr>
+            </thead>
+            <tbody>
+              @if (Model != null && Model.Any())
+{  
+               @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.ItemId</td>
+                        <td>@item.Name</td>
+                        <td>@item.Category</td>
+                        <td>@item.Sertifikat</td>
+                        <td>
+                             @if (!string.IsNullOrEmpty(item.ImageUrl))
+                            {
+                                <img src="@item.ImageUrl" alt="@item.Name" style="width:50px;height:50px;"/>
+                            } 
+                        </td>
+                    </tr>
+                } 
+                }
+else
+{
+    <tr>
+        <td colspan="5" class="text-center">Ingen matvarer er registrert.</td>
+    </tr>
+}
+
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
