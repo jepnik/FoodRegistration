@@ -1,0 +1,38 @@
+@model IEnumerable<FoodTracking.Models.Item>
+
+<body>
+    <h1>Tabel over tracked food items (@ViewBag.CurrentViewName Tabel view)</h1>
+  
+    <div class="container">
+        <h1>@ViewBag.CurrentViewName</h1>
+        <table class='table table-striped'>
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th>Sertifikat</th>
+                    <th>Image</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                     @* Gjør hele tabellr ad klikkbar så du kommer til tilhørende produkt *@
+                    <tr onclick="location.href='@Url.Action("Details", "Home", new { id = item.ItemId })'" style="cursor:pointer;">
+                        <td>@item.ItemId</td>
+                        <td>@item.Name</td>
+                        <td>@item.Category</td>
+                        <td>@item.Sertifikat</td>
+                        <td>
+                            @if (!string.IsNullOrEmpty(item.ImageUrl))
+                            {
+                                <img src="@item.ImageUrl" alt="@item.Name" style="width:50px;height:50px;"/>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</body>

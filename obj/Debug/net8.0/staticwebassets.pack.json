@@ -1,0 +1,45 @@
+{
+  "Files": [
+    {
+      "Id": "C:\\Users\\tine_\\OneDrive\\Skrivebord\\Uilke versjoner av webapp eksamen\\V6.1medDatabase\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\FoodTracking.bundle.scp.css",
+      "PackagePath": "staticwebassets\\FoodTracking.bundle.scp.css"
+    },
+    {
+      "Id": "C:\\Users\\tine_\\OneDrive\\Skrivebord\\Uilke versjoner av webapp eksamen\\V6.1medDatabase\\wwwroot\\images\\biff.jpg",
+      "PackagePath": "staticwebassets\\images\\biff.jpg"
+    },
+    {
+      "Id": "C:\\Users\\tine_\\OneDrive\\Skrivebord\\Uilke versjoner av webapp eksamen\\V6.1medDatabase\\wwwroot\\images\\potet_.jpg",
+      "PackagePath": "staticwebassets\\images\\potet_.jpg"
+    },
+    {
+      "Id": "C:\\Users\\tine_\\OneDrive\\Skrivebord\\Uilke versjoner av webapp eksamen\\V6.1medDatabase\\wwwroot\\images\\profilbilde.webp",
+      "PackagePath": "staticwebassets\\images\\profilbilde.webp"
+    },
+    {
+      "Id": "C:\\Users\\tine_\\OneDrive\\Skrivebord\\Uilke versjoner av webapp eksamen\\V6.1medDatabase\\wwwroot\\js\\bootstrap.js",
+      "PackagePath": "staticwebassets\\js\\bootstrap.js"
+    },
+    {
+      "Id": "C:\\Users\\tine_\\OneDrive\\Skrivebord\\Uilke versjoner av webapp eksamen\\V6.1medDatabase\\wwwroot\\js\\jquery.min.js",
+      "PackagePath": "staticwebassets\\js\\jquery.min.js"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.FoodTracking.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.build.FoodTracking.props",
+      "PackagePath": "build\\FoodTracking.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildMultiTargeting.FoodTracking.props",
+      "PackagePath": "buildMultiTargeting\\FoodTracking.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildTransitive.FoodTracking.props",
+      "PackagePath": "buildTransitive\\FoodTracking.props"
+    }
+  ],
+  "ElementsToRemove": []
+}
