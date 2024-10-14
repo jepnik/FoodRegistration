@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 using Microsoft.AspNetCore.Mvc;
 using FoodTracking.Models; 
 using FoodTracking.ViewModels;
@@ -71,5 +72,36 @@ namespace FoodTracking.Controllers
 
             return items; // Returnerer listen
         }
+=======
+using System.Diagnostics;
+using Microsoft.AspNetCore.Mvc;
+using ITPE3200_Eksamenprosjekt_.Models;
+
+namespace ITPE3200_Eksamenprosjekt_.Controllers;
+
+public class HomeController : Controller
+{
+    private readonly ILogger<HomeController> _logger;
+
+    public HomeController(ILogger<HomeController> logger)
+    {
+        _logger = logger;
+    }
+
+    public IActionResult Index()
+    {
+        return View();
+    }
+
+    public IActionResult Privacy()
+    {
+        return View();
+    }
+
+    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+    public IActionResult Error()
+    {
+        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+>>>>>>> 46e55394175a14df6168af98e4180b03f4a309be
     }
 }

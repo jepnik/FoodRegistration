@@ -1,6 +1,7 @@
 {
   "version": 3,
   "targets": {
+<<<<<<< HEAD
     "net8.0": {
       "Microsoft.Data.Sqlite.Core/8.0.8": {
         "type": "package",
@@ -1187,10 +1188,21 @@
   },
   "packageFolders": {
     "C:\\Users\\tine_\\.nuget\\packages\\": {}
+=======
+    "net8.0": {}
+  },
+  "libraries": {},
+  "projectFileDependencyGroups": {
+    "net8.0": []
+  },
+  "packageFolders": {
+    "C:\\Users\\jomba\\.nuget\\packages\\": {}
+>>>>>>> 46e55394175a14df6168af98e4180b03f4a309be
   },
   "project": {
     "version": "1.0.0",
     "restore": {
+<<<<<<< HEAD
       "projectUniqueName": "C:\\Users\\tine_\\OneDrive\\Skrivebord\\Uilke versjoner av webapp eksamen\\V6.1medDatabase\\FoodTracking.csproj",
       "projectName": "FoodTracking",
       "projectPath": "C:\\Users\\tine_\\OneDrive\\Skrivebord\\Uilke versjoner av webapp eksamen\\V6.1medDatabase\\FoodTracking.csproj",
@@ -1199,6 +1211,16 @@
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\tine_\\AppData\\Roaming\\NuGet\\NuGet.Config"
+=======
+      "projectUniqueName": "C:\\Users\\jomba\\VSCode\\ITPE3200\\Eksamen\\ITPE3200-Eksamenprosjekt-\\ITPE3200-Eksamenprosjekt-.csproj",
+      "projectName": "ITPE3200-Eksamenprosjekt-",
+      "projectPath": "C:\\Users\\jomba\\VSCode\\ITPE3200\\Eksamen\\ITPE3200-Eksamenprosjekt-\\ITPE3200-Eksamenprosjekt-.csproj",
+      "packagesPath": "C:\\Users\\jomba\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\jomba\\VSCode\\ITPE3200\\Eksamen\\ITPE3200-Eksamenprosjekt-\\obj\\",
+      "projectStyle": "PackageReference",
+      "configFilePaths": [
+        "C:\\Users\\jomba\\AppData\\Roaming\\NuGet\\NuGet.Config"
+>>>>>>> 46e55394175a14df6168af98e4180b03f4a309be
       ],
       "originalTargetFrameworks": [
         "net8.0"
@@ -1226,12 +1248,15 @@
     "frameworks": {
       "net8.0": {
         "targetAlias": "net8.0",
+<<<<<<< HEAD
         "dependencies": {
           "Microsoft.EntityFrameworkCore.Sqlite": {
             "target": "Package",
             "version": "[8.0.8, )"
           }
         },
+=======
+>>>>>>> 46e55394175a14df6168af98e4180b03f4a309be
         "imports": [
           "net461",
           "net462",

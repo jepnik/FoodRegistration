@@ -1,5 +1,6 @@
 {
   "version": 2,
+<<<<<<< HEAD
   "dgSpecHash": "SIzAUgi5Ze8=",
   "success": true,
   "projectFilePath": "C:\\Users\\tine_\\OneDrive\\Skrivebord\\Uilke versjoner av webapp eksamen\\V6.1medDatabase\\FoodTracking.csproj",
@@ -29,5 +30,11 @@
     "C:\\Users\\tine_\\.nuget\\packages\\system.text.encodings.web\\8.0.0\\system.text.encodings.web.8.0.0.nupkg.sha512",
     "C:\\Users\\tine_\\.nuget\\packages\\system.text.json\\8.0.4\\system.text.json.8.0.4.nupkg.sha512"
   ],
+=======
+  "dgSpecHash": "n+FiYaP7fYw=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\jomba\\VSCode\\ITPE3200\\Eksamen\\ITPE3200-Eksamenprosjekt-\\ITPE3200-Eksamenprosjekt-.csproj",
+  "expectedPackageFiles": [],
+>>>>>>> 46e55394175a14df6168af98e4180b03f4a309be
   "logs": []
 }
