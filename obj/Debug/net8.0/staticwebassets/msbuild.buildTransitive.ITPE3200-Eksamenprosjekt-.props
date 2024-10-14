@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="..\buildMultiTargeting\ITPE3200-Eksamenprosjekt-.props" />
-</Project>
