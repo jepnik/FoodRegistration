@@ -8,19 +8,19 @@
     "net8.0": []
   },
   "packageFolders": {
-    "C:\\Users\\jomba\\.nuget\\packages\\": {}
+    "C:\\Users\\jepni\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\jomba\\VSCode\\ITPE3200\\Eksamen\\FoodRegistration\\FoodRegistration.csproj",
+      "projectUniqueName": "C:\\VSCode_Prosjekter\\FoodRegistration\\FoodRegistration.csproj",
       "projectName": "FoodRegistration",
-      "projectPath": "C:\\Users\\jomba\\VSCode\\ITPE3200\\Eksamen\\FoodRegistration\\FoodRegistration.csproj",
-      "packagesPath": "C:\\Users\\jomba\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\jomba\\VSCode\\ITPE3200\\Eksamen\\FoodRegistration\\obj\\",
+      "projectPath": "C:\\VSCode_Prosjekter\\FoodRegistration\\FoodRegistration.csproj",
+      "packagesPath": "C:\\Users\\jepni\\.nuget\\packages\\",
+      "outputPath": "C:\\VSCode_Prosjekter\\FoodRegistration\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\jomba\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\jepni\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
