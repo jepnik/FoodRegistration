@@ -17,6 +17,3 @@ FOODREGISTRATION/
 
 .vs/
 *.csproj.user
-obj/Debug/net8.0/apphost.exe
-obj/Debug/net8.0/FoodRegistration.assets.cache
-obj/Debug/net8.0/FoodRegistration.csproj.FileListAbsolute.txt
