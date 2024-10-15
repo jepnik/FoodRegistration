@@ -1,0 +1,15 @@
+bin/
+obj/
+APILogs/
+
+*.log
+
+*.user
+*.vs/
+
+*.exe
+*.dll
+*.pdb
+
+.vs/
+*.csproj.user
