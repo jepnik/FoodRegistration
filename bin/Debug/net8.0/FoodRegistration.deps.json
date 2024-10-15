@@ -8,6 +8,7 @@
     ".NETCoreApp,Version=v8.0": {
       "FoodRegistration/1.0.0": {
         "dependencies": {
+          "Microsoft.EntityFrameworkCore": "8.0.10",
           "Microsoft.EntityFrameworkCore.Sqlite": "8.0.10"
         },
         "runtime": {
