@@ -1029,23 +1029,24 @@
   },
   "projectFileDependencyGroups": {
     "net8.0": [
+      "Microsoft.EntityFrameworkCore >= 8.0.10",
       "Microsoft.EntityFrameworkCore.Sqlite >= 8.0.10"
     ]
   },
   "packageFolders": {
-    "C:\\Users\\hallv\\.nuget\\packages\\": {}
+    "C:\\Users\\jomba\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\documents\\Webapplikasjoner\\FoodRegistration\\FoodRegistration.csproj",
+      "projectUniqueName": "C:\\Users\\jomba\\VSCode\\ITPE3200\\Eksamen\\FoodRegistration\\FoodRegistration.csproj",
       "projectName": "FoodRegistration",
-      "projectPath": "C:\\documents\\Webapplikasjoner\\FoodRegistration\\FoodRegistration.csproj",
-      "packagesPath": "C:\\Users\\hallv\\.nuget\\packages\\",
-      "outputPath": "C:\\documents\\Webapplikasjoner\\FoodRegistration\\obj\\",
+      "projectPath": "C:\\Users\\jomba\\VSCode\\ITPE3200\\Eksamen\\FoodRegistration\\FoodRegistration.csproj",
+      "packagesPath": "C:\\Users\\jomba\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\jomba\\VSCode\\ITPE3200\\Eksamen\\FoodRegistration\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\hallv\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\jomba\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
@@ -1074,6 +1075,10 @@
       "net8.0": {
         "targetAlias": "net8.0",
         "dependencies": {
+          "Microsoft.EntityFrameworkCore": {
+            "target": "Package",
+            "version": "[8.0.10, )"
+          },
           "Microsoft.EntityFrameworkCore.Sqlite": {
             "target": "Package",
             "version": "[8.0.10, )"
