@@ -178,6 +178,7 @@ C:\documents\Webapplikasjoner\FoodRegistration\obj\Debug\net8.0\FoodRegistration
 C:\documents\Webapplikasjoner\FoodRegistration\obj\Debug\net8.0\FoodRegistration.genruntimeconfig.cache
 C:\documents\Webapplikasjoner\FoodRegistration\obj\Debug\net8.0\ref\FoodRegistration.dll
 >>>>>>> b0d5637c047c1108b8c51842a3a90b32efff9088
+<<<<<<< HEAD
 C:\Users\jomba\VSCode\ITPE3200\Eksamen\FoodRegistration\bin\Debug\net8.0\appsettings.Development.json
 C:\Users\jomba\VSCode\ITPE3200\Eksamen\FoodRegistration\bin\Debug\net8.0\appsettings.json
 C:\Users\jomba\VSCode\ITPE3200\Eksamen\FoodRegistration\bin\Debug\net8.0\net8.0\appsettings.Development.json
@@ -251,3 +252,17 @@ C:\Users\jomba\VSCode\ITPE3200\Eksamen\FoodRegistration\obj\Debug\net8.0\refint\
 C:\Users\jomba\VSCode\ITPE3200\Eksamen\FoodRegistration\obj\Debug\net8.0\FoodRegistration.pdb
 C:\Users\jomba\VSCode\ITPE3200\Eksamen\FoodRegistration\obj\Debug\net8.0\FoodRegistration.genruntimeconfig.cache
 C:\Users\jomba\VSCode\ITPE3200\Eksamen\FoodRegistration\obj\Debug\net8.0\ref\FoodRegistration.dll
+=======
+C:\VSCode_Prosjekter\FoodRegistration\obj\Debug\net8.0\FoodRegistration.csproj.AssemblyReference.cache
+C:\VSCode_Prosjekter\FoodRegistration\obj\Debug\net8.0\FoodRegistration.GeneratedMSBuildEditorConfig.editorconfig
+C:\VSCode_Prosjekter\FoodRegistration\obj\Debug\net8.0\FoodRegistration.AssemblyInfoInputs.cache
+C:\VSCode_Prosjekter\FoodRegistration\obj\Debug\net8.0\FoodRegistration.AssemblyInfo.cs
+C:\VSCode_Prosjekter\FoodRegistration\obj\Debug\net8.0\FoodRegistration.csproj.CoreCompileInputs.cache
+C:\VSCode_Prosjekter\FoodRegistration\obj\Debug\net8.0\FoodRegistration.MvcApplicationPartsAssemblyInfo.cache
+C:\VSCode_Prosjekter\FoodRegistration\obj\Debug\net8.0\FoodRegistration.RazorAssemblyInfo.cache
+C:\VSCode_Prosjekter\FoodRegistration\obj\Debug\net8.0\FoodRegistration.RazorAssemblyInfo.cs
+C:\VSCode_Prosjekter\FoodRegistration\obj\Debug\net8.0\FoodRegistration.sourcelink.json
+C:\VSCode_Prosjekter\FoodRegistration\obj\Debug\net8.0\FoodRegistration.dll
+C:\VSCode_Prosjekter\FoodRegistration\obj\Debug\net8.0\refint\FoodRegistration.dll
+C:\VSCode_Prosjekter\FoodRegistration\obj\Debug\net8.0\FoodRegistration.pdb
+>>>>>>> cad9ac243d0fab5a82e08ed519817e9cc96b12f7
