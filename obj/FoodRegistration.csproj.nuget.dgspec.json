@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\jomba\\VSCode\\ITPE3200\\Eksamen\\FoodRegistration\\FoodRegistration.csproj": {}
+    "C:\\documents\\Webapplikasjoner\\FoodRegistration\\FoodRegistration.csproj": {}
   },
   "projects": {
-    "C:\\Users\\jomba\\VSCode\\ITPE3200\\Eksamen\\FoodRegistration\\FoodRegistration.csproj": {
+    "C:\\documents\\Webapplikasjoner\\FoodRegistration\\FoodRegistration.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\jomba\\VSCode\\ITPE3200\\Eksamen\\FoodRegistration\\FoodRegistration.csproj",
+        "projectUniqueName": "C:\\documents\\Webapplikasjoner\\FoodRegistration\\FoodRegistration.csproj",
         "projectName": "FoodRegistration",
-        "projectPath": "C:\\Users\\jomba\\VSCode\\ITPE3200\\Eksamen\\FoodRegistration\\FoodRegistration.csproj",
-        "packagesPath": "C:\\Users\\jomba\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\jomba\\VSCode\\ITPE3200\\Eksamen\\FoodRegistration\\obj\\",
+        "projectPath": "C:\\documents\\Webapplikasjoner\\FoodRegistration\\FoodRegistration.csproj",
+        "packagesPath": "C:\\Users\\hallv\\.nuget\\packages\\",
+        "outputPath": "C:\\documents\\Webapplikasjoner\\FoodRegistration\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\jomba\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\hallv\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
