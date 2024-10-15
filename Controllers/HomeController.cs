@@ -1,76 +1,122 @@
 using System.Diagnostics;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using FoodRegistration.Models;
-
-
-
-//trenger vi disse:
-/* using System.Collections.Generic;
-using FoodRegistration.ViewModels; */
 
 namespace FoodRegistration.Controllers
 {
     public class HomeController : Controller
-        {
+    {
+        private readonly ItemDbContext _itemDbContext; // Dependency Injection for DbContext
+        private readonly ILogger<HomeController> _logger; // Logger for error handling
 
-                public IActionResult Index()
+        // Constructor for dependency injection
+        public HomeController(ItemDbContext itemDbContext, ILogger<HomeController> logger)
         {
-            var items = GetItems();
-            ViewBag.CurrentViewName = "";
-            return View(items);
+            _itemDbContext = itemDbContext;
+            _logger = logger;
         }
 
-  
-     /*    public IActionResult Grid()
+        public IActionResult Index()
         {
-            var items = GetItems();
-            var itemsViewModel = new ItemsViewModel(items, "Grid"); // Create ViewModel for the Grid view
-            return View(itemsViewModel); // Return the ViewModel
-        } */
+            try
+            {
+                var items = _itemDbContext.Items.ToList(); // Fetch items from DB
+                ViewBag.CurrentViewName = "Index";
+                return View(items);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while fetching items for Index.");
+                return View("Error"); // Return an Error view
+            }
+        }
 
         public IActionResult Details(int id)
         {
-            var items = GetItems(); // Fetch items
-            var item = items.FirstOrDefault(i => i.ItemId == id); // Find the item by ID
+            try
+            {
+                var item = _itemDbContext.Items.FirstOrDefault(i => i.ItemId == id);
 
-            if (item == null)
-                return NotFound(); // Return Not Found if the item does not exist
+                if (item == null)
+                {
+                    _logger.LogWarning("Item with ID {ItemId} not found.", id);
+                    return NotFound("The requested item was not found.");
+                }
 
-            return View(item); // Return the found item to the Details view
+                return View(item);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while fetching item details for ID {ItemId}.", id);
+                return View("Error"); // Return an Error view
+            }
         }
 
+        [HttpGet]
+        public IActionResult Create()
+        {
+            return View();
+        }
 
-        // Sørg for at GetItems-metoden er definert her, direkte under klassen
+        [HttpPost]
+        public IActionResult Create(Item item)
+        {
+            if (!ModelState.IsValid)
+            {
+                _logger.LogWarning("Invalid model state for item: {@Item}", item);
+                return View(item); // Re-render the form with validation messages
+            }
+
+            try
+            {
+                _itemDbContext.Items.Add(item);
+                _itemDbContext.SaveChanges();
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while creating a new item: {@Item}", item);
+                return View("Error"); // Return an Error view
+            }
+        }
+
         public List<Item> GetItems()
         {
-            var items = new List<Item>
+            try
             {
-                new Item
+                return new List<Item>
                 {
-                    ItemId = 1,
-                    Name = "Biff",
-                    Category = "Meat",
-                    Sertifikat = "Best price",
-                    ImageUrl = "/images/biff.jpg"
-                },
-                new Item
-                {
-                    ItemId = 2,
-                    Name = "Potet",
-                    Category = "Vegetables",
-                    Sertifikat = "Vegan",
-                    ImageUrl = "/images/potet_.jpg"
-                },
-                new Item
-                {
-                    ItemId = 3,
-                    Name = "Rosin bolle",
-                    Category = "Bakst",
-                    Sertifikat = ""
-                }
-            };
-
-            return items; // Returnerer listen
+                    new Item
+                    {
+                        ItemId = 1,
+                        Name = "Biff",
+                        Category = "Meat",
+                        Sertifikat = "Best price",
+                        ImageUrl = "/images/biff.jpg"
+                    },
+                    new Item
+                    {
+                        ItemId = 2,
+                        Name = "Potet",
+                        Category = "Vegetables",
+                        Sertifikat = "Vegan",
+                        ImageUrl = "/images/potet_.jpg"
+                    },
+                    new Item
+                    {
+                        ItemId = 3,
+                        Name = "Rosin bolle",
+                        Category = "Bakst",
+                        Sertifikat = ""
+                    }
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while generating the items list.");
+                return new List<Item>(); // Return an empty list on error
+            }
         }
     }
 }
