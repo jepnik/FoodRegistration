@@ -14,6 +14,8 @@ FOODREGISTRATION/
 *.pdb
 *.cache
 *.txt
+*.db-shm
+*.db-wal
 
 .vs/
 *.csproj.user
