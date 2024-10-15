@@ -1,6 +1,8 @@
 bin/
 obj/
 APILogs/
+net8.0/
+FOODREGISTRATION/
 
 *.log
 
