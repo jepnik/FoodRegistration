@@ -26,6 +26,10 @@ namespace FoodRegistration.Models
 		public double? Unsaturatedfat { get; set; }
 		public double Fiber { get; set; }	 
 		public double Salt { get; set; }
+
+		// Navigasjonspropertie for Productinfo (1-til-1 forhold)
+        public virtual Productinfo? Productinfo { get; set; } 
+		// Nullable for å håndtere tilfeller uten tilknyttede produktinformasjon
  
 
 

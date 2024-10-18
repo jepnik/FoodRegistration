@@ -23,6 +23,14 @@ namespace FoodRegistration.Models // Bytt ut med ditt faktiske namespaces
         [DataType(DataType.Date)]
         public DateTime UpdatedDate { get; set; }   // Oppdateringsdato
 
+        // Fremmednøkkel for å koble til Item. Kan jeg slette debbe og bare ha den under
+        //altså bare beholde int itemid get set?
+       /*  [ForeignKey("Item")] */
+        public int ItemId { get; set; } // Må tilføres
+
+        // Navigasjonspropertie til Item
+        public virtual Item? Item { get; set; } // Nullable for å håndtere tilfeller uten tilknyttede varer
+        
         public Productinfo()
         {
             CreatedDate = DateTime.Now; // Setter opprettelsesdato til nåværende tid

@@ -11,4 +11,9 @@ public class ItemDbContext : DbContext
 
 	public DbSet<Item> Items { get; set; }
 	public DbSet<Productinfo> productinfos { get; set;}
+
+	 protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        optionsBuilder.UseLazyLoadingProxies();
+    }
 }
