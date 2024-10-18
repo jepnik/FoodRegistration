@@ -15,5 +15,21 @@ namespace FoodRegistration.Models
 		public string? Category { get; set; }
 		public string? Sertifikat { get; set; }
 		public string? ImageUrl { get; set; }
+
+		// Nutritional Information
+		public double Energi { get; set; }
+		public double Carbohydrates { get; set; }
+		public double Sugar { get; set; }
+		public double Protein { get; set; }
+		public double Fat { get; set; }
+		public double? Saturatedfat { get; set; }
+		public double? Unsaturatedfat { get; set; }
+		public double Fiber { get; set; }	 
+		public double Salt { get; set; }
+ 
+
+
+
+
 	}
 }

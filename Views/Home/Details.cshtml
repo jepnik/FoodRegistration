@@ -8,7 +8,29 @@
     <img alt="@Model.Name" src="@Model.ImageUrl" class="img-fluid col-5" />
     <div class="col-7">
         <h5>@Model.Category</h5>
-        <h3 class="pull-right">@Model.ItemId</h3>
+        <h3 class="pull-right">@Model.ItemId</h3> 
         <p><a href="/Home/Index">Back to Index View</a></p>
         </div>
 </div>
+
+
+@* @if (Model.Nutrients != null) // Check if Nutrition data exists
+{
+    <h4>Nutritional Information</h4>
+    <ul>
+        <li><strong>Energi (kcal):</strong> @Model.Nutrients.Energi</li>
+        <li><strong>Fett (g):</strong> @Model.Nutrition.Fett</li>
+        <li><strong>Mettede fettsyrer (g):</strong> @Model.Nutrition.MettedeFettsyrer</li>
+        <li><strong>Umettede fettsyrer (g):</strong> @Model.Nutrition.UmettedeFettsyrer</li>
+        <li><strong>Karbohydrater (g):</strong> @Model.Nutrition.Karbohydrater</li>
+        <li><strong>Sukkerarter (g):</strong> @Model.Nutrition.Sukkerarter</li>
+        <li><strong>Kostfiber (g):</strong> @Model.Nutrition.Kostfiber</li>
+        <li><strong>Protein (g):</strong> @Model.Nutrition.Protein</li>
+        <li><strong>Salt (g):</strong> @Model.Nutrition.Salt</li>
+    </ul>
+}
+else
+{
+    <p>No nutritional information available.</p>
+}
+ *@
