@@ -1,18 +1,59 @@
 @model FoodRegistration.Models.Item
 
-<h3 class="my-5">
-    @Model.Name
-</h3>
-
-<div class="row gx-5">
-    <img alt="@Model.Name" src="@Model.ImageUrl" class="img-fluid col-5" />
-    <div class="col-7">
-        <h5>@Model.Category</h5>
-        <h3 class="pull-right">@Model.ItemId</h3> 
-        <p><a href="/Home/Index">Back to Index View</a></p>
-        </div>
+<div class="text-center my-5">
+    <h1>@Model.Name</h1>
+    <img alt="@Model.Name" src="@Model.ImageUrl" class="img-fluid" />
 </div>
 
+<h4>Nutritional Values per 100g</h4>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Property</th>
+            <th>Value</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Calories</td>
+            <td>@Model.Energi</td>
+        </tr>
+        <tr>
+            <td>Carbohydrates</td>
+            <td>@Model.Carbohydrates</td>
+        </tr>
+        <tr>
+            <td>Sugar</td>
+            <td>@Model.Sugar</td>
+        </tr>
+        <tr>
+            <td>Protein</td>
+            <td>@Model.Protein</td>
+        </tr>
+        <tr>
+            <td>Fat</td>
+            <td>@Model.Fat</td>
+        </tr>
+        <tr>
+            <td>Saturated Fat</td>
+            <td>@Model.Saturatedfat ?? 0</td> <!-- Vise 0 hvis null -->
+        </tr>
+        <tr>
+            <td>Unsaturated Fat</td>
+            <td>@Model.Unsaturatedfat ?? 0</td> <!-- Vise 0 hvis null -->
+        </tr>
+        <tr>
+            <td>Fiber</td>
+            <td>@Model.Fiber</td>
+        </tr>
+        <tr>
+            <td>Salt</td>
+            <td>@Model.Salt</td>
+        </tr>
+    </tbody>
+</table>
+
+ <p><a href="/Home/Index">Back to Index View</a></p>
 
 @* @if (Model.Nutrients != null) // Check if Nutrition data exists
 {
