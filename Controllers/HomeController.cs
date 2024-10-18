@@ -17,11 +17,11 @@ namespace FoodRegistration.Controllers
             _logger = logger;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             try
             {
-                var items = _itemDbContext.Items.ToList(); // Fetch items from DB
+                var items = await _itemDbContext.Items.ToListAsync(); // Fetch items asynchronously
                 ViewBag.CurrentViewName = "Index";
                 return View(items);
             }
@@ -32,11 +32,11 @@ namespace FoodRegistration.Controllers
             }
         }
 
-        public IActionResult Details(int id)
+        public async Task<IActionResult> Details(int id)
         {
             try
             {
-                var item = _itemDbContext.Items.FirstOrDefault(i => i.ItemId == id);
+                var item = await _itemDbContext.Items.FirstOrDefaultAsync(i => i.ItemId == id);
 
                 if (item == null)
                 {
@@ -60,7 +60,7 @@ namespace FoodRegistration.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(Item item)
+        public async Task<IActionResult> Create(Item item)
         {
             if (!ModelState.IsValid)
             {
@@ -71,7 +71,7 @@ namespace FoodRegistration.Controllers
             try
             {
                 _itemDbContext.Items.Add(item);
-                _itemDbContext.SaveChanges();
+                await _itemDbContext.SaveChangesAsync(); // Save changes asynchronously
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
@@ -81,11 +81,11 @@ namespace FoodRegistration.Controllers
             }
         }
 
-        public List<Item> GetItems()
+        public async Task<List<Item>> GetItems()
         {
             try
             {
-                return new List<Item>
+                return await Task.FromResult(new List<Item>
                 {
                     new Item
                     {
@@ -110,7 +110,7 @@ namespace FoodRegistration.Controllers
                         Category = "Bakst",
                         Sertifikat = ""
                     }
-                };
+                });
             }
             catch (Exception ex)
             {
