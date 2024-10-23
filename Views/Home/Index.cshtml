@@ -33,6 +33,7 @@
                     <th>Category</th>
                     <th>Sertifikat</th>
                     <th>Image</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -50,6 +51,10 @@
                                 <img src="@item.ImageUrl" alt="@item.Name" style="width:50px;height:50px;"/>
                             }
                         </td>
+                          <td>
+                    <a asp-action="Update" asp-route-id="@item.ItemId">Update</a>
+                    <a asp-action="Delete" asp-route-id="@item.ItemId">Delete</a>
+                </td>
                     </tr>
                 }
             </tbody>

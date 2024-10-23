@@ -81,7 +81,7 @@ namespace FoodRegistration.Controllers
             }
         }
 
-        public async Task<List<Item>> GetItems()
+   /*      public async Task<List<Item>> GetItems()
         {
             try
             {
@@ -117,6 +117,57 @@ namespace FoodRegistration.Controllers
                 _logger.LogError(ex, "An error occurred while generating the items list.");
                 return new List<Item>(); // Return an empty list on error
             }
+        } */
+                    //For å kunne slette og oppdatere
+       [HttpGet]
+  [HttpGet]
+    public IActionResult Update(int id)
+    {
+        var item = _itemDbContext.Items.Find(id);
+        if (item == null)
+        {
+            return NotFound();
         }
+        return View(item);
     }
+
+// Legg til en POST-metode for å håndtere oppdateringer
+[HttpPost]
+public IActionResult Update(Item item)
+{
+    if (ModelState.IsValid)
+    {
+        _itemDbContext.Items.Update(item);  // Oppdaterer item i databasen
+        _itemDbContext.SaveChanges();       // Lagre endringer i databasen
+        return RedirectToAction("Index");   // Tilbake til ønsket visning, som en liste
+    }
+    return View(item);  // Hvis noe går galt, last opp siden på nytt med valideringsfeil
+}
+
+
+
+              [HttpGet]
+  public IActionResult Delete(int id)
+    {
+        var item = _itemDbContext.Items.Find(id);
+        if (item == null)
+        {
+            return NotFound();
+        }
+        return View(item);
+    }
+
+ [HttpPost]
+    public IActionResult DeleteConfirmed(int id)
+    {
+        var item = _itemDbContext.Items.Find(id);
+        if (item == null)
+        {
+            return NotFound();
+        }
+        _itemDbContext.Items.Remove(item);
+        _itemDbContext.SaveChanges();
+        return RedirectToAction(nameof(Index));
+    }
+}
 }
