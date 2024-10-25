@@ -2,18 +2,20 @@ using System.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using FoodRegistration.Models;
+using FoodRegistration.DAL;
+using FoodRegistration.ViewModels;
 
 namespace FoodRegistration.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ItemDbContext _itemDbContext; // Dependency Injection for DbContext
+        private readonly IItemRepository _itemRepository; // Dependency Injection for DbContext
         private readonly ILogger<HomeController> _logger; // Logger for error handling
 
         // Constructor for dependency injection
-        public HomeController(ItemDbContext itemDbContext, ILogger<HomeController> logger)
+        public HomeController(IItemRepository itemRepository, ILogger<HomeController> logger)
         {
-            _itemDbContext = itemDbContext;
+            _itemRepository = itemRepository;
             _logger = logger;
         }
 
@@ -21,8 +23,8 @@ namespace FoodRegistration.Controllers
         {
             try
             {
-                var items = await _itemDbContext.Items.ToListAsync(); // Fetch items asynchronously
-                ViewBag.CurrentViewName = "Index";
+                var items = await _itemRepository.GetAll();
+                var itemsViewModel = new ItemsViewModel(items, "Index");
                 return View(items);
             }
             catch (Exception ex)
@@ -39,16 +41,11 @@ namespace FoodRegistration.Controllers
 
                 // Henter item inkludert relasjon til Productinfo
                // var item = await _itemDbContext.Items.FirstOrDefaultAsync(i => i.ItemId == id);
-                 var item = await _itemDbContext.Items
-                    .Include(i => i.Productinfo) // Sørger for at Productinfo er inkludert
-                    .FirstOrDefaultAsync(i => i.ItemId == id);
-
-               
-               
+                var item = await _itemRepository.GetItemById(id);
                 if (item == null)
                 {
                     _logger.LogWarning("Item with ID {ItemId} not found.", id);
-                    return NotFound("The requested item was not found.");
+                    return BadRequest("The requested item was not found.");
                 }
 
                 return View(item);
@@ -77,8 +74,7 @@ namespace FoodRegistration.Controllers
 
             try
             {
-                _itemDbContext.Items.Add(item);
-                await _itemDbContext.SaveChangesAsync(); // Save changes asynchronously
+                await _itemRepository.Create(item);
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
@@ -151,9 +147,9 @@ namespace FoodRegistration.Controllers
         } */
 
         [HttpGet]
-        public IActionResult Update(int id)
+        public async Task<IActionResult> Update(int id)
         {
-            var item = _itemDbContext.Items.Find(id);
+            var item = await _itemRepository.GetItemById(id);
             if (item == null)
             {
                 return NotFound();
@@ -162,51 +158,21 @@ namespace FoodRegistration.Controllers
         }
 
         [HttpPost]
-        public IActionResult Update(Item item)
+        public async Task<IActionResult> Update(Item item)
         {
             if (ModelState.IsValid)
             {
-                // Hent det eksisterende elementet fra databasen
-                var existingItem = _itemDbContext.Items.Include(i => i.Productinfo).FirstOrDefault(i => i.ItemId == item.ItemId);
-                
-                if (existingItem != null)
-                {
-                    // Oppdater feltene som ble endret
-                    existingItem.Name = item.Name;
-                    existingItem.Category = item.Category;
-                    existingItem.Sertifikat = item.Sertifikat;
-                    existingItem.ImageUrl = item.ImageUrl;
-                    existingItem.Energi = item.Energi;
-                    existingItem.Carbohydrates = item.Carbohydrates;
-                    existingItem.Sugar = item.Sugar;
-                    existingItem.Protein = item.Protein;
-                    existingItem.Fat = item.Fat;
-                    existingItem.Saturatedfat = item.Saturatedfat;
-                    existingItem.Unsaturatedfat = item.Unsaturatedfat;
-                    existingItem.Fiber = item.Fiber;
-                    existingItem.Salt = item.Salt;
-
-                    // Oppdater productinfo
-                    if (existingItem.Productinfo != null)
-                    {
-                        existingItem.Productinfo.CountryOfOrigin = item.Productinfo.CountryOfOrigin;
-                        existingItem.Productinfo.CountryOfProvenance = item.Productinfo.CountryOfProvenance;
-                        existingItem.Productinfo.ItemNumber = item.Productinfo.ItemNumber;
-                    }
-
-                    _itemDbContext.Items.Update(existingItem); // Oppdaterer det eksisterende elementet
-                    _itemDbContext.SaveChanges(); // Lagre endringene
-                    return RedirectToAction("Index"); // Tilbake til ønsket visning
-                }
+                await _itemRepository.Update(item);
+                return RedirectToAction(nameof(Index));
             }
             return View(item); // Hvis noe er galt, last opp skjemaet på nytt
         }
 
 
         [HttpGet]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var item = _itemDbContext.Items.Find(id);
+            var item = await _itemRepository.GetItemById(id);
             if (item == null)
             {
                 return NotFound();
@@ -215,15 +181,9 @@ namespace FoodRegistration.Controllers
         }
 
         [HttpPost]
-        public IActionResult DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var item = _itemDbContext.Items.Find(id);
-            if (item == null)
-            {
-                return NotFound();
-            }
-            _itemDbContext.Items.Remove(item);
-            _itemDbContext.SaveChanges();
+            await _itemRepository.Delete(id);
             return RedirectToAction(nameof(Index));
         }
     }

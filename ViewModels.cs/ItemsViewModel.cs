@@ -5,8 +5,8 @@ namespace FoodRegistration.ViewModels
 {
     public class ItemsViewModel
     {
-        public IEnumerable<Item> Items { get; set; } // Endret til egenskap
-        public string? CurrentViewName { get; set; } // Endret til egenskap
+        public IEnumerable<Item> Items; // Endret til egenskap
+        public string? CurrentViewName; // Endret til egenskap
 
         public ItemsViewModel(IEnumerable<Item> items, string? currentViewName)
         {

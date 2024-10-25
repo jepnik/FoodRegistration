@@ -1,4 +1,4 @@
-@model FoodRegistration.Models.Item
+@model Item
 
 
 <h2>Create New Item</h2>
@@ -6,6 +6,7 @@
 <form asp-action="Create">
     <!-- ID for produktet -->
     <div class="form-group">
+        <!-- Vi skal vel ikke legge inn itemID manuelt? -->
         <label asp-for="ItemId">ID number</label><span class="text-danger">*</span>
         <input asp-for="ItemId" class="form-control" />
         <span asp-validation-for="ItemId" class="text-danger"></span>
@@ -13,19 +14,19 @@
 
     <!-- Navn på produktet -->
     <div class="form-group">
-        <label asp-for="Name">Name</label><span class="text-danger">*</span>
+        <label asp-for="Name"></label><span class="text-danger">*</span>
         <input asp-for="Name" class="form-control" />
         <span asp-validation-for="Name" class="text-danger"></span>
     </div>
 
     <!-- Kategori -->
     <div class="form-group">
-        <label asp-for="Category">Category</label><span class="text-danger">*</span>
+        <label asp-for="Category"></label><span class="text-danger">*</span>
         <input asp-for="Category" class="form-control" />
         <span asp-validation-for="Category" class="text-danger"></span>
     </div>
 
-    <!-- Sertifikat -->
+    <!-- Sertifikat --> 
     <div class="form-group">
         <label asp-for="Sertifikat"></label>
         <input asp-for="Sertifikat" class="form-control" />
@@ -116,5 +117,5 @@
     
 @*the create button *@
     <button type="submit" class="btn btn-primary">Create</button>
-    <a href="Index" class="btn btn-secondary">Go back to home page</a>
+    <a asp-action="Index" class="btn btn-secondary">Go back to home page</a>
 </form>
