@@ -15,7 +15,7 @@ namespace FoodRegistration.Controllers
         // Constructor for dependency injection
         public HomeController(IItemRepository itemRepository, ILogger<HomeController> logger)
         {
-            _itemRepository = itemRepository ?? throw new ArgumentNullException(nameof(itemDbContext)); // Ensure the DbContext is not null
+            _itemRepository = itemRepository ?? throw new ArgumentNullException(nameof(itemRepository)); // Ensure the DbContext is not null
             _logger = logger ?? throw new ArgumentNullException(nameof(logger)); // Ensure the logger is not null
         }
 
@@ -36,31 +36,31 @@ namespace FoodRegistration.Controllers
 
         public async Task<IActionResult> Details(int id)
         {
-    // Check if the ID is valid (e.g., greater than 0)
-    if (id <= 0)
-    {
-        _logger.LogWarning("Invalid ID {ItemId} provided.", id);
-        return BadRequest("The provided ID is invalid.");
-    }
+            // Check if the ID is valid (e.g., greater than 0)
+            if (id <= 0)
+            {
+                _logger.LogWarning("Invalid ID {ItemId} provided.", id);
+                return BadRequest("The provided ID is invalid.");
+            }
 
-    try
-    {
-                var item = await _itemRepository.GetItemById(id);
+            try
+            {
+                        var item = await _itemRepository.GetItemById(id);
 
-        if (item == null)
-        {
-            _logger.LogWarning("Item with ID {ItemId} not found.", id);
-            return BadRequest("The requested item was not found.");
+                if (item == null)
+                {
+                    _logger.LogWarning("Item with ID {ItemId} not found.", id);
+                    return BadRequest("The requested item was not found.");
+                }
+
+                return View(item);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while fetching item details for ID {ItemId}.", id);
+                return View("Error"); // Return an Error view
+            }
         }
-
-        return View(item);
-    }
-    catch (Exception ex)
-    {
-        _logger.LogError(ex, "An error occurred while fetching item details for ID {ItemId}.", id);
-        return View("Error"); // Return an Error view
-    }
-}
 
         [HttpGet]
         public IActionResult Create()
