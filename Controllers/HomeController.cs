@@ -34,24 +34,31 @@ namespace FoodRegistration.Controllers
 
         public async Task<IActionResult> Details(int id)
         {
-            try
-            {
-                var item = await _itemDbContext.Items.FirstOrDefaultAsync(i => i.ItemId == id);
+    // Check if the ID is valid (e.g., greater than 0)
+    if (id <= 0)
+    {
+        _logger.LogWarning("Invalid ID {ItemId} provided.", id);
+        return BadRequest("The provided ID is invalid.");
+    }
 
-                if (item == null)
-                {
-                    _logger.LogWarning("Item with ID {ItemId} not found.", id);
-                    return NotFound("The requested item was not found.");
-                }
+    try
+    {
+        var item = await _itemDbContext.Items.FirstOrDefaultAsync(i => i.ItemId == id);
 
-                return View(item);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "An error occurred while fetching item details for ID {ItemId}.", id);
-                return View("Error"); // Return an Error view
-            }
+        if (item == null)
+        {
+            _logger.LogWarning("Item with ID {ItemId} not found.", id);
+            return NotFound("The requested item was not found.");
         }
+
+        return View(item);
+    }
+    catch (Exception ex)
+    {
+        _logger.LogError(ex, "An error occurred while fetching item details for ID {ItemId}.", id);
+        return View("Error"); // Return an Error view
+    }
+}
 
         [HttpGet]
         public IActionResult Create()
