@@ -13,8 +13,8 @@ namespace FoodRegistration.Controllers
         // Constructor for dependency injection
         public HomeController(ItemDbContext itemDbContext, ILogger<HomeController> logger)
         {
-            _itemDbContext = itemDbContext;
-            _logger = logger;
+            _itemDbContext = itemDbContext ?? throw new ArgumentNullException(nameof(itemDbContext)); // Ensure the DbContext is not null
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger)); // Ensure the logger is not null
         }
 
         public async Task<IActionResult> Index()
@@ -44,14 +44,14 @@ namespace FoodRegistration.Controllers
                     return NotFound("The requested item was not found.");
                 }
 
-        return View(item);
-    }
-    catch (Exception ex)
-    {
-        _logger.LogError(ex, "An error occurred while fetching item details for ID {ItemId}.", id);
-        return View("Error"); // Return an Error view
-    }
-}
+                return View(item);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while fetching item details for ID {ItemId}.", id);
+                return View("Error"); // Return an Error view
+            }
+        }
 
         [HttpGet]
         public IActionResult Create()
@@ -61,13 +61,13 @@ namespace FoodRegistration.Controllers
 
         [HttpPost]
         public async Task<IActionResult> Create(Item item)
-{
-    // Check if the model state is valid
-    if (!ModelState.IsValid)
-    {
-        _logger.LogWarning("Invalid model state for item: {@Item}", item);
-        return View(item); // Re-render the view with validation messages
-    }
+        {
+            // Check if the model state is valid
+            if (!ModelState.IsValid)
+            {
+                _logger.LogWarning("Invalid model state for item: {@Item}", item);
+                return View(item); // Re-render the view with validation messages
+            }
 
             try
             {
@@ -81,68 +81,6 @@ namespace FoodRegistration.Controllers
                 return View("Error"); // Return an Error view
             }
         }
-
-   /*      public async Task<List<Item>> GetItems()
-        {
-            try
-            {
-                return await Task.FromResult(new List<Item>
-                {
-                    new Item
-                    {
-                        ItemId = 1,
-                        Name = "Biff",
-                        Category = "Meat",
-                        Sertifikat = "Best price",
-                        ImageUrl = "/images/biff.jpg"
-                    },
-                    new Item
-                    {
-                        ItemId = 2,
-                        Name = "Potet",
-                        Category = "Vegetables",
-                        Sertifikat = "Vegan",
-                        ImageUrl = "/images/potet_.jpg"
-                    },
-                    new Item
-                    {
-                        ItemId = 3,
-                        Name = "Rosin bolle",
-                        Category = "Bakst",
-                        Sertifikat = ""
-                    }
-                });
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "An error occurred while generating the items list.");
-                return new List<Item>(); // Return an empty list on error
-            }
-        } */
-                    //For å kunne slette og oppdatere
-        /* [HttpGet]
-        public IActionResult Update(int id)
-        {
-            var item = _itemDbContext.Items.Find(id);
-            if (item == null)
-            {
-                return NotFound();
-            }
-            return View(item);
-        }
-
-        // Legg til en POST-metode for å håndtere oppdateringer
-        [HttpPost]
-        public IActionResult Update(Item item)
-        {
-            if (ModelState.IsValid)
-            {
-                _itemDbContext.Items.Update(item);  // Oppdaterer item i databasen
-                _itemDbContext.SaveChanges();       // Lagre endringer i databasen
-                return RedirectToAction("Index");   // Tilbake til ønsket visning, som en liste
-            }
-            return View(item);  // Hvis noe går galt, last opp siden på nytt med valideringsfeil
-        } */
 
         [HttpGet]
         public IActionResult Update(int id)
@@ -162,7 +100,7 @@ namespace FoodRegistration.Controllers
             {
                 // Hent det eksisterende elementet fra databasen
                 var existingItem = _itemDbContext.Items.Include(i => i.Productinfo).FirstOrDefault(i => i.ItemId == item.ItemId);
-                
+
                 if (existingItem != null)
                 {
                     // Oppdater feltene som ble endret
@@ -183,9 +121,9 @@ namespace FoodRegistration.Controllers
                     // Oppdater productinfo
                     if (existingItem.Productinfo != null)
                     {
-                        existingItem.Productinfo.CountryOfOrigin = item.Productinfo.CountryOfOrigin;
-                        existingItem.Productinfo.CountryOfProvenance = item.Productinfo.CountryOfProvenance;
-                        existingItem.Productinfo.ItemNumber = item.Productinfo.ItemNumber;
+                        existingItem.Productinfo.CountryOfOrigin = item.Productinfo?.CountryOfOrigin; // Use null-conditional operator
+                        existingItem.Productinfo.CountryOfProvenance = item.Productinfo?.CountryOfProvenance; // Use null-conditional operator
+                        existingItem.Productinfo.ItemNumber = item.Productinfo?.ItemNumber; // Use null-conditional operator
                     }
 
                     _itemDbContext.Items.Update(existingItem); // Oppdaterer det eksisterende elementet
@@ -195,7 +133,6 @@ namespace FoodRegistration.Controllers
             }
             return View(item); // Hvis noe er galt, last opp skjemaet på nytt
         }
-
 
         [HttpGet]
         public IActionResult Delete(int id)
