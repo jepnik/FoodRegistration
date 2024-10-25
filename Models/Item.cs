@@ -1,39 +1,56 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+
 namespace FoodRegistration.Models
 {
-	public class Item
-	{
-		public int ItemId { get; set; }
-		
-		[RegularExpression(@"[0-9a-zA-ZæøåÆØÅ. \-]{2,20}", ErrorMessage = "The Name must be numbers or letters and between 2 to 20 characters.")]
+    public class Item
+    {
+        public int ItemId { get; set; }
+
+        [Required(ErrorMessage = "Name is required.")]
+        [RegularExpression(@"^[0-9a-zA-ZæøåÆØÅ. \-]{2,30}$", ErrorMessage = "The Name must be numbers or letters and between 2 to 30 characters.")]
         [Display(Name = "Item name")]
+        public string Name { get; set; } = string.Empty;
 
-		public string Name { get; set; } = string.Empty;
-	    
-		[StringLength(50)]
-		public string? Category { get; set; }
-		public string? Sertifikat { get; set; }
-		public string? ImageUrl { get; set; }
+        [Required(ErrorMessage = "Category is required.")]
+        [StringLength(50, ErrorMessage = "Category cannot exceed 50 characters.")]
+        public string? Category { get; set; }
 
-		// Nutritional Information
-		public double Energi { get; set; }
-		public double Carbohydrates { get; set; }
-		public double Sugar { get; set; }
-		public double Protein { get; set; }
-		public double Fat { get; set; }
-		public double? Saturatedfat { get; set; }
-		public double? Unsaturatedfat { get; set; }
-		public double Fiber { get; set; }	 
-		public double Salt { get; set; }
+        [StringLength(50, ErrorMessage = "Sertifikat cannot exceed 50 characters.")]
+        public string? Sertifikat { get; set; }
 
-		// Navigasjonspropertie for Productinfo (1-til-1 forhold)
-        public virtual Productinfo? Productinfo { get; set; } 
-		// Nullable for å håndtere tilfeller uten tilknyttede produktinformasjon
- 
+        [Url(ErrorMessage = "Invalid URL format.")]
+        public string? ImageUrl { get; set; }
 
+        // Nutritional Information
+        [Range(0, double.MaxValue, ErrorMessage = "Energi must be a non-negative number.")]
+        public double Energi { get; set; }
 
+        [Range(0, double.MaxValue, ErrorMessage = "Carbohydrates must be a non-negative number.")]
+        public double Carbohydrates { get; set; }
 
+        [Range(0, double.MaxValue, ErrorMessage = "Sugar must be a non-negative number.")]
+        public double Sugar { get; set; }
 
-	}
+        [Range(0, double.MaxValue, ErrorMessage = "Protein must be a non-negative number.")]
+        public double Protein { get; set; }
+
+        [Range(0, double.MaxValue, ErrorMessage = "Fat must be a non-negative number.")]
+        public double Fat { get; set; }
+
+        [Range(0, double.MaxValue, ErrorMessage = "Saturated fat must be a non-negative number.")]
+        public double? Saturatedfat { get; set; }
+
+        [Range(0, double.MaxValue, ErrorMessage = "Unsaturated fat must be a non-negative number.")]
+        public double? Unsaturatedfat { get; set; }
+
+        [Range(0, double.MaxValue, ErrorMessage = "Fiber must be a non-negative number.")]
+        public double Fiber { get; set; }
+
+        [Range(0, double.MaxValue, ErrorMessage = "Salt must be a non-negative number.")]
+        public double Salt { get; set; }
+
+        // Navigation property for ProductInfo (1-to-1 relationship)
+        public virtual Productinfo? Productinfo { get; set; }
+    }
 }
