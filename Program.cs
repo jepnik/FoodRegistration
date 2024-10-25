@@ -26,33 +26,51 @@ app.MapControllerRoute(
 
 app.Run(); */
 
-
 using Microsoft.EntityFrameworkCore;
 using FoodRegistration.Models;
+using Serilog;
+
+// Create a logger configuration
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Information()
+    .WriteTo.Console() // Log to console
+    .WriteTo.File("logs/log.txt", rollingInterval: RollingInterval.Day) // Log to file
+    .CreateLogger();
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Use Serilog for logging
+builder.Host.UseSerilog();
+
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddDbContext<ItemDbContext>(options => {
-    options.UseSqlite(
-        builder.Configuration["ConnectionStrings:ItemDbContextConnection"]);
+// Configure the DbContext with SQLite
+builder.Services.AddDbContext<ItemDbContext>(options =>
+{
+    options.UseSqlite(builder.Configuration["ConnectionStrings:ItemDbContextConnection"]);
 });
 
 var app = builder.Build();
+
+// Log application start
+Log.Information("Application Starting...");
 
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
     DBInit.Seed(app);
 }
+else
+{
+    app.UseExceptionHandler("/Home/Error");
+    app.UseHsts();
+}
 
 app.UseStaticFiles();
 
 app.MapDefaultControllerRoute();
 
-// app.MapControllerRoute(
-//     name: "default",
-//     pattern: "{controller=Home}/{action=Index}/{id?}");
-
 app.Run();
+
+// Ensure logs are flushed at the end of the application run
+Log.CloseAndFlush();

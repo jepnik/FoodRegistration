@@ -15,8 +15,8 @@ namespace FoodRegistration.Controllers
         // Constructor for dependency injection
         public HomeController(IItemRepository itemRepository, ILogger<HomeController> logger)
         {
-            _itemRepository = itemRepository;
-            _logger = logger;
+            _itemRepository = itemRepository ?? throw new ArgumentNullException(nameof(itemDbContext)); // Ensure the DbContext is not null
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger)); // Ensure the logger is not null
         }
 
         public async Task<IActionResult> Index()
@@ -36,26 +36,31 @@ namespace FoodRegistration.Controllers
 
         public async Task<IActionResult> Details(int id)
         {
-            try
-            {
+    // Check if the ID is valid (e.g., greater than 0)
+    if (id <= 0)
+    {
+        _logger.LogWarning("Invalid ID {ItemId} provided.", id);
+        return BadRequest("The provided ID is invalid.");
+    }
 
-                // Henter item inkludert relasjon til Productinfo
-               // var item = await _itemDbContext.Items.FirstOrDefaultAsync(i => i.ItemId == id);
+    try
+    {
                 var item = await _itemRepository.GetItemById(id);
-                if (item == null)
-                {
-                    _logger.LogWarning("Item with ID {ItemId} not found.", id);
-                    return BadRequest("The requested item was not found.");
-                }
 
-                return View(item);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "An error occurred while fetching item details for ID {ItemId}.", id);
-                return View("Error"); // Return an Error view
-            }
+        if (item == null)
+        {
+            _logger.LogWarning("Item with ID {ItemId} not found.", id);
+            return BadRequest("The requested item was not found.");
         }
+
+        return View(item);
+    }
+    catch (Exception ex)
+    {
+        _logger.LogError(ex, "An error occurred while fetching item details for ID {ItemId}.", id);
+        return View("Error"); // Return an Error view
+    }
+}
 
         [HttpGet]
         public IActionResult Create()
@@ -66,10 +71,11 @@ namespace FoodRegistration.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(Item item)
         {
+            // Check if the model state is valid
             if (!ModelState.IsValid)
             {
                 _logger.LogWarning("Invalid model state for item: {@Item}", item);
-                return View(item); // Re-render the form with validation messages
+                return View(item); // Re-render the view with validation messages
             }
 
             try
@@ -83,68 +89,6 @@ namespace FoodRegistration.Controllers
                 return View("Error"); // Return an Error view
             }
         }
-
-        /*      public async Task<List<Item>> GetItems()
-        {
-            try
-            {
-                return await Task.FromResult(new List<Item>
-                {
-                    new Item
-                    {
-                        ItemId = 1,
-                        Name = "Biff",
-                        Category = "Meat",
-                        Sertifikat = "Best price",
-                        ImageUrl = "/images/biff.jpg"
-                    },
-                    new Item
-                    {
-                        ItemId = 2,
-                        Name = "Potet",
-                        Category = "Vegetables",
-                        Sertifikat = "Vegan",
-                        ImageUrl = "/images/potet_.jpg"
-                    },
-                    new Item
-                    {
-                        ItemId = 3,
-                        Name = "Rosin bolle",
-                        Category = "Bakst",
-                        Sertifikat = ""
-                    }
-                });
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "An error occurred while generating the items list.");
-                return new List<Item>(); // Return an empty list on error
-            }
-        } */
-                    //For å kunne slette og oppdatere
-        /* [HttpGet]
-        public IActionResult Update(int id)
-        {
-            var item = _itemDbContext.Items.Find(id);
-            if (item == null)
-            {
-                return NotFound();
-            }
-            return View(item);
-        }
-
-        // Legg til en POST-metode for å håndtere oppdateringer
-        [HttpPost]
-        public IActionResult Update(Item item)
-        {
-            if (ModelState.IsValid)
-            {
-                _itemDbContext.Items.Update(item);  // Oppdaterer item i databasen
-                _itemDbContext.SaveChanges();       // Lagre endringer i databasen
-                return RedirectToAction("Index");   // Tilbake til ønsket visning, som en liste
-            }
-            return View(item);  // Hvis noe går galt, last opp siden på nytt med valideringsfeil
-        } */
 
         [HttpGet]
         public async Task<IActionResult> Update(int id)
@@ -167,7 +111,6 @@ namespace FoodRegistration.Controllers
             }
             return View(item); // Hvis noe er galt, last opp skjemaet på nytt
         }
-
 
         [HttpGet]
         public async Task<IActionResult> Delete(int id)

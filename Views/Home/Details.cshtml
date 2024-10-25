@@ -219,7 +219,7 @@ else
 
  @model Item
 
-<!-- Topp-seksjonen med produktnavn og bilde -->
+@* <!-- Topp-seksjonen med produktnavn og bilde -->
 <div class="text-center my-5">
     <h1>@Model.Name</h1>
     <img alt="@Model.Name" src="@Model.ImageUrl" class="img-fluid" style="max-width: 300px;" />
@@ -231,7 +231,23 @@ else
         <div class="table-responsive" style="margin-right: 30px;">
             <h4>Nutritional Values per 100g</h4>
             <table class="table" style="width: auto;">
-                <thead>
+                <thead> *@
+                <!-- Topp-seksjonen med produktnavn og bilde -->
+<div class="text-center my-5">
+    <h1>@Model.Name</h1>
+    <img alt="@Model.Name" src="@Model.ImageUrl" class="img-fluid" style="max-width: 200px;" /> <!-- Gjør bildet mindre -->
+</div>
+
+
+
+<div class="container">
+    <div class="row">
+        <!-- Nutritional Values per 100g - venstre kolonne -->
+        <div class="col-md-5" style="margin-right: 90px;"> <!-- Legger til høyre-margin -->
+            <h4>Nutritional Values per 100g</h4>
+            
+            <table class="table">
+                 <thead>
                     <tr>
                         <th>Property</th>
                         <th>Value</th>
@@ -278,9 +294,15 @@ else
             </table>
         </div>
 
-        <!-- Product Information - høyre tabell -->
+       @*  <!-- Product Information - høyre tabell -->
         <div class="table-responsive">
             <h4>Product Information</h4>
+            <table class="table">
+                <thead> *@
+                 <!-- Product Information - høyre kolonne -->
+        <div class="col-md-5"> <!-- Reduserer bredde litt for å gi mer plass til mellomrom -->
+            <h4>Product Information</h4>
+           
             <table class="table">
                 <thead>
                     <tr>
