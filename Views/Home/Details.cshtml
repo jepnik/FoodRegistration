@@ -1,8 +1,8 @@
-@model FoodRegistration.Models.Item
+@* @model FoodRegistration.Models.Item
 
 <div class="text-center my-5">
     <h1>@Model.Name</h1>
-    <img alt="@Model.Name" src="@Model.ImageUrl" class="img-fluid" />
+     <img alt="@Model.Name" src="@Model.ImageUrl" class="img-fluid" style="max-width: 300px;" style="max-lenght:300px;" 
 </div>
 
 <h4>Nutritional Values per 100g</h4>
@@ -36,11 +36,11 @@
         </tr>
         <tr>
             <td>Saturated Fat</td>
-            <td>@Model.Saturatedfat ?? 0</td> <!-- Vise 0 hvis null -->
+            <td>@Model.Saturatedfat </td> <!-- Vise 0 hvis null -->
         </tr>
         <tr>
             <td>Unsaturated Fat</td>
-            <td>@Model.Unsaturatedfat ?? 0</td> <!-- Vise 0 hvis null -->
+            <td>@Model.Unsaturatedfat </td> <!-- Vise 0 hvis null -->
         </tr>
         <tr>
             <td>Fiber</td>
@@ -53,7 +53,41 @@
     </tbody>
 </table>
 
- <p><a href="/Home/Index">Back to Index View</a></p>
+
+<!-- Tabell for produktinformasjon -->
+<h4>Product Information</h4>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Property</th>
+            <th>Value</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Country of Origin</td>
+            <td>@Model.Productinfo.CountryOfOrigin</td>
+        </tr>
+        <tr>
+            <td>Country of Provenance</td>
+            <td>@Model.Productinfo.CountryOfProvenance</td>
+        </tr>
+        <tr>
+            <td>Item Number</td>
+            <td>@Model.Productinfo.ItemNumber</td>
+        </tr>
+        <tr>
+            <td>Created Date</td>
+            <td>@Model.Productinfo.CreatedDate.ToString("yyyy-MM-dd")</td> <!-- Formater datoen -->
+        </tr>
+        <tr>
+            <td>Updated Date</td>
+            <td>@Model.Productinfo.UpdatedDate.ToString("yyyy-MM-dd")</td> <!-- Formater datoen -->
+        </tr>
+    </tbody>
+</table>
+
+<a asp-action="Index" class="btn btn-secondary">Back to main page</a>
 
 @* @if (Model.Nutrients != null) // Check if Nutrition data exists
 {
@@ -75,3 +109,232 @@ else
     <p>No nutritional information available.</p>
 }
  *@
+
+@* @model FoodRegistration.Models.Item
+
+<!-- Topp-seksjonen med produktnavn og bilde -->
+<div class="text-center my-5">
+    <h1>@Model.Name</h1>
+    <img alt="@Model.Name" src="@Model.ImageUrl" class="img-fluid" style="max-width: 200px;" /> <!-- Gjør bildet mindre -->
+</div>
+
+
+
+<div class="container">
+    <div class="row">
+        <!-- Nutritional Values per 100g - venstre kolonne -->
+        <div class="col-md-5" style="margin-right: 90px;"> <!-- Legger til høyre-margin -->
+            <h4>Nutritional Values per 100g</h4>
+            
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Property</th>
+                        <th>Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Calories</td>
+                        <td>@Model.Energi</td>
+                    </tr>
+                    <tr>
+                        <td>Carbohydrates</td>
+                        <td>@Model.Carbohydrates</td>
+                    </tr>
+                    <tr>
+                        <td>Sugar</td>
+                        <td>@Model.Sugar</td>
+                    </tr>
+                    <tr>
+                        <td>Protein</td>
+                        <td>@Model.Protein</td>
+                    </tr>
+                    <tr>
+                        <td>Fat</td>
+                        <td>@Model.Fat</td>
+                    </tr>
+                    <tr>
+                        <td>Saturated Fat</td>
+                        <td>@Model.Saturatedfat </td> <!-- Vise 0 hvis null -->
+                    </tr>
+                    <tr>
+                        <td>Unsaturated Fat</td>
+                        <td>@Model.Unsaturatedfat </td> <!-- Vise 0 hvis null -->
+                    </tr>
+                    <tr>
+                        <td>Fiber</td>
+                        <td>@Model.Fiber</td>
+                    </tr>
+                    <tr>
+                        <td>Salt</td>
+                        <td>@Model.Salt</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Product Information - høyre kolonne -->
+        <div class="col-md-5"> <!-- Reduserer bredde litt for å gi mer plass til mellomrom -->
+            <h4>Product Information</h4>
+           
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Property</th>
+                        <th>Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Country of Origin</td>
+                        <td>@Model.Productinfo.CountryOfOrigin</td>
+                    </tr>
+                    <tr>
+                        <td>Country of Provenance</td>
+                        <td>@Model.Productinfo.CountryOfProvenance</td>
+                    </tr>
+                    <tr>
+                        <td>Item Number</td>
+                        <td>@Model.Productinfo.ItemNumber</td>
+                    </tr>
+                    <tr>
+                        <td>Created Date</td>
+                        <td>@Model.Productinfo.CreatedDate.ToString("yyyy-MM-dd")</td> <!-- Formater datoen -->
+                    </tr>
+                    <tr>
+                        <td>Updated Date</td>
+                        <td>@Model.Productinfo.UpdatedDate.ToString("yyyy-MM-dd")</td> <!-- Formater datoen -->
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<a asp-action="Index" class="btn btn-secondary mt-4">Back to main page</a>
+ 
+
+ *@
+
+ @model FoodRegistration.Models.Item
+
+@* <!-- Topp-seksjonen med produktnavn og bilde -->
+<div class="text-center my-5">
+    <h1>@Model.Name</h1>
+    <img alt="@Model.Name" src="@Model.ImageUrl" class="img-fluid" style="max-width: 300px;" />
+</div>
+
+<div class="container">
+    <div class="d-flex justify-content-between">
+        <!-- Nutritional Values per 100g - venstre tabell -->
+        <div class="table-responsive" style="margin-right: 30px;">
+            <h4>Nutritional Values per 100g</h4>
+            <table class="table" style="width: auto;">
+                <thead> *@
+                <!-- Topp-seksjonen med produktnavn og bilde -->
+<div class="text-center my-5">
+    <h1>@Model.Name</h1>
+    <img alt="@Model.Name" src="@Model.ImageUrl" class="img-fluid" style="max-width: 200px;" /> <!-- Gjør bildet mindre -->
+</div>
+
+
+
+<div class="container">
+    <div class="row">
+        <!-- Nutritional Values per 100g - venstre kolonne -->
+        <div class="col-md-5" style="margin-right: 90px;"> <!-- Legger til høyre-margin -->
+            <h4>Nutritional Values per 100g</h4>
+            
+            <table class="table">
+                 <thead>
+                    <tr>
+                        <th>Property</th>
+                        <th>Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Calories</td>
+                        <td>@Model.Energi</td>
+                    </tr>
+                    <tr>
+                        <td>Carbohydrates</td>
+                        <td>@Model.Carbohydrates</td>
+                    </tr>
+                    <tr>
+                        <td>Sugar</td>
+                        <td>@Model.Sugar</td>
+                    </tr>
+                    <tr>
+                        <td>Protein</td>
+                        <td>@Model.Protein</td>
+                    </tr>
+                    <tr>
+                        <td>Fat</td>
+                        <td>@Model.Fat</td>
+                    </tr>
+                    <tr>
+                        <td>Saturated Fat</td>
+                        <td>@Model.Saturatedfat</td>
+                    </tr>
+                    <tr>
+                        <td>Unsaturated Fat</td>
+                        <td>@Model.Unsaturatedfat</td>
+                    </tr>
+                    <tr>
+                        <td>Fiber</td>
+                        <td>@Model.Fiber</td>
+                    </tr>
+                    <tr>
+                        <td>Salt</td>
+                        <td>@Model.Salt</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+       @*  <!-- Product Information - høyre tabell -->
+        <div class="table-responsive">
+            <h4>Product Information</h4>
+            <table class="table">
+                <thead> *@
+                 <!-- Product Information - høyre kolonne -->
+        <div class="col-md-5"> <!-- Reduserer bredde litt for å gi mer plass til mellomrom -->
+            <h4>Product Information</h4>
+           
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Property</th>
+                        <th>Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Country of Origin</td>
+                        <td>@Model.Productinfo?.CountryOfOrigin "Not available"</td> <!-- Sjekk for null -->
+                    </tr>
+                    <tr>
+                        <td>Country of Provenance</td>
+                        <td>@Model.Productinfo?.CountryOfProvenance "Not available"</td> <!-- Sjekk for null -->
+                    </tr>
+                    <tr>
+                        <td>Item Number</td>
+                        <td>@Model.Productinfo?.ItemNumber "Not available"</td> <!-- Sjekk for null -->
+                    </tr>
+                    <tr>
+                        <td>Created Date</td>
+                        <td>@Model.Productinfo?.CreatedDate.ToString("yyyy-MM-dd") "Not available"</td> <!-- Sjekk for null -->
+                    </tr>
+                    <tr>
+                        <td>Updated Date</td>
+                        <td>@Model.Productinfo?.UpdatedDate.ToString("yyyy-MM-dd") "Not available"</td> <!-- Sjekk for null -->
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<a asp-action="Index" class="btn btn-secondary mt-4">Back to main page</a>
