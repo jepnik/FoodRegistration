@@ -34,24 +34,30 @@ namespace FoodRegistration.Controllers
 
         public async Task<IActionResult> Details(int id)
         {
-            try
-            {
-                var item = await _itemDbContext.Items.FirstOrDefaultAsync(i => i.ItemId == id);
+    // Check for invalid ID
+    if (id <= 0)
+    {
+        return BadRequest("Invalid ID.");
+    }
 
-                if (item == null)
-                {
-                    _logger.LogWarning("Item with ID {ItemId} not found.", id);
-                    return NotFound("The requested item was not found.");
-                }
+    try
+    {
+        var item = await _itemDbContext.Items.FirstOrDefaultAsync(i => i.ItemId == id);
 
-                return View(item);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "An error occurred while fetching item details for ID {ItemId}.", id);
-                return View("Error"); // Return an Error view
-            }
+        if (item == null)
+        {
+            _logger.LogWarning("Item with ID {ItemId} not found.", id);
+            return NotFound("The requested item was not found.");
         }
+
+        return View(item);
+    }
+    catch (Exception ex)
+    {
+        _logger.LogError(ex, "An error occurred while fetching item details for ID {ItemId}.", id);
+        return View("Error"); // Return an Error view
+    }
+}
 
         [HttpGet]
         public IActionResult Create()
@@ -61,26 +67,34 @@ namespace FoodRegistration.Controllers
 
         [HttpPost]
         public async Task<IActionResult> Create(Item item)
-        {
-            if (!ModelState.IsValid)
-            {
-                _logger.LogWarning("Invalid model state for item: {@Item}", item);
-                return View(item); // Re-render the form with validation messages
-            }
+{
+    // Check if the model state is valid
+    if (!ModelState.IsValid)
+    {
+        _logger.LogWarning("Invalid model state for item: {@Item}", item);
+        return View(item); // Re-render the view with validation messages
+    }
 
-            try
-            {
-                _itemDbContext.Items.Add(item);
-                await _itemDbContext.SaveChangesAsync(); // Save changes asynchronously
-                return RedirectToAction(nameof(Index));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "An error occurred while creating a new item: {@Item}", item);
-                return View("Error"); // Return an Error view
-            }
-        }
-
+    try
+    {
+        // Add the item to the database context
+        _itemDbContext.Items.Add(item);
+        
+        // Save changes asynchronously
+        await _itemDbContext.SaveChangesAsync();
+        
+        // Redirect to the Index action upon successful creation
+        return RedirectToAction(nameof(Index));
+    }
+    catch (Exception ex)
+    {
+        // Log the exception
+        _logger.LogError(ex, "An error occurred while creating a new item: {@Item}", item);
+        
+        // Return an error view
+        return View("Error");
+    }
+}
    /*      public async Task<List<Item>> GetItems()
         {
             try
