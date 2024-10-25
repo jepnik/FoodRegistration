@@ -36,8 +36,15 @@ namespace FoodRegistration.Controllers
         {
             try
             {
-                var item = await _itemDbContext.Items.FirstOrDefaultAsync(i => i.ItemId == id);
 
+                // Henter item inkludert relasjon til Productinfo
+               // var item = await _itemDbContext.Items.FirstOrDefaultAsync(i => i.ItemId == id);
+                 var item = await _itemDbContext.Items
+                    .Include(i => i.Productinfo) // Sørger for at Productinfo er inkludert
+                    .FirstOrDefaultAsync(i => i.ItemId == id);
+
+               
+               
                 if (item == null)
                 {
                     _logger.LogWarning("Item with ID {ItemId} not found.", id);
@@ -119,8 +126,7 @@ namespace FoodRegistration.Controllers
             }
         } */
                     //For å kunne slette og oppdatere
-       [HttpGet]
-  [HttpGet]
+  /* [HttpGet]
     public IActionResult Update(int id)
     {
         var item = _itemDbContext.Items.Find(id);
@@ -142,8 +148,60 @@ public IActionResult Update(Item item)
         return RedirectToAction("Index");   // Tilbake til ønsket visning, som en liste
     }
     return View(item);  // Hvis noe går galt, last opp siden på nytt med valideringsfeil
-}
+} */
 
+  [HttpGet]
+    public IActionResult Update(int id)
+    {
+        var item = _itemDbContext.Items.Find(id);
+        if (item == null)
+        {
+            return NotFound();
+        }
+        return View(item);
+    }
+
+      [HttpPost]
+
+public IActionResult Update(Item item)
+{
+    if (ModelState.IsValid)
+    {
+        // Hent det eksisterende elementet fra databasen
+        var existingItem = _itemDbContext.Items.Include(i => i.Productinfo).FirstOrDefault(i => i.ItemId == item.ItemId);
+        
+        if (existingItem != null)
+        {
+            // Oppdater feltene som ble endret
+            existingItem.Name = item.Name;
+            existingItem.Category = item.Category;
+            existingItem.Sertifikat = item.Sertifikat;
+            existingItem.ImageUrl = item.ImageUrl;
+            existingItem.Energi = item.Energi;
+            existingItem.Carbohydrates = item.Carbohydrates;
+            existingItem.Sugar = item.Sugar;
+            existingItem.Protein = item.Protein;
+            existingItem.Fat = item.Fat;
+            existingItem.Saturatedfat = item.Saturatedfat;
+            existingItem.Unsaturatedfat = item.Unsaturatedfat;
+            existingItem.Fiber = item.Fiber;
+            existingItem.Salt = item.Salt;
+
+            // Oppdater productinfo
+            if (existingItem.Productinfo != null)
+            {
+                existingItem.Productinfo.CountryOfOrigin = item.Productinfo.CountryOfOrigin;
+                existingItem.Productinfo.CountryOfProvenance = item.Productinfo.CountryOfProvenance;
+                existingItem.Productinfo.ItemNumber = item.Productinfo.ItemNumber;
+            }
+
+            _itemDbContext.Items.Update(existingItem); // Oppdaterer det eksisterende elementet
+            _itemDbContext.SaveChanges(); // Lagre endringene
+            return RedirectToAction("Index"); // Tilbake til ønsket visning
+        }
+    }
+    return View(item); // Hvis noe er galt, last opp skjemaet på nytt
+}
 
 
               [HttpGet]
