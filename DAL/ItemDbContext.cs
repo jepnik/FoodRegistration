@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
+using FoodRegistration.Models;
 
-namespace FoodRegistration.Models;
+namespace FoodRegistration.DAL;
 
 public class ItemDbContext : DbContext
 {

@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using FoodRegistration.Models;
 
-namespace FoodRegistration.Models;
+namespace FoodRegistration.DAL;
 
 public static class DBInit
 {

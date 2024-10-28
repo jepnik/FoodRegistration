@@ -27,7 +27,7 @@ app.MapControllerRoute(
 app.Run(); */
 
 using Microsoft.EntityFrameworkCore;
-using FoodRegistration.Models;
+using FoodRegistration.DAL;
 using Serilog;
 
 // Create a logger configuration
@@ -49,6 +49,8 @@ builder.Services.AddDbContext<ItemDbContext>(options =>
 {
     options.UseSqlite(builder.Configuration["ConnectionStrings:ItemDbContextConnection"]);
 });
+
+builder.Services.AddScoped<IItemRepository, ItemRepository>();
 
 var app = builder.Build();
 
