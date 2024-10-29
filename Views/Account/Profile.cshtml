@@ -1,0 +1,18 @@
+@model FoodRegistration.Models.ProfileViewModel
+
+<h2>Profile</h2>
+<form asp-action="UpdateProfile" method="post">
+    <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" id="username" name="Username" class="form-control" value="@Model.Username" required />
+    </div>
+    <div class="form-group">
+        <label for="password">New Password</label>
+        <input type="password" id="password" name="Password" class="form-control" required />
+    </div>
+    <div class="form-group">
+        <label for="confirmPassword">Confirm Password</label>
+        <input type="password" id="confirmPassword" name="ConfirmPassword" class="form-control" required />
+    </div>
+    <button type="submit" class="btn btn-primary">UpdateProfile</button>
+</form>
