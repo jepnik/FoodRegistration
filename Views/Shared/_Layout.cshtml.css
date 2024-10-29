@@ -1,32 +1,32 @@
 ﻿/* Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
 
-a.navbar-brand {
+/* a.navbar-brand {
   white-space: normal;
   text-align: center;
   word-break: break-all;
-}
+} */
 
-a {
+/* a {
   color: #0077cc;
-}
+} */
 
-.btn-primary {
+/* .btn-primary {
   color: #fff;
   background-color: #1b6ec2;
   border-color: #1861ac;
 }
-
-.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+ */
+/* .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
   color: #fff;
   background-color: #1b6ec2;
   border-color: #1861ac;
 }
-
-.border-top {
+ */
+/* .border-top {
   border-top: 1px solid #e5e5e5;
-}
-.border-bottom {
+} */
+/* .border-bottom {
   border-bottom: 1px solid #e5e5e5;
 }
 
@@ -37,12 +37,54 @@ a {
 button.accept-policy {
   font-size: 1rem;
   line-height: inherit;
-}
+} */
 
-.footer {
+/* .footer {
   position: absolute;
   bottom: 0;
   width: 100%;
   white-space: nowrap;
   line-height: 60px;
+}
+ */
+ .navbar {
+  background-color: #83B271;
+  color: #ffffff;
+}
+
+.navbar-brand {
+  font-size: 1.5rem;
+  color: #ffffff;
+}
+
+.nav-link {
+  color: #ffffff;
+  padding: 10px;
+  transition: background-color 0.3s ease;
+}
+
+
+.nav-link:hover {
+  background-color: #395b2c;
+  border-radius: 4px;
+}
+
+.navbar-toggler {
+  border-color: #ffffff;
+}
+
+.user-icon {
+  width: 40px; /* Juster for å gjøre ikonet større */
+  height: 40px;
+  border-radius: 50%; /* Gjør ikonet rundt, om ønskelig */
+  cursor: pointer;
+}
+
+.dropdown {
+  margin-left: auto; 
+}
+
+.dropdown-menu {
+  left: auto;
+  right: 0; 
 }
