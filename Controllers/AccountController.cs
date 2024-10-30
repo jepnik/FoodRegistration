@@ -9,7 +9,7 @@ public class AccountController : Controller
         // Retrieve the current user's info here (username and possibly hashed password)
         var model = new ProfileViewModel
         {
-            Username = "currentUsername"
+            Email = "currentEmail"
         };
         return View(model);
     }

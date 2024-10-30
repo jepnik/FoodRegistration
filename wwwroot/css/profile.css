@@ -1,0 +1,28 @@
+.profile-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.profile-form {
+    flex: 1;
+    margin-right: 20px;
+}
+
+.profile-logo{
+    margin-left: auto;
+}
+
+.profile-logo img {
+    width: 100%; /* Use percentage */
+    height: auto; /* Maintain aspect ratio */
+    max-width: 350px; /* Optional: set a max width */
+}
+
+.profile-button {
+    background-color: #83B271;
+    color: white;
+    border: none;
+    outline: none;
+    margin-top: 1%;
+}
