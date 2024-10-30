@@ -20,61 +20,66 @@ public static class DBInit
                 {
                     Name = "Apple",
                     Category = "Fruit",
-                    Sertifikat = "Organic",
+                    Sertificate = "Organic",
                     ImageUrl = "/images/apple.jpg",
                     
                     // Ernæringsfakta (nutritional information)
-                    Energi = 52,
+                    Energy = 52,
                     Carbohydrates = 14,
                     Sugar = 10,
                     Protein = 0.3,
                     Fat = 0.2,
                     Saturatedfat = 0,
                     Unsaturatedfat = 0.1,
-                    Fiber = 2.4,
+                    Fibre = 2.4,
                     Salt = 0,
+
+                    // Produktinfo                    
+                    CountryOfOrigin = "Norway",    // Opprinnelsesland
+                    CountryOfProvenance = "Norway", // Opphavsland
+                    ItemNumber = "A123",           // Varenummer
+                    CreatedDate = DateTime.Now,
+                    UpdatedDate = DateTime.Now
                     
-                    // Produksjonsinformasjon via Productinfo
-                    Productinfo = new Productinfo
-                    {
-                        CountryOfOrigin = "Norway",    // Opprinnelsesland
-                        CountryOfProvenance = "Norway", // Opphavsland
-                        ItemNumber = "A123",           // Varenummer
-                        CreatedDate = DateTime.Now,
-                        UpdatedDate = DateTime.Now
-                    }
+                    // Produksjonsinformsjon via Productinfo
+                    // Productinfo = new Productinfo
+                    // {
+                        
+                    // }
                 },
                 new Item
                 {
                     Name = "Banana",
                     Category = "Fruit",
-                    Sertifikat = "Fair Trade",
+                    Sertificate = "Fair Trade",
                     ImageUrl = "/images/banana.jpg",
                     
                     // Ernæringsfakta
-                    Energi = 89,
+                    Energy = 89,
                     Carbohydrates = 23,
                     Sugar = 12,
                     Protein = 1.1,
                     Fat = 0.3,
                     Saturatedfat = 0.1,
                     Unsaturatedfat = 0.2,
-                    Fiber = 2.6,
+                    Fibre = 2.6,
                     Salt = 0,
+
+                    // Produktinfo
+                    CountryOfOrigin = "Ecuador",
+                    CountryOfProvenance = "Ecuador",
+                    ItemNumber = "B456",
+                    CreatedDate = DateTime.Now,
+                    UpdatedDate = DateTime.Now
                     
                     // Produksjonsinformasjon via Productinfo
-                    Productinfo = new Productinfo
-                    {
-                        CountryOfOrigin = "Ecuador",
-                        CountryOfProvenance = "Ecuador",
-                        ItemNumber = "B456",
-                        CreatedDate = DateTime.Now,
-                        UpdatedDate = DateTime.Now
-                    }
+                    // Productinfo = new Productinfo
+                    // {
+                        
+                    // }
                 }
             };
-
-            context.Items.AddRange(items);   // Legg til data i Items-tabellen
+            context.AddRange(items);   // Legg til data i Items-tabellen
             context.SaveChanges();
         }
     }

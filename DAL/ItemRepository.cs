@@ -7,43 +7,89 @@ public class ItemRepository : IItemRepository
 {
     private readonly ItemDbContext _db;
 
-    public ItemRepository(ItemDbContext db)
+    private readonly ILogger<ItemRepository> _logger;
+
+    public ItemRepository(ItemDbContext db, ILogger<ItemRepository> logger)
     {
         _db = db;
+        _logger = logger;
     }
 
-    public async Task<IEnumerable<Item>> GetAll()
+    public async Task<IEnumerable<Item>?> GetAll()
     {
-        return await _db.Items.ToListAsync();
+        try
+        {
+            return await _db.Items.ToListAsync();
+        }
+        catch (Exception e)
+        {
+            _logger.LogError("[ItemRepository] items ToListAsync() failed when GetAll(), error message: {e}", e.Message);
+            return null;
+        }
     }
 
     public async Task<Item?> GetItemById(int id)
     {
-        return await _db.Items.FindAsync(id);
+        try
+        {
+            return await _db.Items.FindAsync(id);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError("[ItemRepository] item FindAsync(id) failed when GetItemById for ItemId {ItemId:0000}, error message: {e}", id, e.Message);
+            return null;
+        }
     }
 
-    public async Task Create(Item item)
+    public async Task<bool> Create(Item item)
     {
-        _db.Items.Add(item);
-        await _db.SaveChangesAsync();
+        try
+        {
+            _db.Items.Add(item);
+            await _db.SaveChangesAsync();
+            return true;
+        }
+        catch (Exception e)
+        {
+            _logger.LogError("[ItemRepository] item creation failed for item {@item}, error message: {e}", item, e.Message);
+            return false;
+        }
     }
 
-    public async Task Update(Item item)
+    public async Task<bool> Update(Item item)
     {
-        _db.Items.Update(item);
-        await _db.SaveChangesAsync();
+        try
+        {
+            _db.Items.Update(item);
+            await _db.SaveChangesAsync();
+            return true;
+        }
+        catch (Exception e)
+        {
+            _logger.LogError("[ItemRepository] item FindAsync(id) failed when updating the ItemId {ItemId:0000}, error message: {e}", item, e.Message);
+            return false;
+        }
     }
 
     public async Task<bool> Delete(int id)
     {
-        var item = await _db.Items.FindAsync(id);
-        if (item == null)
+        try
         {
+            var item = await _db.Items.FindAsync(id);
+            if (item == null)
+            {
+                _logger.LogError("[ItemRepository] item not found for the ItemId {ItemId:0000}", id);
+                return false;
+            }
+
+            _db.Items.Remove(item);
+            await _db.SaveChangesAsync();
+            return true;
+        }
+        catch (Exception e)
+        {
+            _logger.LogError("[ItemRepository] item deletion failed for the ItemId {ItemId:0000}, error message: {e}", id, e.Message);
             return false;
         }
-
-        _db.Items.Remove(item);
-        await _db.SaveChangesAsync();
-        return true;
     }
 }
