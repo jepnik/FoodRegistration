@@ -67,5 +67,37 @@ namespace FoodRegistration.Models
 
         // Navigation property for ProductInfo (1-to-1 relationship)
         // public virtual Productinfo? Productinfo { get; set; }
+
+        // Validation property
+        public bool IsFatCompositionValid
+        {
+            get
+            {
+                double saturatedFat = Saturatedfat ?? 0;
+                double unsaturatedFat = Unsaturatedfat ?? 0;
+                return (saturatedFat + unsaturatedFat) <= Fat;
+            }
+        }
+
+        // Method to validate fat composition
+        public string ValidateFatComposition()
+        {
+            // If both saturated and unsaturated fats are null, return an empty string
+            if (Saturatedfat == null && Unsaturatedfat == null)
+            {
+                return string.Empty;
+            }
+
+            // Calculate total of saturated and unsaturated fats
+            double totalFatComposition = (Saturatedfat ?? 0) + (Unsaturatedfat ?? 0);
+
+            // Check if the total fat composition exceeds the total fat
+            if (totalFatComposition > Fat)
+            {
+                return "The combined value of saturated fat and unsaturated fat cannot exceed the total fat.";
+            }
+
+            return string.Empty; // Return an empty string if the validation passes
+        }
     }
 }

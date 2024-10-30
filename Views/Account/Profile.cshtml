@@ -1,0 +1,35 @@
+@model FoodRegistration.Models.ProfileViewModel
+
+@{
+    ViewData["Title"] = "Profile";
+    Layout = "_Layout";
+}
+
+<head>
+    <link rel="stylesheet" href="~/css/profile.css" />
+</head>
+
+<div class="profile-container">
+    <div class="profile-form">
+        <h2>Profile</h2>
+
+        <form asp-action="UpdateProfile" method="post">
+            <div class="form-group">
+                <label for="username">Email</label>
+                <input type="text" id="email" name="Email" class="form-control" value="@Model.Email" required />
+            </div>
+            <div class="form-group">
+                <label for="password">New Password</label>
+                <input type="password" id="password" name="Password" class="form-control" required />
+            </div>
+            <div class="form-group">
+                <label for="confirmPassword">Confirm Password</label>
+                <input type="password" id="confirmPassword" name="ConfirmPassword" class="form-control" required />
+            </div>
+            <button type="submit" class="btn btn-primary profile-button">UpdateProfile</button>
+        </form>
+    </div>
+    <div class="profile-logo">
+        <img src="~/images/UserLogo.png" alt="Profile Logo" />
+    </div>
+</div>
