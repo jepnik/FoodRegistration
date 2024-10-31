@@ -1,0 +1,19 @@
+@model IEnumerable<User>
+
+    <div class="container">
+        <table class="table table-striped">
+            <tr>
+                <th>Id</th>
+                <th>Email</th>
+                <th>Password</th>
+            </tr>
+            @foreach (var user in Model)
+            {
+                <tr>
+                    <td>@user.UserId</td>
+                    <td>@user.Email</td>
+                    <td>@user.Password</td>
+                </tr>
+            }
+        </table>
+    </div>
