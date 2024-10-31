@@ -16,15 +16,15 @@ namespace FoodRegistration.Models
         [StringLength(50, ErrorMessage = "Category cannot exceed 50 characters.")]
         public string? Category { get; set; }
 
-        [StringLength(50, ErrorMessage = "Sertifikat cannot exceed 50 characters.")]
-        public string? Sertifikat { get; set; }
+        [StringLength(50, ErrorMessage = "Sertificate cannot exceed 50 characters.")]
+        public string? Sertificate { get; set; }
 
         [Url(ErrorMessage = "Invalid URL format.")]
         public string? ImageUrl { get; set; }
 
         // Nutritional Information
-        [Range(0, double.MaxValue, ErrorMessage = "Energi must be a non-negative number.")]
-        public double Energi { get; set; }
+        [Range(0, double.MaxValue, ErrorMessage = "Energy must be a non-negative number.")]
+        public double Energy { get; set; }
 
         [Range(0, double.MaxValue, ErrorMessage = "Carbohydrates must be a non-negative number.")]
         public double Carbohydrates { get; set; }
@@ -44,14 +44,29 @@ namespace FoodRegistration.Models
         [Range(0, double.MaxValue, ErrorMessage = "Unsaturated fat must be a non-negative number.")]
         public double? Unsaturatedfat { get; set; }
 
-        [Range(0, double.MaxValue, ErrorMessage = "Fiber must be a non-negative number.")]
-        public double Fiber { get; set; }
+        [Range(0, double.MaxValue, ErrorMessage = "Fibre must be a non-negative number.")]
+        public double Fibre { get; set; }
 
         [Range(0, double.MaxValue, ErrorMessage = "Salt must be a non-negative number.")]
         public double Salt { get; set; }
 
+        [Required(ErrorMessage = "Country of origin is required.")]
+        [StringLength(50, ErrorMessage = "Country of origin can't exceed 50 characters.")]
+        public string? CountryOfOrigin { get; set; } // opprinelseland- råvrer er herfra
+        public string? CountryOfProvenance { get; set; } //Opphavsland- endelige produksjonen eller bearbeidingen av produktet fant sted
+
+        [Required(ErrorMessage = "Item number is required.")]
+        [RegularExpression(@"[0-9a-zA-Z\-]{1,20}", ErrorMessage = "Item number must be alphanumeric and between 1 to 20 characters.")]
+        public string? ItemNumber { get; set; }      // Varenummer
+
+        [DataType(DataType.Date)]
+        public DateTime CreatedDate { get; set; }   // Opprettelsesdato
+
+        [DataType(DataType.Date)]
+        public DateTime UpdatedDate { get; set; }   // Oppdateringsdato
+
         // Navigation property for ProductInfo (1-to-1 relationship)
-        public virtual Productinfo? Productinfo { get; set; }
+        // public virtual Productinfo? Productinfo { get; set; }
 
         // Validation property
         public bool IsFatCompositionValid

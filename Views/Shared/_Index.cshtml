@@ -1,0 +1,38 @@
+@model IEnumerable<Item>
+
+@* Tabel over food items alredy tracked *@
+<div class="container">
+    <table class='table table-striped'>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Sertifikat</th>
+            <th>Image</th>
+            <th>Actions</th>
+        </tr>
+        @foreach (var item in Model)
+        {
+            @* Gjør hele tabellr ad klikkbar så du kommer til tilhørende produkt *@
+            <tr onclick="location.href='@Url.Action("Details", "Home", new { id = item.ItemId })'" style="cursor:pointer;">
+                <td>@item.ItemId</td>
+                <td>@item.Name</td>
+                <td>@item.Category</td>
+                <td>@item.Sertificate</td>
+                <td>
+                    @if (!string.IsNullOrEmpty(item.ImageUrl))
+                    {
+                        <img src="@item.ImageUrl" alt="@item.Name" style="width:50px;height:50px;"/>
+                    }
+                </td>
+                <td>
+                    <a asp-action="Update" asp-route-id="@item.ItemId">Update</a>
+                    <a asp-action="Delete" asp-route-id="@item.ItemId">Delete</a>
+                </td>
+            </tr>
+        }
+    </table>    
+    <p>
+        <a class="btn btn-secondary" asp-controller="Home" asp-action="Create">Create New Item</a>
+    </p>   
+</div>

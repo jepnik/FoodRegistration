@@ -1,4 +1,4 @@
-using System;
+/* using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace FoodRegistration.Models // Bytt ut med ditt faktiske namespaces
@@ -16,7 +16,6 @@ namespace FoodRegistration.Models // Bytt ut med ditt faktiske namespaces
         [RegularExpression(@"[0-9a-zA-Z\-]{1,20}", ErrorMessage = "Item number must be alphanumeric and between 1 to 20 characters.")]
         public string? ItemNumber { get; set; }      // Varenummer
 
-        
         [DataType(DataType.Date)]
         public DateTime CreatedDate { get; set; }   // Opprettelsesdato
 
@@ -24,8 +23,8 @@ namespace FoodRegistration.Models // Bytt ut med ditt faktiske namespaces
         public DateTime UpdatedDate { get; set; }   // Oppdateringsdato
 
         // Fremmednøkkel for å koble til Item. Kan jeg slette debbe og bare ha den under
-        //altså bare beholde int itemid get set?
-       /*  [ForeignKey("Item")] */
+        // altså bare beholde int itemid get set?
+        // [ForeignKey("Item")]
         public int ItemId { get; set; } // Må tilføres
 
         // Navigasjonspropertie til Item
@@ -37,4 +36,4 @@ namespace FoodRegistration.Models // Bytt ut med ditt faktiske namespaces
             UpdatedDate = DateTime.Now;  // Setter oppdateringsdato til nåværende tid
         }
     }
-}
+} */

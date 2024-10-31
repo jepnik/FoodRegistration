@@ -217,7 +217,7 @@ else
 
  *@
 
- @model Item
+@model Item
 
 @* <!-- Topp-seksjonen med produktnavn og bilde -->
 <div class="text-center my-5">
@@ -256,7 +256,7 @@ else
                 <tbody>
                     <tr>
                         <td>Calories</td>
-                        <td>@Model.Energi</td>
+                        <td>@Model.Energy</td>
                     </tr>
                     <tr>
                         <td>Carbohydrates</td>
@@ -284,7 +284,7 @@ else
                     </tr>
                     <tr>
                         <td>Fiber</td>
-                        <td>@Model.Fiber</td>
+                        <td>@Model.Fibre</td>
                     </tr>
                     <tr>
                         <td>Salt</td>
@@ -313,23 +313,23 @@ else
                 <tbody>
                     <tr>
                         <td>Country of Origin</td>
-                        <td>@Model.Productinfo?.CountryOfOrigin "Not available"</td> <!-- Sjekk for null -->
+                        <td>@Model.CountryOfOrigin "Not available"</td> <!-- Sjekk for null -->
                     </tr>
                     <tr>
                         <td>Country of Provenance</td>
-                        <td>@Model.Productinfo?.CountryOfProvenance "Not available"</td> <!-- Sjekk for null -->
+                        <td>@Model.CountryOfProvenance "Not available"</td> <!-- Sjekk for null -->
                     </tr>
                     <tr>
                         <td>Item Number</td>
-                        <td>@Model.Productinfo?.ItemNumber "Not available"</td> <!-- Sjekk for null -->
+                        <td>@Model.ItemNumber "Not available"</td> <!-- Sjekk for null -->
                     </tr>
                     <tr>
                         <td>Created Date</td>
-                        <td>@Model.Productinfo?.CreatedDate.ToString("yyyy-MM-dd") "Not available"</td> <!-- Sjekk for null -->
+                        <td>@Model.CreatedDate.ToString("yyyy-MM-dd") "Not available"</td> <!-- Sjekk for null -->
                     </tr>
                     <tr>
                         <td>Updated Date</td>
-                        <td>@Model.Productinfo?.UpdatedDate.ToString("yyyy-MM-dd") "Not available"</td> <!-- Sjekk for null -->
+                        <td>@Model.UpdatedDate.ToString("yyyy-MM-dd") "Not available"</td> <!-- Sjekk for null -->
                     </tr>
                 </tbody>
             </table>
