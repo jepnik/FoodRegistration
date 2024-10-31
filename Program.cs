@@ -52,6 +52,14 @@ builder.Services.AddDbContext<ItemDbContext>(options =>
 
 builder.Services.AddScoped<IItemRepository, ItemRepository>();
 
+//Session support
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30); //Timeout session etter 30 minutter
+    options.Cookie.HttpOnly = true; //Session må ha cookie http for GDPR. Nødvendig for denne oppgaven?
+    options.Cookie.IsEssential = true;
+});
+
 var app = builder.Build();
 
 // Log application start
@@ -68,7 +76,17 @@ else
     app.UseHsts();
 }
 
+app.UseHttpsRedirection();
+
 app.UseStaticFiles();
+
+app.UseRouting();
+
+app.UseSession();
+
+app.UseAuthorization();
+
+app.UseMiddleware<AuthenticationMiddleware>();
 
 app.MapDefaultControllerRoute();
 

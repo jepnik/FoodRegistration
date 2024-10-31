@@ -17,6 +17,8 @@
 </head>
 <body>
 
+@if (ViewData["Title"]?.ToString() != "Login") //To remove navigation bar from login page
+{
 <header class="navbar navbar-expand-lg navbar-dark mb-4 p-3 shadow" style="background-color: #83B271;">
     <a class="navbar-brand" href="/">FoodRegistration</a>
 
@@ -55,6 +57,7 @@
         </div>
     </div> 
 </header>
+}
 
 <div class="container">
     <main role="main" class="pb-3">

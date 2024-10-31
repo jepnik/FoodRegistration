@@ -21,7 +21,7 @@
 </div>
 
 
-@* Tabel over food items alredy tracked *@
+@* Table over food items alredy tracked *@
 <body>
     <div class="container">
         <h1>@ViewBag.CurrentViewName</h1>
@@ -39,7 +39,7 @@
             <tbody>
               @foreach (var item in Model)
                 {
-                     @* Gjør hele tabellr ad klikkbar så du kommer til tilhørende produkt *@
+                     @* Gjør hele tabell rad klikkbar så du kommer til tilhørende produkt *@
                     <tr onclick="location.href='@Url.Action("Details", "Home", new { id = item.ItemId })'" style="cursor:pointer;">
                         <td>@item.ItemId</td>
                         <td>@item.Name</td>

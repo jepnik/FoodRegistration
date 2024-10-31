@@ -77,5 +77,15 @@ public static class DBInit
             context.Items.AddRange(items);   // Legg til data i Items-tabellen
             context.SaveChanges();
         }
+        
+        if (!context.Users.Any())
+        {
+            var users = new List<User>
+            {
+                new User { Email = "Email", Password = "Password"},
+            };
+            context.AddRange(users);
+            context.SaveChanges();
+        }
     }
 }
