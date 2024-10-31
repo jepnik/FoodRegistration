@@ -58,11 +58,11 @@ app.UseSession();
 
 app.UseAuthorization();
 
+app.UseAuthentication();
+
 app.UseMiddleware<AuthenticationMiddleware>();
 
 app.UseRouting();
-
-app.UseAuthorization();
 
 // Configure route mappings for both MVC and API
 app.MapControllerRoute(
