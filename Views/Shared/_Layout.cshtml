@@ -18,7 +18,12 @@
 <body>
 
 <header class="navbar navbar-expand-lg navbar-dark mb-4 p-3 shadow" style="background-color: #83B271;">
-    <a class="navbar-brand" href="/">FoodRegistration</a>
+    @* <a class="navbar-brand" href="/">FoodRegistration</a> *@
+      <a class="navbar-brand d-flex align-items-center" href="/">
+        <img src="/images/logoHvit.ico" alt="Logo" class="logo mr-2" /> <!-- Logoen -->
+        FOODTRACE
+    </a>
+
 
     <!-- Hamburger Toggle Button for Mobile -->
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -38,10 +43,10 @@
             
          <!-- Logg ut i hamburger menyen, bare synlig på små skjermer -->
             <li class="nav-item d-lg-none">
-                <a class="nav-link" href="/Account/Logout">Logg ut</a>
-            </li>
-            <li class="nav-item d-lg-none">
                 <a class="nav-link" href="/Account/Profile">Account</a>
+            </li>
+             <li class="nav-item d-lg-none">
+                <a class="nav-link" href="/Account/Logout">Logg ut</a>
             </li>
         </ul> 
         
@@ -56,15 +61,17 @@
     </div> 
 </header>
 
-<div class="container">
+<!-- Main content area with enough space at the bottom for the fixed footer -->
+<div class="container" style="margin-bottom: 70px;"> 
     <main role="main" class="pb-3">
         @RenderBody()
     </main>
 </div>
 
-<footer class="border-top footer text-muted">
-    <div class="container">
-        &copy; 2024 - FoodRegistration - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+<!-- Footer (bunnbanneret) -->
+<footer class="footer text-white">
+    <div class="container text-center">
+        &copy; 2024 - FoodRegistration | Kontakt oss: Telefon: 999 99 999 | E-post: <a href="mailto:vårbedrift@gmail.com" class="text-white">vårbedrift@gmail.com</a>
     </div>
 </footer>
 
