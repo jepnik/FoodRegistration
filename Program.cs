@@ -29,17 +29,6 @@ builder.Services.AddScoped<IItemRepository, ItemRepository>();
 
 var app = builder.Build();
 
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowReactApp",
-        policy =>
-        {
-            policy.WithOrigins("http://localhost:3000") // Change to the port where React is running
-                  .AllowAnyMethod()
-                  .AllowAnyHeader();
-        });
-});
-
 // Log application start
 Log.Information("Application Starting...");
 
