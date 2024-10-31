@@ -6,7 +6,7 @@ using Serilog;
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Information()
     .WriteTo.Console() // Log to console
-    .WriteTo.File("logs/log.txt", rollingInterval: RollingInterval.Day) // Log to file
+    .WriteTo.File("Logs/log.txt", rollingInterval: RollingInterval.Day) // Log to file
     .CreateLogger();
 
 var builder = WebApplication.CreateBuilder(args);
@@ -49,11 +49,11 @@ if (app.Environment.IsDevelopment())
     app.UseDeveloperExceptionPage();
     DBInit.Seed(app); // Seed the database in development mode
 }
-else
+/* else
 {
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
-}
+} */
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

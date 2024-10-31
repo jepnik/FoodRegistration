@@ -1,4 +1,4 @@
-@model FoodRegistration.Models.Item
+@model Item
 
 <h2>Update Item</h2>
 
@@ -18,9 +18,9 @@
     </div>
 
     <div class="form-group">
-        <label asp-for="Sertifikat"></label>
-        <input asp-for="Sertifikat" class="form-control" />
-        <span asp-validation-for="Sertifikat" class="text-danger"></span>
+        <label asp-for="Sertificate"></label>
+        <input asp-for="Sertificate" class="form-control" />
+        <span asp-validation-for="Sertificate" class="text-danger"></span>
     </div>
 
     <div class="form-group">
@@ -33,9 +33,9 @@
     <h4>Nutritional Information</h4>
     
     <div class="form-group">
-        <label asp-for="Energi">Calories (kcal)</label>
-        <input asp-for="Energi" class="form-control" />
-        <span asp-validation-for="Energi" class="text-danger"></span>
+        <label asp-for="Energy">Calories (kcal)</label>
+        <input asp-for="Energy" class="form-control" />
+        <span asp-validation-for="Energy" class="text-danger"></span>
     </div>
     
     <div class="form-group">
@@ -75,9 +75,9 @@
     </div>
 
     <div class="form-group">
-        <label asp-for="Fiber">Fiber (g)</label>
-        <input asp-for="Fiber" class="form-control" />
-        <span asp-validation-for="Fiber" class="text-danger"></span>
+        <label asp-for="Fibre">Fiber (g)</label>
+        <input asp-for="Fibre" class="form-control" />
+        <span asp-validation-for="Fibre" class="text-danger"></span>
     </div>
 
     <div class="form-group">
@@ -90,21 +90,21 @@
     <h4>Product Information</h4>
 
     <div class="form-group">
-        <label asp-for="Productinfo.CountryOfOrigin">Country of Origin</label>
-        <input asp-for="Productinfo.CountryOfOrigin" class="form-control" />
-        <span asp-validation-for="Productinfo.CountryOfOrigin" class="text-danger"></span>
+        <label asp-for="CountryOfOrigin">Country of Origin</label>
+        <input asp-for="CountryOfOrigin" class="form-control" />
+        <span asp-validation-for="CountryOfOrigin" class="text-danger"></span>
     </div>
 
     <div class="form-group">
-        <label asp-for="Productinfo.CountryOfProvenance">Country of Provenance</label>
-        <input asp-for="Productinfo.CountryOfProvenance" class="form-control" />
-        <span asp-validation-for="Productinfo.CountryOfProvenance" class="text-danger"></span>
+        <label asp-for="CountryOfProvenance">Country of Provenance</label>
+        <input asp-for="CountryOfProvenance" class="form-control" />
+        <span asp-validation-for="CountryOfProvenance" class="text-danger"></span>
     </div>
 
     <div class="form-group">
-        <label asp-for="Productinfo.ItemNumber">Item Number</label>
-        <input asp-for="Productinfo.ItemNumber" class="form-control" />
-        <span asp-validation-for="Productinfo.ItemNumber" class="text-danger"></span>
+        <label asp-for="ItemNumber">Item Number</label>
+        <input asp-for="ItemNumber" class="form-control" />
+        <span asp-validation-for="ItemNumber" class="text-danger"></span>
     </div>
 
     <button type="submit" class="btn btn-primary">Save Changes</button>

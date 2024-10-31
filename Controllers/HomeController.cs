@@ -1,132 +1,112 @@
-using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using FoodRegistration.Models;
 using FoodRegistration.DAL;
 using FoodRegistration.ViewModels;
 
-namespace FoodRegistration.Controllers
+namespace FoodRegistration.Controllers;
+
+public class HomeController : Controller
 {
-    public class HomeController : Controller
+    private readonly IItemRepository _itemRepository; // Dependency Injection for DbContext
+    private readonly ILogger<HomeController> _logger; // Logger for error handling
+
+    // Constructor for dependency injection
+    public HomeController(IItemRepository itemRepository, ILogger<HomeController> logger)
     {
-        private readonly IItemRepository _itemRepository; // Dependency Injection for DbContext
-        private readonly ILogger<HomeController> _logger; // Logger for error handling
-
-        // Constructor for dependency injection
-        public HomeController(IItemRepository itemRepository, ILogger<HomeController> logger)
-        {
-            _itemRepository = itemRepository ?? throw new ArgumentNullException(nameof(itemRepository)); // Ensure the DbContext is not null
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger)); // Ensure the logger is not null
-        }
-
-        public async Task<IActionResult> Index()
-        {
-            try
-            {
-                var items = await _itemRepository.GetAll();
-                var itemsViewModel = new ItemsViewModel(items, "Index");
-                return View(items);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "An error occurred while fetching items for Index.");
-                return View("Error"); // Return an Error view
-            }
-        }
-
-        public async Task<IActionResult> Details(int id)
-{
-    // Check if the ID is valid (e.g., greater than 0)
-    if (id <= 0)
-    {
-        _logger.LogWarning("Invalid ID {ItemId} provided.", id);
-        return BadRequest("The provided ID is invalid.");
+        _itemRepository = itemRepository ?? throw new ArgumentNullException(nameof(itemRepository)); // Ensure the DbContext is not null
+        _logger = logger ?? throw new ArgumentNullException(nameof(logger)); // Ensure the logger is not null
     }
 
-    try
+    public async Task<IActionResult> Index()
+    {
+        var items = await _itemRepository.GetAll();
+        if (items == null)
+        {
+            _logger.LogError("[HomeController] Item list not found while executing _itemRepository.GetAll()");
+            return NotFound("Item list not found");
+        }
+        var itemsViewModel = new ItemsViewModel(items, "Index");
+        return View(itemsViewModel);
+    }
+        
+    public async Task<IActionResult> Details(int id)
     {
         var item = await _itemRepository.GetItemById(id);
-
+        // Check if the ID is valid (e.g., greater than 0)
         if (item == null)
         {
-            _logger.LogWarning("Item with ID {ItemId} not found.", id);
-            return NotFound($"No item found with ID {id}."); // Changed to return NotFound
+            _logger.LogError("[HomeController] Item not found for the ItemId {ItemId:0000}", id);
+            return NotFound("Item not found for the ItemId");
         }
-
         return View(item);
     }
-    catch (Exception ex)
+
+    [HttpGet]
+    public IActionResult Create()
     {
-        _logger.LogError(ex, "An error occurred while fetching item details for ID {ItemId}.", id);
-        return View("Error"); // Return an Error view
+        return View();
     }
-}
 
-        [HttpGet]
-        public IActionResult Create()
+    [HttpPost]
+    public async Task<IActionResult> Create(Item item)
+    {
+        // Check if the model state is valid
+        if (!ModelState.IsValid)
         {
-            return View();
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Create(Item item)
-        {
-            // Check if the model state is valid
-            if (!ModelState.IsValid)
-            {
-                _logger.LogWarning("Invalid model state for item: {@Item}", item);
-                return View(item); // Re-render the view with validation messages
-            }
-
-            try
-            {
-                await _itemRepository.Create(item);
+            bool returnOk = await _itemRepository.Create(item);
+            if (returnOk)
                 return RedirectToAction(nameof(Index));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "An error occurred while creating a new item: {@Item}", item);
-                return View("Error"); // Return an Error view
-            }
         }
+        _logger.LogWarning("[HmController] Item creation failed {@item}", item);
+        return View(item);
+    }
 
-        [HttpGet]
-        public async Task<IActionResult> Update(int id)
+    [HttpGet]
+    public async Task<IActionResult> Update(int id)
+    {
+        var item = await _itemRepository.GetItemById(id);
+        if (item == null)
         {
-            var item = await _itemRepository.GetItemById(id);
-            if (item == null)
-            {
-                return NotFound();
-            }
-            return View(item);
+            _logger.LogError("[HomeController] Item not found when updating the ItemId {ItemId:0000}", id);
+            return BadRequest("Item not found for the ItemId");
         }
+        return View(item);
+    }
 
-        [HttpPost]
-        public async Task<IActionResult> Update(Item item)
+    [HttpPost]
+    public async Task<IActionResult> Update(Item item)
+    {
+        if (ModelState.IsValid)
         {
-            if (ModelState.IsValid)
-            {
-                await _itemRepository.Update(item);
+            bool returnOk = await _itemRepository.Update(item);
+            if (returnOk)
                 return RedirectToAction(nameof(Index));
-            }
-            return View(item); // Hvis noe er galt, last opp skjemaet på nytt
         }
+        _logger.LogWarning("[HomeController] Item update failed {@item}", item);
+        return View(item); // Hvis noe er galt, last opp skjemaet på nytt
+    }
 
-        [HttpGet]
-        public async Task<IActionResult> Delete(int id)
+    [HttpGet]
+    public async Task<IActionResult> Delete(int id)
+    {
+        var item = await _itemRepository.GetItemById(id);
+        if (item == null)
         {
-            var item = await _itemRepository.GetItemById(id);
-            if (item == null)
-            {
-                return NotFound();
-            }
-            return View(item);
+            _logger.LogError("[HomeController] Item not found for the ItemId {ItemId:0000}", id);
+            return BadRequest("Item not found for the ItemId");
         }
+        return View(item);
+    }
 
-        [HttpPost]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+    [HttpPost]
+    public async Task<IActionResult> DeleteConfirmed(int id)
+    {
+        bool returnOk = await _itemRepository.Delete(id);
+        if (!returnOk)
         {
-            await _itemRepository.Delete(id);
-            return RedirectToAction(nameof(Index));
+            _logger.LogError("[HomeController] Item deletion failed for the ItemId {ItemId:0000}", id);
+            return BadRequest("Item deletion failed");
         }
+        return RedirectToAction(nameof(Index));
     }
 }
