@@ -29,18 +29,9 @@ app.Run(); */
 using Microsoft.EntityFrameworkCore;
 using FoodRegistration.DAL;
 using Serilog;
-
-// Create a logger configuration
-Log.Logger = new LoggerConfiguration()
-    .MinimumLevel.Information()
-    .WriteTo.Console() // Log to console
-    .WriteTo.File("Logs/log.txt", rollingInterval: RollingInterval.Day) // Log to file
-    .CreateLogger();
+using Serilog.Events;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// Use Serilog for logging
-builder.Host.UseSerilog();
 
 builder.Services.AddControllersWithViews();
 
@@ -52,21 +43,26 @@ builder.Services.AddDbContext<ItemDbContext>(options =>
 
 builder.Services.AddScoped<IItemRepository, ItemRepository>();
 
-var app = builder.Build();
+// Create a logger configuration
+var loggerConfiguration = new LoggerConfiguration()
+    .MinimumLevel.Information()
+    .WriteTo.Console() // Log to console
+    .WriteTo.File($"Logs/log_{DateTime.Now:yyyyMMdd_HHmmss}.log"); // Log to file
 
-// Log application start
-Log.Information("Application Starting...");
+loggerConfiguration.Filter.ByExcluding(e => e.Properties.TryGetValue("SourceContext", out var value) &&
+                            e.Level == LogEventLevel.Information &&
+                            e.MessageTemplate.Text.Contains("Executed DbCommand"));
+
+var logger = loggerConfiguration.CreateLogger();
+builder.Logging.AddSerilog(logger);
+
+var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
     DBInit.Seed(app);
 }
-/* else
-{
-    app.UseExceptionHandler("/Home/Error");
-    app.UseHsts();
-} */
 
 app.UseStaticFiles();
 
