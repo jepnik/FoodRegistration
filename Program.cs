@@ -1,31 +1,3 @@
-/* var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
-builder.Services.AddControllersWithViews();
-
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
-{
-    app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
-}
-
-app.UseHttpsRedirection();
-app.UseStaticFiles();
-
-app.UseRouting();
-
-app.UseAuthorization();
-
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
-
-app.Run(); */
-
 using Microsoft.EntityFrameworkCore;
 using FoodRegistration.DAL;
 using Serilog;
@@ -41,6 +13,7 @@ builder.Services.AddDbContext<ItemDbContext>(options =>
     options.UseSqlite(builder.Configuration["ConnectionStrings:ItemDbContextConnection"]);
 });
 
+// Register repository
 builder.Services.AddScoped<IItemRepository, ItemRepository>();
 
 // Create a logger configuration
@@ -56,17 +29,47 @@ loggerConfiguration.Filter.ByExcluding(e => e.Properties.TryGetValue("SourceCont
 var logger = loggerConfiguration.CreateLogger();
 builder.Logging.AddSerilog(logger);
 
+// Session support
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30); //Timeout session etter 30 minutter
+    options.Cookie.HttpOnly = true; //Session må ha cookie http for GDPR. Nødvendig for denne oppgaven?
+    options.Cookie.IsEssential = true;
+});
+
 var app = builder.Build();
 
+// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
-    DBInit.Seed(app);
+    DBInit.Seed(app); // Seed the database in development mode
 }
 
+
+app.UseHttpsRedirection();
+
+app.UseHttpsRedirection();
 app.UseStaticFiles();
 
-app.MapDefaultControllerRoute();
+app.UseRouting();
+
+app.UseSession();
+
+app.UseAuthorization();
+
+app.UseMiddleware<AuthenticationMiddleware>();
+
+app.UseRouting();
+
+app.UseAuthorization();
+
+// Configure route mappings for both MVC and API
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}"); // MVC route
+
+app.MapControllers(); // API route mapping
 
 app.Run();
 

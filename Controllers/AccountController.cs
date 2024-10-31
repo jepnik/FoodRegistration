@@ -1,8 +1,40 @@
 using Microsoft.AspNetCore.Mvc;
 using FoodRegistration.Models;
+using FoodRegistration.DAL;
+using FoodRegistration.ViewModels;
+using System.Linq;
+
+namespace FoodRegistration.Controllers;
 
 public class AccountController : Controller
 {
+    //GET: Account/Login
+    public ActionResult Login()
+    {
+        return View();
+    }
+
+    [HttpPost]
+    public ActionResult Login(string email, string password)
+    {
+        //temporary inputs
+        if (email == "email" && password == "password")
+        {
+            //Lage session
+            HttpContext.Session.SetString("User", email);
+            return RedirectToAction("Index", "Home"); //Sendes til forside
+        }
+        ViewBag.Error = "Ikke gyldig brukernavn eller passord";
+        return View();
+    }
+
+    public ActionResult Logout()
+    {
+        //Logg ut og stop session
+        HttpContext.Session.Clear();
+        return RedirectToAction("Login");
+    }
+
     [HttpGet]
     public IActionResult Profile()
     {
