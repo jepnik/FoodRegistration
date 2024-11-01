@@ -1,22 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using FoodRegistration.DAL;
 using Serilog;
-
-// Create a logger configuration
-Log.Logger = new LoggerConfiguration()
-    .MinimumLevel.Information()
-    .WriteTo.Console() // Log to console
-    .WriteTo.File("Logs/log.txt", rollingInterval: RollingInterval.Day) // Log to file
-    .CreateLogger();
+using Serilog.Events;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Use Serilog for logging
-builder.Host.UseSerilog();
-
-// Add services to the container.
-builder.Services.AddControllersWithViews(); // For MVC
-builder.Services.AddControllers(); // For API controllers
+builder.Services.AddControllersWithViews();
 
 // Configure the DbContext with SQLite
 builder.Services.AddDbContext<ItemDbContext>(options =>
@@ -27,7 +16,20 @@ builder.Services.AddDbContext<ItemDbContext>(options =>
 // Register repository
 builder.Services.AddScoped<IItemRepository, ItemRepository>();
 
-//Session support
+// Create a logger configuration
+var loggerConfiguration = new LoggerConfiguration()
+    .MinimumLevel.Information()
+    .WriteTo.Console() // Log to console
+    .WriteTo.File($"Logs/log_{DateTime.Now:yyyyMMdd_HHmmss}.log"); // Log to file
+
+loggerConfiguration.Filter.ByExcluding(e => e.Properties.TryGetValue("SourceContext", out var value) &&
+                            e.Level == LogEventLevel.Information &&
+                            e.MessageTemplate.Text.Contains("Executed DbCommand"));
+
+var logger = loggerConfiguration.CreateLogger();
+builder.Logging.AddSerilog(logger);
+
+// Session support
 builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromMinutes(30); //Timeout session etter 30 minutter
@@ -37,20 +39,12 @@ builder.Services.AddSession(options =>
 
 var app = builder.Build();
 
-// Log application start
-Log.Information("Application Starting...");
-
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
     DBInit.Seed(app); // Seed the database in development mode
 }
-/* else
-{
-    app.UseExceptionHandler("/Home/Error");
-    app.UseHsts();
-} */
 
 
 app.UseHttpsRedirection();
@@ -64,11 +58,11 @@ app.UseSession();
 
 app.UseAuthorization();
 
+app.UseAuthentication();
+
 app.UseMiddleware<AuthenticationMiddleware>();
 
 app.UseRouting();
-
-app.UseAuthorization();
 
 // Configure route mappings for both MVC and API
 app.MapControllerRoute(

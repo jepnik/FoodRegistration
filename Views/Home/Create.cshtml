@@ -4,10 +4,11 @@
 <h2>Create New Item</h2>
 
 <form asp-action="Create">
+    <div asp-validation-summary="All" class="text-danger"></div>
     <!-- ID for produktet -->
     <div class="form-group">
         <!-- Vi skal vel ikke legge inn itemID manuelt? -->
-        <label asp-for="ItemId">ID number</label><span class="text-danger">*</span>
+        <label asp-for="ItemId"></label><span class="text-danger">*</span>
         <input asp-for="ItemId" class="form-control" />
         <span asp-validation-for="ItemId" class="text-danger"></span>
     </div>
@@ -28,14 +29,14 @@
 
     <!-- Sertifikat --> 
     <div class="form-group">
-        <label asp-for="Sertificate"></label>
-        <input asp-for="Sertificate" class="form-control" />
-        <span asp-validation-for="Sertificate" class="text-danger"></span>
+        <label asp-for="Certificate"></label>
+        <input asp-for="Certificate" class="form-control" />
+        <span asp-validation-for="Certificate" class="text-danger"></span>
     </div>
 
     <!-- Image URL -->
     <div class="form-group">
-        <label asp-for="ImageUrl">Bilde linke</label>
+        <label asp-for="ImageUrl"></label>
         <input asp-for="ImageUrl" class="form-control" />
         <span asp-validation-for="ImageUrl" class="text-danger"></span>
     </div>

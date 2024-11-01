@@ -20,7 +20,7 @@ public static class DBInit
                 {
                     Name = "Apple",
                     Category = "Fruit",
-                    Sertificate = "Organic",
+                    Certificate = "Organic",
                     ImageUrl = "/images/apple.jpg",
                     
                     // Ernæringsfakta (nutritional information)
@@ -50,7 +50,7 @@ public static class DBInit
                 {
                     Name = "Banana",
                     Category = "Fruit",
-                    Sertificate = "Fair Trade",
+                    Certificate = "Fair Trade",
                     ImageUrl = "/images/banana.jpg",
                     
                     // Ernæringsfakta

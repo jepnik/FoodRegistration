@@ -57,7 +57,7 @@ public class HomeController : Controller
             if (returnOk)
                 return RedirectToAction(nameof(Index));
         }
-        _logger.LogWarning("[HmController] Item creation failed {@item}", item);
+        _logger.LogWarning("[HomeController] Item creation failed {@item}", item);
         return View(item);
     }
 

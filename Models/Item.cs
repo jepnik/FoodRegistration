@@ -16,8 +16,8 @@ namespace FoodRegistration.Models
         [StringLength(50, ErrorMessage = "Category cannot exceed 50 characters.")]
         public string? Category { get; set; }
 
-        [StringLength(50, ErrorMessage = "Sertificate cannot exceed 50 characters.")]
-        public string? Sertificate { get; set; }
+        [StringLength(50, ErrorMessage = "Certificate cannot exceed 50 characters.")]
+        public string? Certificate { get; set; }
 
         [Url(ErrorMessage = "Invalid URL format.")]
         public string? ImageUrl { get; set; }
