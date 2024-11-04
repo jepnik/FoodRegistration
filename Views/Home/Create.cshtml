@@ -109,14 +109,37 @@
         <span asp-validation-for="Salt" class="text-danger"></span>
     </div>
 
+<h3>Product information</h3>
+ <!-- Country of Origin -->
+    <div class="form-group">
+        <label asp-for="CountryOfOrigin">Country of Origin</label><span class="text-danger">*</span>
+        <input asp-for="CountryOfOrigin" class="form-control" />
+        <span asp-validation-for="CountryOfOrigin" class="text-danger"></span>
+    </div>
 
+    <!-- Country of Provenance -->
+    <div class="form-group">
+        <label asp-for="CountryOfProvenance">Country of Provenance</label><span class="text-danger">*</span>
+        <input asp-for="CountryOfProvenance" class="form-control" />
+        <span asp-validation-for="CountryOfProvenance" class="text-danger"></span>
+    </div>
+
+    @* <!-- Item Number -->
+    <div class="form-group">
+        <label asp-for="ItemNumber">Item Number</label><span class="text-danger">*</span>
+        <input asp-for="ItemNumber" class="form-control" />
+        <span asp-validation-for="ItemNumber" class="text-danger"></span>
+    </div>
+ *@
+    <!-- Created Date (Read-only) -->
+    <div class="form-group">
+        <label asp-for="CreatedDate">Created Date</label>
+        <input asp-for="CreatedDate" class="form-control" readonly />
+    </div>
     
-
-
-
    
     
 @*the create button *@
-    <button type="submit" class="btn btn-primary">Create</button>
-    <a asp-action="Index" class="btn btn-secondary">Go back to home page</a>
+    <button type="submit" class="btn btn-primary mt-3 mb-5">Create</button>
+    <a asp-action="Index" class="btn btn-secondary mt-3 mb-5">Go back to home page</a>
 </form>

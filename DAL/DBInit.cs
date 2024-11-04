@@ -37,7 +37,6 @@ public static class DBInit
                     // Produktinfo                    
                     CountryOfOrigin = "Norway",    // Opprinnelsesland
                     CountryOfProvenance = "Norway", // Opphavsland
-                    ItemNumber = "A123",           // Varenummer
                     CreatedDate = DateTime.Now,
                     UpdatedDate = DateTime.Now
                     

@@ -55,6 +55,7 @@ for details on configuring this project to bundle and minify static web assets. 
   font-size: 1.3rem; /* Endring: Øker skriftstørrelsen i bunnbanneret 
 } */
 
+
 .navbar {
   background-color: #83B271;
   color: #ffffff !important;
@@ -105,13 +106,13 @@ for details on configuring this project to bundle and minify static web assets. 
   left: auto;
   right: 0;
 }
-
+  
 .footer {
   background-color: #83B271;
   color: #ffffff;
   position: fixed;
   bottom: 0;
   width: 100%;
-  padding: 30px;
+  padding: 20px;
   font-size: 1.3rem;
 }
