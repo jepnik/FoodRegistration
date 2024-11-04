@@ -1,1 +1,1 @@
-# ITPE3200-Eksamensprosjekt-
+# ITPE3200 Eksamensprosjekt

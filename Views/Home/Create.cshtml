@@ -6,12 +6,12 @@
 <form asp-action="Create">
     <div asp-validation-summary="All" class="text-danger"></div>
     <!-- ID for produktet -->
-    <div class="form-group">
+    @* <div class="form-group">
         <!-- Vi skal vel ikke legge inn itemID manuelt? -->
         <label asp-for="ItemId"></label><span class="text-danger">*</span>
         <input asp-for="ItemId" class="form-control" />
         <span asp-validation-for="ItemId" class="text-danger"></span>
-    </div>
+    </div> *@
 
     <!-- Navn på produktet -->
     <div class="form-group">
