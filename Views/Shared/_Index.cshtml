@@ -26,13 +26,14 @@
                     }
                 </td>
                 <td>
-                    <a asp-action="Update" asp-route-id="@item.ItemId">Update</a>
-                    <a asp-action="Delete" asp-route-id="@item.ItemId">Delete</a>
+                    <a asp-action="Update" asp-route-id="@item.ItemId" class="btn btn-success">Update</a>
+                    <a asp-action="Delete" asp-route-id="@item.ItemId" class="btn btn-danger">Delete</a>
+                    
                 </td>
             </tr>
         }
     </table>    
     <p>
-        <a class="btn btn-secondary mt-3 mb-5" asp-controller="Home" asp-action="Create">Create New Item</a>
+        <a class="btn btn-primary mt-3 mb-5" asp-controller="Home" asp-action="Create">Create New Item</a>
     </p>   
 </div>

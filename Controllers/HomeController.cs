@@ -83,7 +83,6 @@ public async Task<IActionResult> Create(Item item)
 }
 
 
-
     [HttpGet]
     public async Task<IActionResult> Update(int id)
     {
@@ -96,20 +95,7 @@ public async Task<IActionResult> Create(Item item)
         return View(item);
     }
 
-  /*   [HttpPost]
-    public async Task<IActionResult> Update(Item item)
-    {
-        if (ModelState.IsValid)
-        {
-            bool returnOk = await _itemRepository.Update(item);
-            if (returnOk)
-                return RedirectToAction(nameof(Index));
-        }
-        _logger.LogWarning("[HomeController] Item update failed {@item}", item);
-        return View(item); // Hvis noe er galt, last opp skjemaet på nytt
-    } */
-
-    //ny kode for update se om fungerer
+ 
 
     [HttpPost]
 public async Task<IActionResult> Update(Item item)
