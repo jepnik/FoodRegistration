@@ -1,16 +1,15 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FoodRegistration.Models
 {
     public class Item
     {
-        public int ItemId { get; set; }
-
-        [Required(ErrorMessage = "Name is required.")]
-        [RegularExpression(@"^[0-9a-zA-ZæøåÆØÅ. \-]{2,30}$", ErrorMessage = "The Name must be numbers or letters and between 2 to 30 characters.")]
-        [Display(Name = "Item name")]
-        public string Name { get; set; } = string.Empty;
+         [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public int ItemId { get; set; }
+    public string Name { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Category is required.")]
         [StringLength(50, ErrorMessage = "Category cannot exceed 50 characters.")]
@@ -55,10 +54,6 @@ namespace FoodRegistration.Models
         public string? CountryOfOrigin { get; set; } // opprinelseland- råvrer er herfra
         public string? CountryOfProvenance { get; set; } //Opphavsland- endelige produksjonen eller bearbeidingen av produktet fant sted
 
-        [Required(ErrorMessage = "Item number is required.")]
-        [RegularExpression(@"[0-9a-zA-Z\-]{1,20}", ErrorMessage = "Item number must be alphanumeric and between 1 to 20 characters.")]
-        public string? ItemNumber { get; set; }      // Varenummer
-
         [DataType(DataType.Date)]
         public DateTime CreatedDate { get; set; }   // Opprettelsesdato
 
@@ -67,7 +62,7 @@ namespace FoodRegistration.Models
 
         // Navigation property for ProductInfo (1-to-1 relationship)
         // public virtual Productinfo? Productinfo { get; set; }
-
+/* 
         // Validation property
         public bool IsFatCompositionValid
         {
@@ -98,6 +93,26 @@ namespace FoodRegistration.Models
             }
 
             return string.Empty; // Return an empty string if the validation passes
+        } */
+
+
+         // Tilpasset validering
+    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+    {
+        // Sjekk at summen av saturated og unsaturated fat ikke overstiger fat
+        if ((Saturatedfat.GetValueOrDefault() + Unsaturatedfat.GetValueOrDefault()) > Fat)
+        {
+            yield return new ValidationResult(
+                "The combined value of Saturated fat and Unsaturated fat cannot exceed the total Fat.",
+                new[] { nameof(Saturatedfat), nameof(Unsaturatedfat) }
+            );
         }
+    }
+
+
+
+
+
+        
     }
 }

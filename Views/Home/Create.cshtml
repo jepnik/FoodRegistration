@@ -5,13 +5,8 @@
 
 <form asp-action="Create">
     <div asp-validation-summary="All" class="text-danger"></div>
-    <!-- ID for produktet -->
-    <div class="form-group">
-        <!-- Vi skal vel ikke legge inn itemID manuelt? -->
-        <label asp-for="ItemId"></label><span class="text-danger">*</span>
-        <input asp-for="ItemId" class="form-control" />
-        <span asp-validation-for="ItemId" class="text-danger"></span>
-    </div>
+    
+  
 
     <!-- Navn på produktet -->
     <div class="form-group">
@@ -124,20 +119,8 @@
         <span asp-validation-for="CountryOfProvenance" class="text-danger"></span>
     </div>
 
-    @* <!-- Item Number -->
-    <div class="form-group">
-        <label asp-for="ItemNumber">Item Number</label><span class="text-danger">*</span>
-        <input asp-for="ItemNumber" class="form-control" />
-        <span asp-validation-for="ItemNumber" class="text-danger"></span>
-    </div>
- *@
-    <!-- Created Date (Read-only) -->
-    <div class="form-group">
-        <label asp-for="CreatedDate">Created Date</label>
-        <input asp-for="CreatedDate" class="form-control" readonly />
-    </div>
-    
-   
+  
+  
     
 @*the create button *@
     <button type="submit" class="btn btn-primary mt-3 mb-5">Create</button>

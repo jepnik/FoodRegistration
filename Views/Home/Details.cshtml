@@ -320,10 +320,6 @@ else
                         <td>@Model.CountryOfProvenance "Not available"</td> <!-- Sjekk for null -->
                     </tr>
                     <tr>
-                        <td>Item Number</td>
-                        <td>@Model.ItemNumber "Not available"</td> <!-- Sjekk for null -->
-                    </tr>
-                    <tr>
                         <td>Created Date</td>
                         <td>@Model.CreatedDate.ToString("yyyy-MM-dd") "Not available"</td> <!-- Sjekk for null -->
                     </tr>
@@ -338,3 +334,4 @@ else
 </div>
 
 <a asp-action="Index" class="btn btn-secondary mt-3 mb-5">Back to main page</a>
+ <a class="btn btn-secondary mt-3 mb-5" asp-controller="Home" asp-action="Create">Update item</a>

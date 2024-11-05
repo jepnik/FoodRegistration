@@ -67,7 +67,6 @@ public static class DBInit
                     // Produktinfo
                     CountryOfOrigin = "Ecuador",
                     CountryOfProvenance = "Ecuador",
-                    ItemNumber = "B456",
                     CreatedDate = DateTime.Now,
                     UpdatedDate = DateTime.Now
                     
