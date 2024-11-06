@@ -116,13 +116,6 @@ namespace FoodRegistration.DAL
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-     /*    // Metode for å hente neste ItemId
-        public int GetNextItemId()
-        {
-            var itemCount = _db.Items.Count();
-            return itemCount + 1; // Returnerer neste tilgjengelige ItemId
-        }
- */
         public async Task<IEnumerable<Item>?> GetAll()
         {
             try
@@ -163,8 +156,8 @@ namespace FoodRegistration.DAL
                 return false;
             }
         }
-
-        public async Task<bool> Update(Item item)
+//gamle versjon av update
+     /*    public async Task<bool> Update(Item item)
         {
             try
             {
@@ -177,7 +170,24 @@ namespace FoodRegistration.DAL
                 _logger.LogError("[ItemRepository] item update failed for ItemId {ItemId:0000}, error message: {e}", item.ItemId, e.Message);
                 return false;
             }
-        }
+        } */
+
+        //ny kode for ås e om kan få både update og create date til å funke samtidig
+        public async Task<bool> Update(Item item)
+{
+    try
+    {
+        _db.Items.Update(item); // Oppdaterer elementet i databasen
+        await _db.SaveChangesAsync(); // Lagrer endringene
+        return true;
+    }
+    catch (Exception e)
+    {
+        _logger.LogError("[ItemRepository] item update failed for ItemId {ItemId}, error message: {e}", item.ItemId, e.Message);
+        return false;
+    }
+}
+
 
         public async Task<bool> Delete(int id)
         {

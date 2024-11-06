@@ -95,9 +95,10 @@ public async Task<IActionResult> Create(Item item)
         return View(item);
     }
 
- 
+ //Gamle versjon da funker enten datecrated eller datupdate. datecreatd er ritkig til du oppdaterer da er update
+ //date riktig og datecreate feil. en av de får ritkig dato mens andre åfr 0001-01-01  
 
-    [HttpPost]
+/*     [HttpPost]
 public async Task<IActionResult> Update(Item item)
 {
     if (ModelState.IsValid)
@@ -107,7 +108,48 @@ public async Task<IActionResult> Update(Item item)
         return RedirectToAction(nameof(Index));
     }
     return View(item); // Hvis noe er galt, last opp skjemaet på nytt
+} */
+
+[HttpPost]
+public async Task<IActionResult> Update(Item item)
+{
+    if (ModelState.IsValid)
+    {
+        // Hent det eksisterende elementet fra databasen
+        var existingItem = await _itemRepository.GetItemById(item.ItemId);
+        
+        if (existingItem == null)
+        {
+            _logger.LogError("[HomeController] Item not found when updating the ItemId {ItemId:0000}", item.ItemId);
+            return NotFound("Item not found.");
+        }
+
+        // Behold CreatedDate og oppdater kun feltene som kan endres
+        existingItem.Name = item.Name;
+        existingItem.Category = item.Category;
+        existingItem.Certificate = item.Certificate;
+        existingItem.ImageUrl = item.ImageUrl;
+        existingItem.Energy = item.Energy;
+        existingItem.Carbohydrates = item.Carbohydrates;
+        existingItem.Sugar = item.Sugar;
+        existingItem.Protein = item.Protein;
+        existingItem.Fat = item.Fat;
+        existingItem.Saturatedfat = item.Saturatedfat;
+        existingItem.Unsaturatedfat = item.Unsaturatedfat;
+        existingItem.Fibre = item.Fibre;
+        existingItem.Salt = item.Salt;
+        existingItem.CountryOfOrigin = item.CountryOfOrigin;
+        existingItem.CountryOfProvenance = item.CountryOfProvenance;
+        existingItem.UpdatedDate = DateTime.Now; // Sett UpdatedDate til nåværende tidspunkt
+
+        // Oppdater elementet i databasen
+        await _itemRepository.Update(existingItem);
+
+        return RedirectToAction(nameof(Index));
+    }
+    return View(item); // Hvis noe er galt, last opp skjemaet på nytt
 }
+
 
     [HttpGet]
     public async Task<IActionResult> Delete(int id)
