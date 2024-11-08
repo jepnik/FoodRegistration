@@ -7,8 +7,10 @@ namespace FoodRegistration.Controllers;
 
 public class HomeController : Controller
 {
-    private readonly IItemRepository _itemRepository; // Dependency Injection for DbContext
-    private readonly ILogger<HomeController> _logger; // Logger for error handling
+    //Interface for item databse
+    private readonly IItemRepository _itemRepository;
+    // Logger for error handling
+    private readonly ILogger<HomeController> _logger;
 
     // Constructor for dependency injection
     public HomeController(IItemRepository itemRepository, ILogger<HomeController> logger)
@@ -17,6 +19,7 @@ public class HomeController : Controller
         _logger = logger ?? throw new ArgumentNullException(nameof(logger)); // Ensure the logger is not null
     }
 
+    // Main index page showing table with added items
     public async Task<IActionResult> Index()
     {
         var items = await _itemRepository.GetAll();
@@ -28,7 +31,8 @@ public class HomeController : Controller
         var itemsViewModel = new ItemsViewModel(items, "Index");
         return View(itemsViewModel);
     }
-        
+
+    // Details page for an item by ID
     public async Task<IActionResult> Details(int id)
     {
         var item = await _itemRepository.GetItemById(id);
@@ -41,48 +45,37 @@ public class HomeController : Controller
         return View(item);
     }
 
+    //Create item form 
     [HttpGet]
     public IActionResult Create()
     {
         return View();
     }
 
- /*    [HttpPost] denne fungerer men da er ikke ItemID automatisert
+    //Submit the Create item form with validation
+    [HttpPost]
     public async Task<IActionResult> Create(Item item)
     {
-        // Check if the model state is valid
         if (!ModelState.IsValid)
         {
-            bool returnOk = await _itemRepository.Create(item);
-            if (returnOk)
-                return RedirectToAction(nameof(Index));
-        }
-        _logger.LogWarning("[HomeController] Item creation failed {@item}", item);
-        return View(item);
-    } */
-
-    //den nye koden:
-    [HttpPost]
-public async Task<IActionResult> Create(Item item)
-{
-    if (!ModelState.IsValid)
-    {
-        foreach (var state in ModelState)
-        {
-            foreach (var error in state.Value.Errors)
+            // Log validation errors
+            foreach (var state in ModelState)
             {
-                _logger.LogError($"Field: {state.Key}, Error: {error.ErrorMessage}");
+                foreach (var error in state.Value.Errors)
+                {
+                    _logger.LogError($"Field: {state.Key}, Error: {error.ErrorMessage}");
+                }
             }
+            //retunrs to view with validation errors
+            return View(item);
         }
-        return View(item); // Returnerer til View med valideringsfeil
+
+        item.CreatedDate = DateTime.Now; // Set created date to now
+        await _itemRepository.Create(item); // Save new item to database
+        return RedirectToAction(nameof(Index));
     }
 
-    item.CreatedDate = DateTime.Now;
-    await _itemRepository.Create(item); // ItemId settes automatisk
-    return RedirectToAction(nameof(Index));
-}
-
-
+    //Render the Update item form for a specific item by it's ItemId
     [HttpGet]
     public async Task<IActionResult> Update(int id)
     {
@@ -95,62 +88,50 @@ public async Task<IActionResult> Create(Item item)
         return View(item);
     }
 
- //Gamle versjon da funker enten datecrated eller datupdate. datecreatd er ritkig til du oppdaterer da er update
- //date riktig og datecreate feil. en av de får ritkig dato mens andre åfr 0001-01-01  
-
-/*     [HttpPost]
-public async Task<IActionResult> Update(Item item)
-{
-    if (ModelState.IsValid)
+    //Submit the Update form and save changes to the item
+    [HttpPost]
+    public async Task<IActionResult> Update(Item item)
     {
-        item.UpdatedDate = DateTime.Now; // Sett UpdatedDate til gjeldende tidspunkt
-        await _itemRepository.Update(item); // Oppdaterer elementet i databasen
-        return RedirectToAction(nameof(Index));
-    }
-    return View(item); // Hvis noe er galt, last opp skjemaet på nytt
-} */
-
-[HttpPost]
-public async Task<IActionResult> Update(Item item)
-{
-    if (ModelState.IsValid)
-    {
-        // Hent det eksisterende elementet fra databasen
-        var existingItem = await _itemRepository.GetItemById(item.ItemId);
-        
-        if (existingItem == null)
+        if (ModelState.IsValid)
         {
-            _logger.LogError("[HomeController] Item not found when updating the ItemId {ItemId:0000}", item.ItemId);
-            return NotFound("Item not found.");
+            //Retrieve the existing item from the database
+            var existingItem = await _itemRepository.GetItemById(item.ItemId);
+
+            if (existingItem == null)
+            {
+                _logger.LogError("[HomeController] Item not found when updating the ItemId {ItemId:0000}", item.ItemId);
+                return NotFound("Item not found.");
+            }
+
+            //Keep original CreatedDate, only updates other properties
+            existingItem.Name = item.Name;
+            existingItem.Category = item.Category;
+            existingItem.Certificate = item.Certificate;
+            existingItem.ImageUrl = item.ImageUrl;
+            existingItem.Energy = item.Energy;
+            existingItem.Carbohydrates = item.Carbohydrates;
+            existingItem.Sugar = item.Sugar;
+            existingItem.Protein = item.Protein;
+            existingItem.Fat = item.Fat;
+            existingItem.Saturatedfat = item.Saturatedfat;
+            existingItem.Unsaturatedfat = item.Unsaturatedfat;
+            existingItem.Fibre = item.Fibre;
+            existingItem.Salt = item.Salt;
+            existingItem.CountryOfOrigin = item.CountryOfOrigin;
+            existingItem.CountryOfProvenance = item.CountryOfProvenance;
+            //Sett UpdatedDate til nåværende tidspunkt
+            existingItem.UpdatedDate = DateTime.Now;
+
+            // Saves updates to database
+            await _itemRepository.Update(existingItem);
+
+            return RedirectToAction(nameof(Index));
         }
-
-        // Behold CreatedDate og oppdater kun feltene som kan endres
-        existingItem.Name = item.Name;
-        existingItem.Category = item.Category;
-        existingItem.Certificate = item.Certificate;
-        existingItem.ImageUrl = item.ImageUrl;
-        existingItem.Energy = item.Energy;
-        existingItem.Carbohydrates = item.Carbohydrates;
-        existingItem.Sugar = item.Sugar;
-        existingItem.Protein = item.Protein;
-        existingItem.Fat = item.Fat;
-        existingItem.Saturatedfat = item.Saturatedfat;
-        existingItem.Unsaturatedfat = item.Unsaturatedfat;
-        existingItem.Fibre = item.Fibre;
-        existingItem.Salt = item.Salt;
-        existingItem.CountryOfOrigin = item.CountryOfOrigin;
-        existingItem.CountryOfProvenance = item.CountryOfProvenance;
-        existingItem.UpdatedDate = DateTime.Now; // Sett UpdatedDate til nåværende tidspunkt
-
-        // Oppdater elementet i databasen
-        await _itemRepository.Update(existingItem);
-
-        return RedirectToAction(nameof(Index));
+        // Reload view if validation fails 
+        return View(item);
     }
-    return View(item); // Hvis noe er galt, last opp skjemaet på nytt
-}
 
-
+    //Show confirmation page for deleting an item
     [HttpGet]
     public async Task<IActionResult> Delete(int id)
     {
@@ -163,6 +144,7 @@ public async Task<IActionResult> Update(Item item)
         return View(item);
     }
 
+    // Confirm and delete item from the database
     [HttpPost]
     public async Task<IActionResult> DeleteConfirmed(int id)
     {

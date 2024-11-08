@@ -4,10 +4,11 @@ namespace FoodRegistration.ViewModels
 {
     public class ItemsViewModel
     {
-        public IEnumerable<Item> Items; // Endret til egenskap
-        
-        public string? CurrentViewName; // Endret til egenskap
-
+        //items that are displayed
+        public IEnumerable<Item> Items;
+        //curent view name
+        public string? CurrentViewName;
+        // Constructor to initialize Items and CurrentViewName properties
         public ItemsViewModel(IEnumerable<Item> items, string? currentViewName)
         {
             Items = items;

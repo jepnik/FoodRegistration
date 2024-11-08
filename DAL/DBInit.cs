@@ -1,4 +1,3 @@
-using Microsoft.EntityFrameworkCore;
 using FoodRegistration.Models;
 
 namespace FoodRegistration.DAL;
@@ -9,10 +8,14 @@ public static class DBInit
     {
         using var serviceScope = app.ApplicationServices.CreateScope();
         ItemDbContext context = serviceScope.ServiceProvider.GetRequiredService<ItemDbContext>();
-        //context.Database.EnsureDeleted();   // Sletter databasen for testing
-        context.Database.EnsureCreated();   // Oppretter databasen på nytt
+        //Uncomment the follwoing line to delets the database
+        //context.Database.EnsureDeleted();   
+        //Ensures the databse is created if it dosen't alredy exist
+        context.Database.EnsureCreated();
 
-        if (!context.Items.Any())   // Sjekker om det allerede er data
+        // Decide whether to keep or remove the following code for seeding initial items in the database.
+        // This part is optional and only necessary if you want specific items to appear when the app starts.
+        /* if (!context.Items.Any())   // Sjekker om det allerede er data
         {
             var items = new List<Item>
             {
@@ -40,11 +43,7 @@ public static class DBInit
                     CreatedDate = DateTime.Now,
                     UpdatedDate = DateTime.Now
                     
-                    // Produksjonsinformsjon via Productinfo
-                    // Productinfo = new Productinfo
-                    // {
-                        
-                    // }
+                   
                 },
                 new Item
                 {
@@ -69,24 +68,23 @@ public static class DBInit
                     CountryOfProvenance = "Ecuador",
                     CreatedDate = DateTime.Now,
                     UpdatedDate = DateTime.Now
-                    
-                    // Produksjonsinformasjon via Productinfo
-                    // Productinfo = new Productinfo
-                    // {
-                        
-                    // }
+                   
                 }
             };
-            context.AddRange(items);   // Legg til data i Items-tabellen
+
+            // Add the items to the Items table
+            context.AddRange(items);   
             context.SaveChanges();
-        }
-        
+        } */
+
+        //Check if any user data exists; if not, add a default user for testing
         if (!context.Users.Any())
         {
             var users = new List<User>
             {
                 new User { Email = "Email", Password = "Password"},
             };
+            //Add the users to the Users table
             context.AddRange(users);
             context.SaveChanges();
         }

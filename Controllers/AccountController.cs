@@ -1,8 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using FoodRegistration.Models;
-using FoodRegistration.DAL;
-using FoodRegistration.ViewModels;
-using System.Linq;
 
 namespace FoodRegistration.Controllers;
 
