@@ -57,6 +57,8 @@ public double? Fibre { get; set; }
 [Range(0, double.MaxValue, ErrorMessage = "Salt must be a non-negative number.")]
 public double? Salt { get; set; }
 
+            // Product Information
+
         [Required(ErrorMessage = "Country of origin is required.")]
         [StringLength(50, ErrorMessage = "Country of origin can't exceed 50 characters.")]
         public string? CountryOfOrigin { get; set; } // opprinelseland- råvrer er herfra

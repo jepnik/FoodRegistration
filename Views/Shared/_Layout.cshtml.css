@@ -1,61 +1,9 @@
 ﻿/* Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
 
-/*  .navbar {
-  background-color: #83B271;
-  color: #ffffff !important;
-  font-size: 1.4rem;
-}
+/* Top Banner */
 
-.navbar-brand {
-  font-size: 1.5rem;
-  color: #ffffff;
-}
-
-.nav-link {
-  color: #ffffff !important;
-  padding: 10px;
-  transition: background-color 0.3s ease;
-  font-size: 1.4rem;
-}
-
-
-.nav-link:hover {
-  background-color: #395b2c;
-  border-radius: 4px;
-}
-
-.navbar-toggler {
-  border-color: #ffffff;
-}
-
-.user-icon {
-  width: 40px; /* Juster for å gjøre ikonet større 
-  height: 40px;
-  border-radius: 50%; /* Gjør ikonet rundt, om ønskelig 
-  cursor: pointer;
-}
-
-.dropdown {
-  margin-left: auto; 
-}
-
-.dropdown-menu {
-  left: auto;
-  right: 0; 
-}
-
-.footer {
-  background-color: #83B271;
-  color: #ffffff;
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  padding: 30px;
-  font-size: 1.3rem; /* Endring: Øker skriftstørrelsen i bunnbanneret 
-} */
-
-
+/* color of toppbaner and texts color and size*/
 .navbar {
   background-color: #83B271;
   color: #ffffff !important;
@@ -64,33 +12,33 @@ for details on configuring this project to bundle and minify static web assets. 
 
 .navbar-brand {
   font-size: 1.5rem;
-  color: #ffffff;
-  display: flex; /* Nytt: For å vise logoen og teksten side om side */
-  align-items: center; /* Nytt: Sentraliserer logoen og teksten vertikalt */
 }
 
-.navbar-brand .logo {
-  width: 30px; /* Juster størrelsen etter behov */
+/* Adjust logo size and placment of logo contra texts*/
+ .navbar-brand .logo {
+  width: 30px; 
   height: 30px;
-  margin-right: 10px; /* Avstand mellom logoen og teksten */
-}
+  margin-right: 10px; 
+} 
 
-.nav-link {
+/*Styling of the navigation links*/
+ .nav-link {
   color: #ffffff !important;
   padding: 10px;
   transition: background-color 0.3s ease;
   font-size: 1.4rem;
-}
+} 
 
 .nav-link:hover {
   background-color: #395b2c;
   border-radius: 4px;
 }
 
-.navbar-toggler {
+ .navbar-toggler {
   border-color: #ffffff;
-}
+} 
 
+/* User icon styling */
 .user-icon {
   width: 40px;
   height: 40px;
@@ -98,15 +46,23 @@ for details on configuring this project to bundle and minify static web assets. 
   cursor: pointer;
 }
 
-.dropdown {
+/* Usier icon menu positioning*/
+ .dropdown {
   margin-left: auto;
-}
+} 
 
+/* Hamburger/box menu dropdown positioning*/
 .dropdown-menu {
   left: auto;
   right: 0;
 }
-  
+
+/* text size in tabel over items*/
+.container{
+  font-size: 1.2rem;
+}
+ 
+/* Footer styling */
 .footer {
   background-color: #83B271;
   color: #ffffff;

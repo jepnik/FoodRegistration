@@ -4,21 +4,21 @@
 <h2>Create New Item</h2>
 
 <form asp-action="Create">
-    <!-- Navn på produktet -->
+    <!-- Name of Product -->
     <div class="form-group">
         <label asp-for="Name"></label><span class="text-danger">*</span>
         <input asp-for="Name" class="form-control" />
         <span asp-validation-for="Name" class="text-danger"></span>
     </div>
 
-    <!-- Kategori -->
+    <!-- Category -->
     <div class="form-group">
         <label asp-for="Category"></label><span class="text-danger">*</span>
         <input asp-for="Category" class="form-control" />
         <span asp-validation-for="Category" class="text-danger"></span>
     </div>
 
-    <!-- Sertifikat --> 
+    <!-- Certificate --> 
     <div class="form-group">
         <label asp-for="Certificate"></label>
         <input asp-for="Certificate" class="form-control" />
@@ -32,16 +32,16 @@
         <span asp-validation-for="ImageUrl" class="text-danger"></span>
     </div>
 
-    <!-- Ernæringsverdier -->
+    <!-- Nutrions values -->
     <h3>Nutrients per 100g</h3>
-    <!-- Energi -->
+    <!-- Energy -->
     <div class="form-group">
         <label asp-for="Energy">Calories pr 100g</label><span class="text-danger">*</span>
         <input asp-for="Energy" class="form-control" />
         <span asp-validation-for="Energy" class="text-danger"></span>
     </div>
 
-    <!-- Carbs -->
+    <!-- Carbohydrates -->
      <div class="form-group">
         <label asp-for="Carbohydrates">Carbohydrates pr 100g</label><span class="text-danger">*</span>
         <input asp-for="Carbohydrates" class="form-control" />
@@ -100,6 +100,8 @@
         <span asp-validation-for="Salt" class="text-danger"></span>
     </div>
 
+    <!--Product Information-->
+
 <h3>Product information</h3>
  <!-- Country of Origin -->
     <div class="form-group">
@@ -115,8 +117,7 @@
         <span asp-validation-for="CountryOfProvenance" class="text-danger"></span>
     </div>
 
-  
-  
+    <!--buttons-->  
     
 @*the create button *@
     <button type="submit" class="btn btn-primary mt-3 mb-5">Create</button>
