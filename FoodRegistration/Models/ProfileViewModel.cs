@@ -4,7 +4,9 @@ namespace FoodRegistration.Models;
 
 public class ProfileViewModel
 {
+    
     [Required]
+    [EmailAddress]
     public string Email { get; set; }
 
     [Required]
