@@ -3,6 +3,7 @@
 
 <h2>Create New Item</h2>
 
+<!-- Basic information about product -->
 <form asp-action="Create">
     <!-- Name of Product -->
     <div class="form-group">
@@ -18,7 +19,7 @@
         <span asp-validation-for="Category" class="text-danger"></span>
     </div>
 
-    <!-- Certificate --> 
+    <!-- Certificate -->
     <div class="form-group">
         <label asp-for="Certificate"></label>
         <input asp-for="Certificate" class="form-control" />
@@ -34,6 +35,7 @@
 
     <!-- Nutrions values -->
     <h3>Nutrients per 100g</h3>
+
     <!-- Energy -->
     <div class="form-group">
         <label asp-for="Energy">Calories pr 100g</label><span class="text-danger">*</span>
@@ -42,29 +44,29 @@
     </div>
 
     <!-- Carbohydrates -->
-     <div class="form-group">
+    <div class="form-group">
         <label asp-for="Carbohydrates">Carbohydrates pr 100g</label><span class="text-danger">*</span>
         <input asp-for="Carbohydrates" class="form-control" />
         <span asp-validation-for="Carbohydrates" class="text-danger"></span>
     </div>
-    
-    
-     <!-- Sugar -->
-      <div class="form-group">
+
+
+    <!-- Sugar -->
+    <div class="form-group">
         <label asp-for="Sugar">-Of which sugar pr 100g</label><span class="text-danger">*</span>
         <input asp-for="Sugar" class="form-control" />
         <span asp-validation-for="Sugar" class="text-danger"></span>
     </div>
 
-     <!-- Protein -->
+    <!-- Protein -->
     <div class="form-group">
         <label asp-for="Protein">Protein pr 100g</label><span class="text-danger">*</span>
         <input asp-for="Protein" class="form-control" />
         <span asp-validation-for="Protein" class="text-danger"></span>
     </div>
 
-    
-      <!-- Fat -->
+
+    <!-- Fat -->
     <div class="form-group">
         <label asp-for="Fat">Fat pr 100g</label><span class="text-danger">*</span>
         <input asp-for="Fat" class="form-control" />
@@ -77,17 +79,16 @@
         <input asp-for="Saturatedfat" class="form-control" />
         <span asp-validation-for="Saturatedfat" class="text-danger"></span>
     </div>
-    
+
     <!--unsaturated fat-->
-     <div class="form-group">
+    <div class="form-group">
         <label asp-for="Unsaturatedfat">-Of which unsaturated fat pr 100g</label><span class="text-danger">*</span>
         <input asp-for="Unsaturatedfat" class="form-control" />
         <span asp-validation-for="Unsaturatedfat" class="text-danger"></span>
     </div>
 
-   
-     <!-- fiber -->
-       <div class="form-group">
+    <!-- fiber -->
+    <div class="form-group">
         <label asp-for="Fibre">Fiber pr 100g</label><span class="text-danger">*</span>
         <input asp-for="Fibre" class="form-control" />
         <span asp-validation-for="Fibre" class="text-danger"></span>
@@ -101,9 +102,8 @@
     </div>
 
     <!--Product Information-->
-
-<h3>Product information</h3>
- <!-- Country of Origin -->
+    <h3>Product information</h3>
+    <!-- Country of Origin -->
     <div class="form-group">
         <label asp-for="CountryOfOrigin">Country of Origin</label><span class="text-danger">*</span>
         <input asp-for="CountryOfOrigin" class="form-control" />
@@ -117,9 +117,7 @@
         <span asp-validation-for="CountryOfProvenance" class="text-danger"></span>
     </div>
 
-    <!--buttons-->  
-    
-@*the create button *@
+    <!--buttons fro create and to go back to main page ->  
     <button type="submit" class="btn btn-primary mt-3 mb-5">Create</button>
     <a asp-action="Index" class="btn btn-secondary mt-3 mb-5">Go back to home page</a>
 </form>

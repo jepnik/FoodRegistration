@@ -1,259 +1,28 @@
-@* @model FoodRegistration.Models.Item
-
-<div class="text-center my-5">
-    <h1>@Model.Name</h1>
-     <img alt="@Model.Name" src="@Model.ImageUrl" class="img-fluid" style="max-width: 300px;" style="max-lenght:300px;" 
-</div>
-
-<h4>Nutritional Values per 100g</h4>
-<table class="table">
-    <thead>
-        <tr>
-            <th>Property</th>
-            <th>Value</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>Calories</td>
-            <td>@Model.Energi</td>
-        </tr>
-        <tr>
-            <td>Carbohydrates</td>
-            <td>@Model.Carbohydrates</td>
-        </tr>
-        <tr>
-            <td>Sugar</td>
-            <td>@Model.Sugar</td>
-        </tr>
-        <tr>
-            <td>Protein</td>
-            <td>@Model.Protein</td>
-        </tr>
-        <tr>
-            <td>Fat</td>
-            <td>@Model.Fat</td>
-        </tr>
-        <tr>
-            <td>Saturated Fat</td>
-            <td>@Model.Saturatedfat </td> <!-- Vise 0 hvis null -->
-        </tr>
-        <tr>
-            <td>Unsaturated Fat</td>
-            <td>@Model.Unsaturatedfat </td> <!-- Vise 0 hvis null -->
-        </tr>
-        <tr>
-            <td>Fiber</td>
-            <td>@Model.Fiber</td>
-        </tr>
-        <tr>
-            <td>Salt</td>
-            <td>@Model.Salt</td>
-        </tr>
-    </tbody>
-</table>
-
-
-<!-- Tabell for produktinformasjon -->
-<h4>Product Information</h4>
-<table class="table">
-    <thead>
-        <tr>
-            <th>Property</th>
-            <th>Value</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>Country of Origin</td>
-            <td>@Model.Productinfo.CountryOfOrigin</td>
-        </tr>
-        <tr>
-            <td>Country of Provenance</td>
-            <td>@Model.Productinfo.CountryOfProvenance</td>
-        </tr>
-        <tr>
-            <td>Item Number</td>
-            <td>@Model.Productinfo.ItemNumber</td>
-        </tr>
-        <tr>
-            <td>Created Date</td>
-            <td>@Model.Productinfo.CreatedDate.ToString("yyyy-MM-dd")</td> <!-- Formater datoen -->
-        </tr>
-        <tr>
-            <td>Updated Date</td>
-            <td>@Model.Productinfo.UpdatedDate.ToString("yyyy-MM-dd")</td> <!-- Formater datoen -->
-        </tr>
-    </tbody>
-</table>
-
-<a asp-action="Index" class="btn btn-secondary">Back to main page</a>
-
-@* @if (Model.Nutrients != null) // Check if Nutrition data exists
-{
-    <h4>Nutritional Information</h4>
-    <ul>
-        <li><strong>Energi (kcal):</strong> @Model.Nutrients.Energi</li>
-        <li><strong>Fett (g):</strong> @Model.Nutrition.Fett</li>
-        <li><strong>Mettede fettsyrer (g):</strong> @Model.Nutrition.MettedeFettsyrer</li>
-        <li><strong>Umettede fettsyrer (g):</strong> @Model.Nutrition.UmettedeFettsyrer</li>
-        <li><strong>Karbohydrater (g):</strong> @Model.Nutrition.Karbohydrater</li>
-        <li><strong>Sukkerarter (g):</strong> @Model.Nutrition.Sukkerarter</li>
-        <li><strong>Kostfiber (g):</strong> @Model.Nutrition.Kostfiber</li>
-        <li><strong>Protein (g):</strong> @Model.Nutrition.Protein</li>
-        <li><strong>Salt (g):</strong> @Model.Nutrition.Salt</li>
-    </ul>
-}
-else
-{
-    <p>No nutritional information available.</p>
-}
- *@
-
-@* @model FoodRegistration.Models.Item
-
-<!-- Topp-seksjonen med produktnavn og bilde -->
-<div class="text-center my-5">
-    <h1>@Model.Name</h1>
-    <img alt="@Model.Name" src="@Model.ImageUrl" class="img-fluid" style="max-width: 200px;" /> <!-- Gjør bildet mindre -->
-</div>
-
-
-
-<div class="container">
-    <div class="row">
-        <!-- Nutritional Values per 100g - venstre kolonne -->
-        <div class="col-md-5" style="margin-right: 90px;"> <!-- Legger til høyre-margin -->
-            <h4>Nutritional Values per 100g</h4>
-            
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Property</th>
-                        <th>Value</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Calories</td>
-                        <td>@Model.Energi</td>
-                    </tr>
-                    <tr>
-                        <td>Carbohydrates</td>
-                        <td>@Model.Carbohydrates</td>
-                    </tr>
-                    <tr>
-                        <td>Sugar</td>
-                        <td>@Model.Sugar</td>
-                    </tr>
-                    <tr>
-                        <td>Protein</td>
-                        <td>@Model.Protein</td>
-                    </tr>
-                    <tr>
-                        <td>Fat</td>
-                        <td>@Model.Fat</td>
-                    </tr>
-                    <tr>
-                        <td>Saturated Fat</td>
-                        <td>@Model.Saturatedfat </td> <!-- Vise 0 hvis null -->
-                    </tr>
-                    <tr>
-                        <td>Unsaturated Fat</td>
-                        <td>@Model.Unsaturatedfat </td> <!-- Vise 0 hvis null -->
-                    </tr>
-                    <tr>
-                        <td>Fiber</td>
-                        <td>@Model.Fiber</td>
-                    </tr>
-                    <tr>
-                        <td>Salt</td>
-                        <td>@Model.Salt</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <!-- Product Information - høyre kolonne -->
-        <div class="col-md-5"> <!-- Reduserer bredde litt for å gi mer plass til mellomrom -->
-            <h4>Product Information</h4>
-           
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Property</th>
-                        <th>Value</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Country of Origin</td>
-                        <td>@Model.Productinfo.CountryOfOrigin</td>
-                    </tr>
-                    <tr>
-                        <td>Country of Provenance</td>
-                        <td>@Model.Productinfo.CountryOfProvenance</td>
-                    </tr>
-                    <tr>
-                        <td>Item Number</td>
-                        <td>@Model.Productinfo.ItemNumber</td>
-                    </tr>
-                    <tr>
-                        <td>Created Date</td>
-                        <td>@Model.Productinfo.CreatedDate.ToString("yyyy-MM-dd")</td> <!-- Formater datoen -->
-                    </tr>
-                    <tr>
-                        <td>Updated Date</td>
-                        <td>@Model.Productinfo.UpdatedDate.ToString("yyyy-MM-dd")</td> <!-- Formater datoen -->
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>
-
-<a asp-action="Index" class="btn btn-secondary mt-4">Back to main page</a>
- 
-
- *@
-
 @model Item
+<!-- Page to display detailed information of a specific item -->
 
-
-@* <!-- Topp-seksjonen med produktnavn og bilde -->
+<!-- Name and (if) picture in the top section -->
 <div class="text-center my-5">
     <h1>@Model.Name</h1>
-    <img alt="@Model.Name" src="@Model.ImageUrl" class="img-fluid" style="max-width: 300px;" />
+    <!-- Displays items image with widhth 200px and with responsive scaling of the hight -->
+    <img alt="@Model.Name" src="@Model.ImageUrl" class="img-fluid" style="max-width: 200px;" />
 </div>
-
-<div class="container">
-    <div class="d-flex justify-content-between">
-        <!-- Nutritional Values per 100g - venstre tabell -->
-        <div class="table-responsive" style="margin-right: 30px;">
-            <h4>Nutritional Values per 100g</h4>
-            <table class="table" style="width: auto;">
-                <thead> *@
-                <!-- Topp-seksjonen med produktnavn og bilde -->
-<div class="text-center my-5">
-    <h1>@Model.Name</h1>
-    <img alt="@Model.Name" src="@Model.ImageUrl" class="img-fluid" style="max-width: 200px;" /> <!-- Gjør bildet mindre -->
-</div>
-
-
 
 <div class="container">
     <div class="row">
-        <!-- Nutritional Values per 100g - venstre kolonne -->
-        <div class="col-md-5" style="margin-right: 90px;"> <!-- Legger til høyre-margin -->
+        <!-- Nutritional values per 100g - left column -->
+        <div class="col-md-5" style="margin-right: 90px;"> <!-- Adds margin between columns -->
             <h4>Nutritional Values per 100g</h4>
-            
+
             <table class="table">
-                 <thead>
+                <thead>
                     <tr>
                         <th>Property</th>
                         <th>Value</th>
                     </tr>
                 </thead>
+
+                <!-- Nutritional values-->
                 <tbody>
                     <tr>
                         <td>Calories</td>
@@ -295,15 +64,10 @@ else
             </table>
         </div>
 
-       @*  <!-- Product Information - høyre tabell -->
-        <div class="table-responsive">
+        <!-- Product information right column -->
+        <div class="col-md-5"> <!-- Adjusted width for balanced spacing -->
             <h4>Product Information</h4>
-            <table class="table">
-                <thead> *@
-                 <!-- Product Information - høyre kolonne -->
-        <div class="col-md-5"> <!-- Reduserer bredde litt for å gi mer plass til mellomrom -->
-            <h4>Product Information</h4>
-           
+
             <table class="table">
                 <thead>
                     <tr>
@@ -311,22 +75,24 @@ else
                         <th>Value</th>
                     </tr>
                 </thead>
+
+                <!-- Product infromation properties-->
                 <tbody>
                     <tr>
                         <td>Country of Origin</td>
-                        <td>@Model.CountryOfOrigin</td> <!-- Sjekk for null -->
+                        <td>@Model.CountryOfOrigin</td>
                     </tr>
                     <tr>
                         <td>Country of Provenance</td>
-                        <td>@Model.CountryOfProvenance</td> <!-- Sjekk for null -->
+                        <td>@Model.CountryOfProvenance</td>
                     </tr>
                     <tr>
                         <td>Created Date</td>
-                        <td>@Model.CreatedDate.ToString("yyyy-MM-dd")</td> <!-- Sjekk for null -->
+                        <td>@Model.CreatedDate.ToString("yyyy-MM-dd")</td>
                     </tr>
                     <tr>
                         <td>Updated Date</td>
-                        <td>@Model.UpdatedDate.ToString("yyyy-MM-dd")</td> <!-- Sjekk for null -->
+                        <td>@Model.UpdatedDate.ToString("yyyy-MM-dd")</td>
                     </tr>
                 </tbody>
             </table>
@@ -334,7 +100,6 @@ else
     </div>
 </div>
 
-<!--buttons-->
+<!--buttons for update and returning to main page-->
 <a asp-action="Update" asp-route-id="@Model.ItemId" class="btn btn-success mt-3 mb-5">Update</a>
 <a asp-action="Index" class="btn btn-secondary mt-3 mb-5">Back to main page</a>
-

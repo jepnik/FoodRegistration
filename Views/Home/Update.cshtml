@@ -2,15 +2,17 @@
 
 <h2>Update Item</h2>
 
-
+<!-- Form to update item information -->
 <form asp-action="Update">
     <input type="hidden" asp-for="ItemId" />
+
+    <!-- Basic item details -->
     <div class="form-group">
         <label asp-for="Name"></label>
         <input asp-for="Name" class="form-control" />
         <span asp-validation-for="Name" class="text-danger"></span>
     </div>
-    
+
     <div class="form-group">
         <label asp-for="Category"></label>
         <input asp-for="Category" class="form-control" />
@@ -29,15 +31,15 @@
         <span asp-validation-for="ImageUrl" class="text-danger"></span>
     </div>
 
-    <!-- Nutritional Information -->
+    <!-- Nutritional information -->
     <h4>Nutritional Information</h4>
-    
+
     <div class="form-group">
         <label asp-for="Energy">Calories (kcal)</label>
         <input asp-for="Energy" class="form-control" />
         <span asp-validation-for="Energy" class="text-danger"></span>
     </div>
-    
+
     <div class="form-group">
         <label asp-for="Carbohydrates">Carbohydrates (g)</label>
         <input asp-for="Carbohydrates" class="form-control" />
@@ -86,7 +88,7 @@
         <span asp-validation-for="Salt" class="text-danger"></span>
     </div>
 
-    <!-- Product Information -->
+    <!-- Product information -->
     <h4>Product Information</h4>
 
     <div class="form-group">
@@ -100,7 +102,7 @@
         <input asp-for="CountryOfProvenance" class="form-control" />
         <span asp-validation-for="CountryOfProvenance" class="text-danger"></span>
     </div>
-
+    <!-- Buttons for save changes and cancel -->
     <button type="submit" class="btn btn-primary mt-3 mb-5">Save Changes</button>
     <a asp-action="Index" class="btn btn-secondary mt-3 mb-5">Cancel</a>
 </form>

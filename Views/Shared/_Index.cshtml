@@ -1,6 +1,6 @@
 @model IEnumerable<Item>
 
-@* Tabel over food items alredy tracked *@
+<!-- Main page for displaying the table of items -->
 <div class="container">
     <table class='table table-striped'>
         <tr>
@@ -11,29 +11,33 @@
             <th>Image</th>
             <th>Actions</th>
         </tr>
+        <!-- Loop through each item in the model to display rows -->
         @foreach (var item in Model)
         {
-            @* Gjør hele tabellr ad klikkbar så du kommer til tilhørende produkt *@
+            <!-- Make the entire entire row clickable to navigate to the item's details page -->
             <tr onclick="location.href='@Url.Action("Details", "Home", new { id = item.ItemId })'" style="cursor:pointer;">
                 <td>@item.ItemId</td>
                 <td>@item.Name</td>
                 <td>@item.Category</td>
                 <td>@item.Certificate</td>
+                <!-- Display image if available, with styling -->
                 <td>
                     @if (!string.IsNullOrEmpty(item.ImageUrl))
                     {
-                        <img src="@item.ImageUrl" alt="@item.Name" style="width:50px;height:50px;"/>
+                        <img src="@item.ImageUrl" alt="@item.Name" class="img-fluid" style="max-width: 60px;" />
                     }
                 </td>
+                <!--  buttons for update and delete -->
                 <td>
                     <a asp-action="Update" asp-route-id="@item.ItemId" class="btn btn-success">Update</a>
                     <a asp-action="Delete" asp-route-id="@item.ItemId" class="btn btn-danger">Delete</a>
-                    
+
                 </td>
             </tr>
         }
-    </table>    
+    </table>
+    <!--  button for create -->
     <p>
         <a class="btn btn-primary mt-3 mb-5" asp-controller="Home" asp-action="Create">Create New Item</a>
-    </p>   
+    </p>
 </div>
