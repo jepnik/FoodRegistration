@@ -1,8 +1,12 @@
-@model FoodRegistration.Models.ProfileViewModel
+@model FoodRegistration.Models.User
 
 @{
     ViewData["Title"] = "Profile";
-    Layout = "_Layout";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var domain = Model.Email!.Split('@')[1];
+
+    var logo = domain == "anotherfoodcompany" ? "AlternativeUserLogo.png" : "UserLogo.png";
 }
 
 <head>
@@ -13,23 +17,26 @@
     <div class="profile-form">
         <h2>Profile</h2>
 
-        <form asp-action="UpdateProfile" method="post">
-            <div class="form-group">
-                <label for="username">Email</label>
-                <input type="text" id="email" name="Email" class="form-control" value="@Model.Email" required />
+        <div class="form-group">
+                <h3>Email account: @Model.Email</h3>
             </div>
+
             <div class="form-group">
-                <label for="password">New Password</label>
-                <input type="password" id="password" name="Password" class="form-control" required />
+                <p>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor 
+                    incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud 
+                    exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute 
+                    irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla 
+                    pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
+                    deserunt mollit anim id est laborum.
+                </p>
             </div>
-            <div class="form-group">
-                <label for="confirmPassword">Confirm Password</label>
-                <input type="password" id="confirmPassword" name="ConfirmPassword" class="form-control" required />
-            </div>
-            <button type="submit" class="btn btn-primary profile-button">UpdateProfile</button>
-        </form>
+            <a href="@Url.Action("ChangePassword", "Account")" class="btn btn-primary w-100 changePassword-button">Change Password</a>
+            <form asp-controller="Account" asp-action="DeleteUser" method="post" onsubmit="return confirm('Are you sure you want to delete this account? This action cannot be reversed');">
+                <button type="submit" class="btn btn-secondary w-100 deleteUser-button">Delete Account</button>
+            </form>
     </div>
     <div class="profile-logo">
-        <img src="~/images/UserLogo.png" alt="Profile Logo" />
+        <img src="~/images/@logo" alt="Logo" />
     </div>
 </div>

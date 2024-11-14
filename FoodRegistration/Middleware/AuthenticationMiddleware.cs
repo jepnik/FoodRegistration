@@ -10,7 +10,9 @@ public class AuthenticationMiddleware
     public async Task InvokeAsync(HttpContext context)
     {
         // Check if session exists
-        if (string.IsNullOrEmpty(context.Session.GetString("User")) && !context.Request.Path.StartsWithSegments("/Account/Login"))
+        if (!context.Session.GetInt32("UserID").HasValue
+        && !context.Request.Path.StartsWithSegments("/Account/Login")
+        && !context.Request.Path.StartsWithSegments("/Account/RegisterUser"))
         {
             context.Response.Redirect("/Account/Login");
             return;

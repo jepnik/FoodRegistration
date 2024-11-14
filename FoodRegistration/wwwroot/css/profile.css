@@ -19,10 +19,18 @@
     max-width: 350px; /* Optional: set a max width */
 }
 
-.profile-button {
+.changePassword-button {
     background-color: #83B271;
     color: white;
     border: none;
     outline: none;
-    margin-top: 1%;
+    margin-top: 5%;
+}
+
+.deleteUser-button {
+    background-color: #9c3b3b;
+    color: white;
+    border: none;
+    outline: none;
+    margin-top: 5%;
 }

@@ -4,6 +4,8 @@ using Serilog;
 using Serilog.Events;
 
 var builder = WebApplication.CreateBuilder(args);
+var connectionString = builder.Configuration.GetConnectionString("ItemDbContextConnection") ?? 
+throw new InvalidOperationException("Connection string 'ItemDbContextConnection' not found.");
 
 builder.Services.AddControllersWithViews();
 
