@@ -61,11 +61,13 @@ namespace FoodRegistration.Models
         // Country where raw materials are sourced
         [Required(ErrorMessage = "Country of origin is required.")]
         [StringLength(50, ErrorMessage = "Country of origin can't exceed 50 characters.")]
+        [RegularExpression(@"^[a-zA-Z\s]+$", ErrorMessage = "Only letters are allowed.")]
         public string? CountryOfOrigin { get; set; }
        
         // Country where final production occurred
         [Required(ErrorMessage = "Country of provenance is required.")]
         [StringLength(50, ErrorMessage = "Country of provenance can't exceed 50 characters.")]
+        [RegularExpression(@"^[a-zA-Z\s]+$", ErrorMessage = "Only letters are allowed.")]
         public string? CountryOfProvenance { get; set; }
 
         [DataType(DataType.Date)]
