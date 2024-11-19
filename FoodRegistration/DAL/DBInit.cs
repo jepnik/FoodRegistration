@@ -1,4 +1,6 @@
 using FoodRegistration.Models;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace FoodRegistration.DAL;
 
@@ -77,12 +79,24 @@ public static class DBInit
             context.SaveChanges();
         } */
 
-         /*
-        Removed the dbInit for users admin@foodcompany and admin@anotherfoodcompany, 
-        as they must be added to the database through the frontend in order to hash their passwords.
-        Logging in compares the hashed version of the input password with the hashed version of the password
-        in the database, so this is necessary and is done towards the end of the development process.
-        Their names are also changed to test@foodcompany and test@anotherfoodcompany
-        */
+        if (!context.Users.Any())
+        {
+            var users = new List<User>
+            {
+                new User { Email = "test@foodcompany", Password = HashPassword("password")},
+                new User { Email = "test@anotherfoodcompany", Password = HashPassword("password")},
+
+            };
+            context.AddRange(users);
+            context.SaveChanges();
+        }
+    }
+    private static string HashPassword(string password) //Method for hashing password. Using SHA256 because it's quick and we're not using ASP.NET Core Identity
+    {
+        using (var sha256 = SHA256.Create())
+        {
+            var hashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
+            return BitConverter.ToString(hashedBytes).Replace("-", "").ToLower();
+        }
     }
 }
