@@ -1,4 +1,6 @@
 using FoodRegistration.Models;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace FoodRegistration.DAL;
 
@@ -82,12 +84,20 @@ public static class DBInit
         {
             var users = new List<User>
             {
-                new User { Email = "admin@foodcompany", Password = "password"},
-                new User { Email = "admin@anotherfoodcompany", Password = "password"}
+                new User { Email = "test@foodcompany", Password = HashPassword("password")},
+                new User { Email = "test@anotherfoodcompany", Password = HashPassword("password")},
+
             };
-            //Add the users to the Users table
             context.AddRange(users);
             context.SaveChanges();
+        }
+    }
+    private static string HashPassword(string password) //Method for hashing password. Using SHA256 because it's quick and we're not using ASP.NET Core Identity
+    {
+        using (var sha256 = SHA256.Create())
+        {
+            var hashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
+            return BitConverter.ToString(hashedBytes).Replace("-", "").ToLower();
         }
     }
 }

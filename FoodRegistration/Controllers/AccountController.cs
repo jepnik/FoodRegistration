@@ -3,6 +3,8 @@ using FoodRegistration.Models;
 using FoodRegistration.DAL;
 using FoodRegistration.ViewModels;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace FoodRegistration.Controllers;
 
@@ -18,6 +20,15 @@ public class AccountController : Controller
     
     /*Sets a variable to retrieve the users ID from the session, this is used in many methods*/
     private int? CurrentUserId => HttpContext.Session.GetInt32("UserID");
+
+    private string HashPassword(string password) //Method for hashing password. Using SHA256 because it's quick and we're not using ASP.NET Core Identity
+    {
+        using (var sha256 = SHA256.Create())
+        {
+            var hashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
+            return BitConverter.ToString(hashedBytes).Replace("-", "").ToLower();
+        }
+    }
 
     [HttpGet]
     public IActionResult RegisterUser()
@@ -43,7 +54,7 @@ public class AccountController : Controller
                 /* added ?? string.Empty to remove warnings saying possible null reference assignment, 
                 it is believed that these values never will be null, so it's assumed to be safe to remove the warnings */
                 Email = model.Email ?? string.Empty,
-                Password = model.Password ?? string.Empty
+                Password = HashPassword(model.Password!) //model.Password ?? string.Empty
             };
             _context.Users.Add(newUser);
             _context.SaveChanges();
@@ -66,7 +77,7 @@ public class AccountController : Controller
         if (ModelState.IsValid)
         {
             var user = await _context.Users
-            .FirstOrDefaultAsync(u => u.Email == model.Email && u.Password == model.Password);
+            .FirstOrDefaultAsync(u => u.Email == model.Email && u.Password == HashPassword(model.Password!)); //Hashes written password to compare to hashed password in database
 
             if (user != null)
             {
@@ -97,7 +108,7 @@ public class AccountController : Controller
         var user = await _context.Users.FindAsync(userId);
         var model = new User //Removed Profile.cs Model since it was identical to User.cs
         {
-            UserId = user!.UserId,
+            UserId = user!.UserId, //Using '!' because user never will be null at this point, since you have to be logged in to reach this method
             Email = user.Email
         };
         return View(model);
@@ -118,16 +129,16 @@ public class AccountController : Controller
             if (userId.HasValue)
             {
                 var user = await _context.Users.FindAsync(userId.Value);
-                if (user != null && user.Password == model.OldPassword)
+                if (user != null && user.Password == HashPassword(model.OldPassword!))
                 {
-                    user.Password = model.NewPassword;
+                    user.Password = HashPassword(model.NewPassword!);
                     await _context.SaveChangesAsync();
 
                     return RedirectToAction("Profile");
                 }
                 else
                 {
-                    ModelState.AddModelError("", "Invalid old password");
+                    ModelState.AddModelError("OldPassword", "Incorrect password"); //Error message for incorrect old password
                 }
             }
         }
