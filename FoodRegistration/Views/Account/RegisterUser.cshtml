@@ -1,0 +1,36 @@
+@model FoodRegistration.ViewModels.RegisterUserViewModel
+
+@{
+    ViewData["Title"] = "RegisterUser";
+    Layout = "~/Views/Shared/_Layout.cshtml";  // Makes the layout similar to the rest of the app
+}
+
+<head>
+    <link href="~/css/registerAndPassword.css" rel="stylesheet" />
+</head>
+
+<body>
+    <div class="register-form">
+        <h2>Register</h2>
+        <form asp-controller="Account" asp-action="RegisterUser" method="post">
+            <div>
+                <label asp-for="Email">Email:</label>
+                <input asp-for="Email" type="email" required />
+                <span asp-validation-for="Email"></span>
+            </div>
+            <div>
+                <label asp-for="Password">Password:</label>
+                <input asp-for="Password" type="password" required />
+                <span asp-validation-for="Password"></span>
+            </div>
+            <div>
+                <label asp-for="ConfirmPassword">Confirm Password:</label>
+                <input asp-for="ConfirmPassword" type="password" required />
+                <span asp-validation-for="ConfirmPassword"></span>
+            </div>
+            <button type="submit" class="btn btn-primary w-100 submit-button">Register</button>
+            <button type="button" class="btn btn-secondary w-100 cancel-button"onclick="history.back()">Cancel</button>
+        </form>
+    </div>
+</body>
+</html>

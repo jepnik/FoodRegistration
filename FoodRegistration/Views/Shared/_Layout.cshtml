@@ -1,0 +1,102 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - FoodRegistration</title>
+
+    <!-- Favicon -->
+    <link rel="icon" href="~/images/favicon.ico" type="image/x-icon">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/FoodRegistration.styles.css" asp-append-version="true" />
+
+    <!-- Scripts (head section for dropdown functionality) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+
+@{ //To change the logo on the righton the navbar based on if someone is logged in as admin@anotherfoodcompany
+    var userEmail = Context.Session.GetString("UserEmail");
+    var logo = "DefaultLogo.png"; // Default logo
+
+    if (!string.IsNullOrEmpty(userEmail))
+    {
+        var domain = userEmail.Split('@')[1];
+        logo = domain == "foodcompany" ? "UserLogo.png" : "AlternativeUserLogo.png";
+    }
+}
+
+<body>
+
+    @if (ViewData["Title"]?.ToString() != "Login" && ViewData["Title"]?.ToString() != "RegisterUser") //Removes navigation bar from login page and register user page
+    {
+        <!--Toppbanner-->
+        <header class="navbar navbar-expand-lg navbar-dark mb-4 p-3 shadow" style="background-color: #83B271;">
+            <!-- Brand Logo and Name -->
+            <a class="navbar-brand d-flex align-items-center" href="/">
+                <img src="/images/logoHvit.ico" alt="Logo" class="logo mr-2" />FOODTRACE</a>
+
+
+            <!-- Hamburger toggle button navbar for small screnn -->
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- common navbar links in toppbaner and hamburger menu -->
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Home/Index">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Home/Create">Create Item</a>
+                    </li>
+                    <!-- Account for hamburger menu -->
+                    <li class="nav-item d-lg-none">
+                        <a class="nav-link" href="/Account/Profile">Account</a>
+                    </li>
+                    <!-- Log out for hamburger menu -->
+                    <li class="nav-item d-lg-none">
+                        <a class="nav-link" href="/Account/Logout">Logg out</a>
+                    </li>
+                </ul>
+
+                <!-- User icon with dropdown-menu for big screen -->
+                <div class="dropdown ml-auto d-none d-lg-block">
+                    <img src="/images/@logo" class="dropdown-toggle user-icon" id="userMenuIcon" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" alt="User Icon" />
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userMenuIcon">
+                        <a class="dropdown-item" href="/Account/Profile">Account</a>
+                        <a class="dropdown-item" href="/Account/Logout">Logg ut</a>
+                    </div>
+                </div>
+            </div>
+        </header>
+    }
+
+    <!-- Main content area are here content from alle pages will be -->
+    <div class="container" style="padding-top: 140px;">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <!--Footer-->
+    <footer class="footer">
+        <div class="container text-center">
+            &copy; 2024 - FoodRegistration | Contact us: +47 999 99 999 | Email: <a href="mailto:vårbedrift@gmail.com"
+                class="text-white">vårbedrift@gmail.com</a>
+        </div>
+    </footer>
+
+    <!-- Additional local scripts -->
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+
+</html>
