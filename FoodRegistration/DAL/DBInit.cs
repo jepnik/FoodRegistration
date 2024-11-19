@@ -84,8 +84,8 @@ public static class DBInit
         {
             var users = new List<User>
             {
-                new User { Email = "test@foodcompany", Password = HashPassword("password")},
-                new User { Email = "test@anotherfoodcompany", Password = HashPassword("password")},
+                new User { Email = "test@foodcompany.com", Password = HashPassword("password")},
+                new User { Email = "test@anotherfoodcompany.com", Password = HashPassword("password")},
 
             };
             context.AddRange(users);
