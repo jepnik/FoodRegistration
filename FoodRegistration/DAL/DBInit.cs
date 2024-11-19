@@ -77,17 +77,12 @@ public static class DBInit
             context.SaveChanges();
         } */
 
-        //Check if any user data exists; if not, add a default user for testing
-        if (!context.Users.Any())
-        {
-            var users = new List<User>
-            {
-                new User { Email = "admin@foodcompany", Password = "password"},
-                new User { Email = "admin@anotherfoodcompany", Password = "password"}
-            };
-            //Add the users to the Users table
-            context.AddRange(users);
-            context.SaveChanges();
-        }
+         /*
+        Removed the dbInit for users admin@foodcompany and admin@anotherfoodcompany, 
+        as they must be added to the database through the frontend in order to hash their passwords.
+        Logging in compares the hashed version of the input password with the hashed version of the password
+        in the database, so this is necessary and is done towards the end of the development process.
+        Their names are also changed to test@foodcompany and test@anotherfoodcompany
+        */
     }
 }
