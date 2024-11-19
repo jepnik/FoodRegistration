@@ -2,7 +2,7 @@
 
 @{
     ViewData["Title"] = "RegisterUser";
-    Layout = "~/Views/Shared/_Layout.cshtml";  // Makes the layout similar to the rest of the app
+    Layout = "~/Views/Shared/_Layout.cshtml"; // Makes the layout similar to the rest of the app
 }
 
 <head>
@@ -28,9 +28,10 @@
                 <input asp-for="ConfirmPassword" type="password" required />
                 <span asp-validation-for="ConfirmPassword"></span>
             </div>
-            <button type="submit" class="btn btn-primary w-100 submit-button">Register</button>
-            <button type="button" class="btn btn-secondary w-100 cancel-button"onclick="history.back()">Cancel</button>
+            <button type="submit" class="btn btn-primary mt-3 mb-5">Register</button>
+            <a asp-action="Profile" class="btn btn-danger mt-3 mb-5">Cancel</a>
         </form>
     </div>
 </body>
+
 </html>

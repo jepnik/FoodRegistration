@@ -1,23 +1,22 @@
 .login-container {
-    max-width: 400px;
+    max-width: 300px;
     margin: 0 auto;
-    padding-top: 50px;
+    position: relative;
+    top: -50px;
     text-align: center;
 }
 
 .login-container img {
     height: auto;
     width: 75%;
-    margin-bottom: 10%;
 }
 
 .form-group {
-    margin-bottom: 15px;
     text-align: left;
 }
 
-.login-button {
-    background-color: #83B271;
+.buttons-button {
+    width: 100%;
     color: white;
     border: none;
     outline: none;

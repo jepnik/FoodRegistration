@@ -1,7 +1,8 @@
 @model FoodRegistration.ViewModels.LoginViewModel
-@{ 
+
+@{
     ViewData["Title"] = "Login";
-    Layout = "~/Views/Shared/_Layout.cshtml";  // Makes the layout similar to the rest of the page
+    Layout = "~/Views/Shared/_Layout.cshtml"; // Makes the layout similar to the rest of the page
 }
 
 <head>
@@ -10,29 +11,29 @@
 
 <div class="login-container">
     <img src="~/images/FoodTrace.png" alt="Logo">
-        <h2>Login</h2>
-        <form asp-controller="Account" asp-action="Login" method="post">
-            <div class="form-group">
-                <label asp-for="Email" class="form-label">Email</label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
+    <h2>Login</h2>
+    <form asp-controller="Account" asp-action="Login" method="post">
+        <div class="form-group">
+            <label asp-for="Email" class="form-label">Email</label>
+            <input asp-for="Email" class="form-control" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
 
-            <div class="form-group">
-                <label asp-for="Password" class="form-label">Password</label>
-                <input asp-for="Password" type="password" class="form-control" />
-                <span asp-validation-for="Password" class="text-danger"></span>
-            </div>
+        <div class="form-group">
+            <label asp-for="Password" class="form-label">Password</label>
+            <input asp-for="Password" type="password" class="form-control" />
+            <span asp-validation-for="Password" class="text-danger"></span>
+        </div>
 
-            <button type="submit" class="btn btn-primary w-100 login-button">Login</button>
-        </form>
-            <div>
-                <a asp-controller="Account" asp-action="RegisterUser">Register User</a>
-                <!-- <p>Register a new account <a asp-controller="AccountController" asp-action="RegisterUser">Register here</a></p> -->
-            </div>
-
-            @if (ViewBag.Error != null)
-            {
-                <p>@ViewBag.Error</p>
-            }
+        <button type="submit" class="btn btn-success mt-4 mb-2 buttons-button">Login</button>
+    </form>
+    <div>
+        <a asp-controller="Account" asp-action="RegisterUser" class="btn btn-primary mt-2 buttons-button">Register
+            User</a>
     </div>
+
+    @if (ViewBag.Error != null)
+    {
+        <p>@ViewBag.Error</p>
+    }
+</div>

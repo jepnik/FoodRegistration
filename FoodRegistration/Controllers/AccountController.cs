@@ -96,7 +96,7 @@ public class AccountController : Controller
 
     public ActionResult Logout()
     {
-        //Logg ut og stop session
+        //Log out and stop session
         HttpContext.Session.Clear();
         return RedirectToAction("Login");
     }
