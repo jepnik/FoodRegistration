@@ -1,6 +1,5 @@
 @model Item
 
-
 <h2>Create New Item</h2>
 
 <!-- Basic information about product -->
@@ -50,7 +49,6 @@
         <span asp-validation-for="Carbohydrates" class="text-danger"></span>
     </div>
 
-
     <!-- Sugar -->
     <div class="form-group">
         <label asp-for="Sugar">-Of which sugar pr 100g</label><span class="text-danger">*</span>
@@ -64,7 +62,6 @@
         <input asp-for="Protein" class="form-control" />
         <span asp-validation-for="Protein" class="text-danger"></span>
     </div>
-
 
     <!-- Fat -->
     <div class="form-group">
@@ -117,7 +114,7 @@
         <span asp-validation-for="CountryOfProvenance" class="text-danger"></span>
     </div>
 
-    <!--buttons fro create and to go back to main page -->  
+    <!--buttons from create and to go back to main page -->  
     <button type="submit" class="btn btn-primary mt-3 mb-5">Create</button>
     <a asp-action="Index" class="btn btn-secondary mt-3 mb-5">Go back to home page</a>
 </form>
