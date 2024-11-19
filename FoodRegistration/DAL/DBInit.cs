@@ -8,9 +8,9 @@ public static class DBInit
     {
         using var serviceScope = app.ApplicationServices.CreateScope();
         ItemDbContext context = serviceScope.ServiceProvider.GetRequiredService<ItemDbContext>();
-        //Uncomment the follwoing line to delets the database
+        //Uncomment the following line to delete the database
         //context.Database.EnsureDeleted();   
-        //Ensures the databse is created if it dosen't alredy exist
+        //Ensures the database is created if it doesn't already exist
         context.Database.EnsureCreated();
 
         // Decide whether to keep or remove the following code for seeding initial items in the database.
@@ -77,7 +77,7 @@ public static class DBInit
             context.SaveChanges();
         } */
 
-        //Check if any user data exists; if not, add a default user for testing
+        //Check if any user data exist; if not, add a default user for testing
         if (!context.Users.Any())
         {
             var users = new List<User>
