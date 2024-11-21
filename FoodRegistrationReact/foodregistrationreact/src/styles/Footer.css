@@ -1,0 +1,24 @@
+/* .footer {
+    background-color: #83B271 !important; /* Match the color from Sub 1 
+    color: #ffffff;
+    width: 100%;
+    padding: 20px;
+    text-align: center;
+    margin-top: 20px;
+    position: absolute; 
+    bottom: 0px;
+    z-index: 100;
+  } */
+
+  /* se hva som fungerer best for positions når du får større skjern/bunnbaner må ned under flere elemeter på skjerm */
+  .footer {
+    background-color: #83B271 !important; /* Grønn farge */
+    color: #ffffff;
+    width: 100%;
+    padding: 20px;
+    text-align: center;
+    margin-top: 20px;
+    position: fixed; /* Holder footer fast nederst */
+    bottom: 0;
+    z-index: 100;
+}

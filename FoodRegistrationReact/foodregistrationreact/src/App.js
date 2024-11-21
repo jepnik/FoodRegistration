@@ -1,25 +1,36 @@
-import logo from './logo.svg';
+/* import HomePage from './home/HomePage';
 import './App.css';
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <HomePage/>
     </div>
   );
 }
 
+export default App; */
+
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import Layout from './shared/Layout';
+import HomePage from './home/HomePage';
+//import ItemListPage from './items/ItemListPage';
+
+function App() {
+  const userEmail = "user@foodcompany.com"; // Example, replace with session data
+
+  return (
+    <Router>
+      <Layout userEmail={userEmail}>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </Layout>
+    </Router>
+  );
+}
+
 export default App;
+
