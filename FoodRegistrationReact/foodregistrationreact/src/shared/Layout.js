@@ -4,17 +4,12 @@ import Footer from './Footer';
 
 const Layout = ({ children, userEmail }) => {
   return (
-    <>
-      {/* Header with dynamic userEmail */}
+    <div className="App">
       <Header userEmail={userEmail} />
-      {/* Main content area with padding for fixed header */}
-      {/* <main style={{ paddingTop: '40px' }}>{children}</main> */}
-      <div className="content">{children}</div> {/* Hovedinnhold skyver footer */}
-      {/* Footer at the bottom */}
+      <div className="content">{children}</div> {/* Hovedinnhold */}
       <Footer />
-    </>
+    </div>
   );
 };
 
 export default Layout;
-

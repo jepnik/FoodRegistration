@@ -1,11 +1,11 @@
 .footer {
-  background-color: #83B271 !important; /* Match the color from Sub 1 
-  color: #ffffff; */
+  background-color: #83B271 !important; 
+  color: #ffffff; 
   width: 100%;
-  padding: 20px;
   text-align: center;
   margin-top: 20px;
   position: relative; 
   bottom: 0px;
   z-index: 100;
 }
+

@@ -111,43 +111,98 @@ const HomePage = () => {
       salt: 0.0,
       countryOfOrigin: "Ecuador",
       countryOfProvenance: "Ecuador"
+    },
+    {
+      itemId: 7,
+      name: "Banana",
+      category: "Fruit",
+      certificate: "Fair Trade",
+      imageUrl: "/images/biff.jpg",
+      energy: 89,
+      carbohydrates: 23,
+      sugar: 12,
+      protein: 1.1,
+      fat: 0.3,
+      saturatedFat: 0.1,
+      unsaturatedFat: 0.2,
+      fibre: 2.6,
+      salt: 0.0,
+      countryOfOrigin: "Ecuador",
+      countryOfProvenance: "Ecuador"
     }
   ];
 
-  return (
-    <div className="table-container" >
-      <h1>Food Items</h1>
-      <Table striped bordered hover>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Category</th>
-            <th>Certificate</th>
-            <th>Image</th>
-            <th>Actions</th>
+const handleUpdate = (itemId) => {
+  console.log(`Update item with ID: ${itemId}`);
+  // Naviger til oppdateringssiden, eller implementer oppdateringslogikk
+};
+
+const handleDelete = (itemId) => {
+  console.log(`Delete item with ID: ${itemId}`);
+  // Implementer sletteloggikk
+};
+
+const handleCreate = () => {
+  console.log("Navigate to Create Item page");
+  // Naviger til opprettelsesiden
+};
+
+return (
+  <div className="table-container">
+    <h1 className="text-center">Food Items</h1>
+    <Table striped bordered hover>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Category</th>
+          <th>Certificate</th>
+          <th>Image</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {items.map((item) => (
+          <tr key={item.itemId}>
+            <td>{item.itemId}</td>
+            <td>{item.name}</td>
+            <td>{item.category}</td>
+            <td>{item.certificate}</td>
+            <td>
+              <img
+                src={item.imageUrl}
+                alt={item.name}
+                style={{ width: "60px", height: "60px" }}
+              />
+            </td>
+            <td>
+              <Button
+                variant="success"
+                size="sm"
+                onClick={() => handleUpdate(item.itemId)}
+                className="me-2"
+              >
+                Update
+              </Button>
+              <Button
+                variant="danger"
+                size="sm"
+                onClick={() => handleDelete(item.itemId)}
+              >
+                Delete
+              </Button>
+            </td>
           </tr>
-        </thead>
-        <tbody>
-          {items.map(item => (
-            <tr key={item.itemId}>
-              <td>{item.itemId}</td>
-              <td>{item.name}</td>
-              <td>{item.category}</td>
-              <td>{item.certificate}</td>
-              <td>
-                <img
-                  src={item.imageUrl}
-                  alt={item.name}
-                  style={{ width: "100px", height: "100px" }}/>
-              </td>
-              <td>{item.Actions}</td>
-            </tr>
-          ))}
-        </tbody>
-      </Table>
+        ))}
+      </tbody>
+    </Table>
+    <div className="create-button-container">
+    <Button variant="primary" size="lg" onClick={handleCreate}>
+          Create New Item
+        </Button>
     </div>
-  );
+  </div>
+);
 };
 
 export default HomePage;
