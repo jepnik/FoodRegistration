@@ -15,30 +15,29 @@
 
 <div class="profile-container">
     <div class="profile-form">
-        <h2>Profile</h2>
-        <div class="form-group">
-            <h3>Email account: @Model.Email</h3>
-        </div>
+        <h2>Profile: @Model.Email</h2>
         <div class="form-group">
             <p>
-                This application allows you to register, track, and manage food items along with their nutritional content. From here, you can:
+                This application allows you to register, track, and manage food items along with their nutritional
+                content. From here, you can:
             </p>
             <ul>
                 <li>
                     <strong>Change Password:</strong> Update your password to ensure your account remains secure.
                 </li>
                 <li>
-                    <strong>Delete Account:</strong> Permanently remove your account and all associated data from the system.
+                    <strong>Delete Account:</strong> Permanently remove your account and all associated data from the
+                    system.
                 </li>
             </ul>
 
         </div>
         <div>
-        <a asp-action="ChangePassword" asp-route-id="@Model.UserId" class="btn btn-success">Change Password</a>
-        <form asp-controller="Account" asp-action="DeleteUser" method="post"
-            onsubmit="return confirm('Are you sure you want to delete this account? This action cannot be reversed');">
-            <button type="submit" class="btn btn-danger mt-2 mb-5">Delete Account</button>
-        </form>
+            <a asp-action="ChangePassword" asp-route-id="@Model.UserId" class="btn btn-success">Change Password</a>
+            <form asp-controller="Account" asp-action="DeleteUser" method="post"
+                onsubmit="return confirm('Are you sure you want to delete this account? This action cannot be reversed');">
+                <button type="submit" class="btn btn-danger mt-2 mb-5">Delete Account</button>
+            </form>
         </div>
     </div>
     <div class="profile-logo">
