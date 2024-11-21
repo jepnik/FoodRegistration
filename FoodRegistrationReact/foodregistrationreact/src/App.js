@@ -1,21 +1,9 @@
-/* import HomePage from './home/HomePage';
-import './App.css';
-
-function App() {
-  return (
-    <div className="App">
-      <HomePage/>
-    </div>
-  );
-}
-
-export default App; */
-
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import Layout from './shared/Layout';
 import HomePage from './home/HomePage';
-//import ItemListPage from './items/ItemListPage';
+import './App.css'; 
+
 
 function App() {
   const userEmail = "user@foodcompany.com"; // Example, replace with session data
@@ -33,4 +21,3 @@ function App() {
 }
 
 export default App;
-

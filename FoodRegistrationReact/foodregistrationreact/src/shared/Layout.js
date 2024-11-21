@@ -8,7 +8,8 @@ const Layout = ({ children, userEmail }) => {
       {/* Header with dynamic userEmail */}
       <Header userEmail={userEmail} />
       {/* Main content area with padding for fixed header */}
-      <main style={{ paddingTop: '80px' }}>{children}</main>
+      {/* <main style={{ paddingTop: '40px' }}>{children}</main> */}
+      <div className="content">{children}</div> {/* Hovedinnhold skyver footer */}
       {/* Footer at the bottom */}
       <Footer />
     </>
