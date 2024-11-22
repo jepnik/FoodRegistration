@@ -1,0 +1,23 @@
+.login-container {
+    max-width: 300px;
+    margin: 0 auto;
+    position: relative;
+    top: -50px;
+    text-align: center;
+}
+
+.login-container img {
+    height: auto;
+    width: 75%;
+}
+
+.form-group {
+    text-align: left;
+}
+
+.buttons-button {
+    width: 100%;
+    color: white;
+    border: none;
+    outline: none;
+}

@@ -1,0 +1,21 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+          {
+            "name": ".NET Core Launch (web)", // Name of the launch configuration as shown in the debug panel
+            "type": "coreclr", // Type of the debugger to use, in this case, .NET Core CLR (Common Language Runtime)
+            "request": "launch", // Specifies that this configuration is for launching a new process
+            "preLaunchTask": "build", // Task to run before starting the debugging session, typically for building the project
+            "program": "${workspaceFolder}/api/bin/Debug/net8.0/api.dll", // Path to the compiled .NET Core application (the entry point for the application)
+            "args": [], // Arguments to pass to the application on startup (none in this case)
+            "cwd": "${workspaceFolder}/api", // Current working directory where the application should be executed
+            "stopAtEntry": false, // If true, the debugger will stop at the entry point of the application (false means it won't)
+            "launchBrowser": {
+                "enabled": false // Disable automatic browser launch on start for the backend
+            },
+            "env": { // Environment variables to set for the application
+                "ASPNETCORE_ENVIRONMENT": "Development" // Sets the environment to Development
+            }
+        }
+      ]
+}

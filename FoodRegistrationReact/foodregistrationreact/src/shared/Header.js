@@ -1,17 +1,20 @@
 import React from 'react';
 import '../styles/Header.css';
 
+const API_URL = "http://localhost:5244";
+
 const Header = ({ userEmail }) => {
-  const logo = '/images/logoHvit.ico';
-  const userIcon = '/images/userLogo.png';
+  const logo = `${API_URL}/images/logoHvit.ico`; // Dynamisk logo fra API
+  const userIcon = `${API_URL}/images/userLogo.png`; // Dynamisk brukerikon fra API
 
   return (
     <header className="navbar navbar-expand-lg navbar-dark shadow" style={{ backgroundColor: '#83B271' }}>
       {/* Brand Logo and Name */}
       <a className="navbar-brand d-flex align-items-center" href="/">
-        <img src={logo} alt="Logo" className="logo mr-2" />
+        <img src={logo} alt="Logo" className="logo me-2" />
         FOODTRACE
       </a>
+
 
       {/* Hamburger Toggle Button */}
       <button

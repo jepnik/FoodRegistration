@@ -1,0 +1,20 @@
+.profile-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.profile-form {
+    flex: 1;
+    margin-right: 20px;
+}
+
+.profile-logo{
+    margin-left: auto;
+}
+
+.profile-logo img {
+    width: 80%; /* Use percentage */
+    height: auto; /* Maintain aspect ratio */
+    max-width: 350px; /* Optional: set a max width */
+}

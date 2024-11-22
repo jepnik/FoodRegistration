@@ -1,0 +1,23 @@
+2024-11-22 14:00:29.773 +01:00 [INF] Now listening on: https://localhost:7217
+2024-11-22 14:00:29.779 +01:00 [INF] Now listening on: http://localhost:5244
+2024-11-22 14:00:29.783 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2024-11-22 14:00:29.784 +01:00 [INF] Hosting environment: Development
+2024-11-22 14:00:29.785 +01:00 [INF] Content root path: C:\Users\tine_\OneDrive\Skrivebord\ITPE-Eksamen\sub2\FoodRegistration\FoodRegistrationReact\api
+2024-11-22 14:00:33.586 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5244/swagger/index.html - null null
+2024-11-22 14:00:33.657 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5244/swagger/index.html - 200 null text/html;charset=utf-8 72.8378ms
+2024-11-22 14:00:33.816 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5244/swagger/v1/swagger.json - null null
+2024-11-22 14:00:33.916 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5244/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 99.8313ms
+2024-11-22 14:00:40.413 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5244/api/ItemAPI/items - null null
+2024-11-22 14:00:40.434 +01:00 [INF] Executing endpoint 'FoodRegistration.Controllers.ItemAPIController.GetItems (api)'
+2024-11-22 14:00:40.448 +01:00 [INF] Route matched with {action = "GetItems", controller = "ItemAPI"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetItems() on controller FoodRegistration.Controllers.ItemAPIController (api).
+2024-11-22 14:00:40.679 +01:00 [INF] Executing OkObjectResult, writing value of type 'System.Linq.Enumerable+SelectListIterator`2[[FoodRegistration.Models.Item, api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[FoodRegistration.DTOs.ItemDto, api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2024-11-22 14:00:40.776 +01:00 [INF] Executed action FoodRegistration.Controllers.ItemAPIController.GetItems (api) in 324.9787ms
+2024-11-22 14:00:40.776 +01:00 [INF] Executed endpoint 'FoodRegistration.Controllers.ItemAPIController.GetItems (api)'
+2024-11-22 14:00:40.784 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5244/api/ItemAPI/items - 200 364 application/json; charset=utf-8 371.6138ms
+2024-11-22 14:01:52.442 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5244/api/ItemAPI/items - null null
+2024-11-22 14:01:52.443 +01:00 [INF] Executing endpoint 'FoodRegistration.Controllers.ItemAPIController.GetItems (api)'
+2024-11-22 14:01:52.443 +01:00 [INF] Route matched with {action = "GetItems", controller = "ItemAPI"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetItems() on controller FoodRegistration.Controllers.ItemAPIController (api).
+2024-11-22 14:01:52.494 +01:00 [INF] Executing OkObjectResult, writing value of type 'System.Linq.Enumerable+SelectListIterator`2[[FoodRegistration.Models.Item, api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[FoodRegistration.DTOs.ItemDto, api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2024-11-22 14:01:52.495 +01:00 [INF] Executed action FoodRegistration.Controllers.ItemAPIController.GetItems (api) in 51.2873ms
+2024-11-22 14:01:52.495 +01:00 [INF] Executed endpoint 'FoodRegistration.Controllers.ItemAPIController.GetItems (api)'
+2024-11-22 14:01:52.495 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5244/api/ItemAPI/items - 200 364 application/json; charset=utf-8 53.8688ms

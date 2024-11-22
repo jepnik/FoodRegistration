@@ -1,0 +1,37 @@
+2024-11-22 09:32:11.222 +01:00 [INF] Now listening on: http://localhost:5244
+2024-11-22 09:32:11.229 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2024-11-22 09:32:11.229 +01:00 [INF] Hosting environment: Development
+2024-11-22 09:32:11.230 +01:00 [INF] Content root path: C:\Users\tine_\OneDrive\Skrivebord\ITPE-Eksamen\sub2\FoodRegistration\FoodRegistrationReact\api
+2024-11-22 09:32:15.061 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5244/ - null null
+2024-11-22 09:32:15.119 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5244/ - 404 0 null 59.1291ms
+2024-11-22 09:32:15.123 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5244/, Response status code: 404
+2024-11-22 09:32:16.719 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5244/ - null null
+2024-11-22 09:32:16.723 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5244/ - 404 0 null 4.3468ms
+2024-11-22 09:32:16.724 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5244/, Response status code: 404
+2024-11-22 09:32:20.754 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5244/ - null null
+2024-11-22 09:32:20.757 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5244/ - 404 0 null 2.4248ms
+2024-11-22 09:32:20.757 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5244/, Response status code: 404
+2024-11-22 09:34:04.012 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5244/swagger/index.html - null null
+2024-11-22 09:34:04.064 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5244/swagger/index.html - 200 null text/html;charset=utf-8 52.4846ms
+2024-11-22 09:34:04.110 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5244/swagger/swagger-ui.css - null null
+2024-11-22 09:34:04.115 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5244/swagger/swagger-ui-bundle.js - null null
+2024-11-22 09:34:04.124 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5244/swagger/swagger-ui-standalone-preset.js - null null
+2024-11-22 09:34:04.132 +01:00 [INF] Sending file. Request path: '/swagger-ui.css'. Physical path: 'N/A'
+2024-11-22 09:34:04.132 +01:00 [INF] Sending file. Request path: '/swagger-ui-standalone-preset.js'. Physical path: 'N/A'
+2024-11-22 09:34:04.134 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5244/swagger/swagger-ui-standalone-preset.js - 200 339486 text/javascript 9.0466ms
+2024-11-22 09:34:04.134 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5244/swagger/swagger-ui.css - 200 143943 text/css 23.1009ms
+2024-11-22 09:34:04.138 +01:00 [INF] Sending file. Request path: '/swagger-ui-bundle.js'. Physical path: 'N/A'
+2024-11-22 09:34:04.139 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5244/swagger/swagger-ui-bundle.js - 200 1096145 text/javascript 23.3296ms
+2024-11-22 09:34:04.520 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5244/swagger/v1/swagger.json - null null
+2024-11-22 09:34:04.536 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5244/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 15.9337ms
+2024-11-22 09:34:04.536 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5244/swagger/favicon-32x32.png - null null
+2024-11-22 09:34:04.537 +01:00 [INF] Sending file. Request path: '/favicon-32x32.png'. Physical path: 'N/A'
+2024-11-22 09:34:04.537 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5244/swagger/favicon-32x32.png - 200 628 image/png 0.7406ms
+2024-11-22 09:42:25.550 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5244/swagger/index.html - null null
+2024-11-22 09:42:25.551 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5244/swagger/index.html - 200 null text/html;charset=utf-8 0.973ms
+2024-11-22 09:42:25.824 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5244/swagger/v1/swagger.json - null null
+2024-11-22 09:42:25.825 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5244/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 1.2462ms
+2024-11-22 09:42:26.745 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5244/swagger/index.html - null null
+2024-11-22 09:42:26.746 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5244/swagger/index.html - 200 null text/html;charset=utf-8 0.8463ms
+2024-11-22 09:42:26.852 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5244/swagger/v1/swagger.json - null null
+2024-11-22 09:42:26.853 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5244/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 0.6111ms
