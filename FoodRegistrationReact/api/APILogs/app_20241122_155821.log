@@ -1,0 +1,27 @@
+2024-11-22 15:58:22.823 +01:00 [INF] Now listening on: https://localhost:7217
+2024-11-22 15:58:22.833 +01:00 [INF] Now listening on: http://localhost:5244
+2024-11-22 15:58:22.840 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2024-11-22 15:58:22.843 +01:00 [INF] Hosting environment: Development
+2024-11-22 15:58:22.845 +01:00 [INF] Content root path: C:\Users\tine_\OneDrive\Skrivebord\ITPE-Eksamen\sub2\FoodRegistration\FoodRegistrationReact\api
+2024-11-22 15:58:27.293 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5244/api/itemapi/items - null null
+2024-11-22 15:58:27.337 +01:00 [INF] CORS policy execution successful.
+2024-11-22 15:58:27.340 +01:00 [INF] Executing endpoint 'FoodRegistration.Controllers.ItemAPIController.GetItems (api)'
+2024-11-22 15:58:27.360 +01:00 [INF] Route matched with {action = "GetItems", controller = "ItemAPI"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetItems() on controller FoodRegistration.Controllers.ItemAPIController (api).
+2024-11-22 15:58:27.609 +01:00 [INF] Executing OkObjectResult, writing value of type 'System.Linq.Enumerable+SelectListIterator`2[[FoodRegistration.Models.Item, api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[FoodRegistration.DTOs.ItemDto, api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2024-11-22 15:58:27.723 +01:00 [INF] Executed action FoodRegistration.Controllers.ItemAPIController.GetItems (api) in 356.9723ms
+2024-11-22 15:58:27.730 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5244/images/banana.jpg - null null
+2024-11-22 15:58:27.730 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5244/api/itemapi/items - null null
+2024-11-22 15:58:27.730 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5244/images/apple.jpg - null null
+2024-11-22 15:58:27.732 +01:00 [INF] Executed endpoint 'FoodRegistration.Controllers.ItemAPIController.GetItems (api)'
+2024-11-22 15:58:27.738 +01:00 [INF] CORS policy execution successful.
+2024-11-22 15:58:27.738 +01:00 [INF] Executing endpoint 'FoodRegistration.Controllers.ItemAPIController.GetItems (api)'
+2024-11-22 15:58:27.740 +01:00 [INF] Route matched with {action = "GetItems", controller = "ItemAPI"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetItems() on controller FoodRegistration.Controllers.ItemAPIController (api).
+2024-11-22 15:58:27.749 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5244/images/apple.jpg - 404 0 null 19.6019ms
+2024-11-22 15:58:27.749 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5244/images/banana.jpg - 404 0 null 21.125ms
+2024-11-22 15:58:27.751 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5244/images/banana.jpg, Response status code: 404
+2024-11-22 15:58:27.751 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5244/images/apple.jpg, Response status code: 404
+2024-11-22 15:58:27.754 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5244/api/itemapi/items - 200 768 application/json; charset=utf-8 463.0309ms
+2024-11-22 15:58:27.796 +01:00 [INF] Executing OkObjectResult, writing value of type 'System.Linq.Enumerable+SelectListIterator`2[[FoodRegistration.Models.Item, api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[FoodRegistration.DTOs.ItemDto, api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2024-11-22 15:58:27.796 +01:00 [INF] Executed action FoodRegistration.Controllers.ItemAPIController.GetItems (api) in 56.1429ms
+2024-11-22 15:58:27.796 +01:00 [INF] Executed endpoint 'FoodRegistration.Controllers.ItemAPIController.GetItems (api)'
+2024-11-22 15:58:27.797 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5244/api/itemapi/items - 200 768 application/json; charset=utf-8 68.7984ms

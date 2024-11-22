@@ -1,59 +1,72 @@
-import React, { useState, useEffect } from 'react';
-import { Table, Button } from 'react-bootstrap';
+import React, { useState, useEffect } from 'react'; // Import React and hooks
+import { Table, Button, Form } from 'react-bootstrap'; // Import required Bootstrap components
 
-const API_URL = "http://localhost:5244"; // Sett din backend API URL her
+const API_URL = 'http://localhost:5244'; // Adjust to match your backend's base URL
 
 const HomePage = () => {
-  // Hooks for state management
-  const [items, setItems] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [items, setItems] = useState([]); // All items fetched from the API
+  const [filteredItems, setFilteredItems] = useState([]); // Items after filtering
+  const [loading, setLoading] = useState(false); // Loading state
+  const [error, setError] = useState(null); // Error state
+  const [searchQuery, setSearchQuery] = useState(''); // Search query input
 
-  // Function to fetch items from the backend API
+  // Fetch items from the API
   const fetchItems = async () => {
     setLoading(true);
     setError(null);
 
     try {
-      const response = await fetch(`${API_URL}/api/itemapi/items`);
+      const response = await fetch(`${API_URL}/api/itemapi/items`); // Adjust endpoint as needed
       if (!response.ok) {
-        throw new Error("Network response was not ok");
+        throw new Error('Network response was not ok');
       }
-
-      const data = await response.json(); // Parse JSON response
-      setItems(data); // Update state with fetched data
+      const data = await response.json(); // Parse response JSON
+      setItems(data); // Update items state
+      setFilteredItems(data); // Initialize filtered items
       console.log(data); // Debugging
     } catch (error) {
       console.error(`There was a problem with the fetch operation: ${error.message}`);
-      setError('Failed to fetch items.'); // Set error state
+      setError('Failed to fetch items.');
     } finally {
       setLoading(false); // End loading
     }
   };
 
-  // Hook to fetch items on component mount
+  // Fetch items when the component mounts
   useEffect(() => {
     fetchItems();
   }, []);
 
-  const handleUpdate = (itemId) => {
-    console.log(`Update item with ID: ${itemId}`);
-    // Naviger til oppdateringssiden, eller implementer oppdateringslogikk
-  };
+  // Update filtered items based on the search query
+  const handleSearchChange = (e) => {
+    const query = e.target.value.toLowerCase();
+    setSearchQuery(query);
 
-  const handleDelete = (itemId) => {
-    console.log(`Delete item with ID: ${itemId}`);
-    // Implementer sletteloggikk
-  };
-
-  const handleCreate = () => {
-    console.log("Navigate to Create Item page");
-    // Naviger til opprettelsesiden
+    const filtered = items.filter(
+      (item) =>
+        item.name.toLowerCase().includes(query) ||
+        (item.category && item.category.toLowerCase().includes(query)) || // Optional category check
+        (item.certificate && item.certificate.toLowerCase().includes(query)) // Optional certificate check
+    );
+    setFilteredItems(filtered);
   };
 
   return (
-    <div className="table-container">
+    <div className="container mt-4">
       <h1 className="text-center">Food Items</h1>
+      
+      {/* Search bar */}
+      <Form.Group className="mb-3">
+        <Form.Control
+          type="text"
+          placeholder="Search by name, category, or certificate"
+          value={searchQuery}
+          onChange={handleSearchChange}
+        />
+      </Form.Group>
+      {/* Error message display */}
+      {error && <p style={{ color: 'red' }}>{error}</p>}
+      {/* Table View */}
       <Table striped bordered hover>
         <thead>
           <tr>
@@ -66,31 +79,24 @@ const HomePage = () => {
           </tr>
         </thead>
         <tbody>
-          {items.map(item => (
+          {filteredItems.map((item) => (
             <tr key={item.itemId}>
               <td>{item.itemId}</td>
               <td>{item.name}</td>
               <td>{item.category}</td>
               <td>{item.certificate}</td>
               <td>
-                <img src={`${API_URL}${item.imageUrl}`} alt={item.name}
-                 width="60" /*  style={{ width: "60px", height: "60px" }} */
+                <img
+                  src={`${API_URL}${item.imageUrl}`}
+                  alt={item.name}
+                  style={{ width: '60px', height: '60px' }}
                 />
               </td>
               <td>
-                <Button
-                  variant="success"
-                  size="sm"
-                  onClick={() => handleUpdate(item.itemId)}
-                  className="me-2"
-                >
+                <Button variant="success" size="sm" className="me-2">
                   Update
                 </Button>
-                <Button
-                  variant="danger"
-                  size="sm"
-                  onClick={() => handleDelete(item.itemId)}
-                >
+                <Button variant="danger" size="sm">
                   Delete
                 </Button>
               </td>
@@ -98,11 +104,6 @@ const HomePage = () => {
           ))}
         </tbody>
       </Table>
-      <div className="create-button-container">
-        <Button variant="primary" size="lg" onClick={handleCreate}>
-          Create New Item
-        </Button>
-      </div>
     </div>
   );
 };
