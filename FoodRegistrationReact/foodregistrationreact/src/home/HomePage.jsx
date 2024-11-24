@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'; // Import React and hooks
 import { Table, Button, Form } from 'react-bootstrap'; // Import required Bootstrap components
+import { useNavigate } from 'react-router-dom'; // Import useNavigate for navigation
 
 const API_URL = 'http://localhost:5244'; // Adjust to match your backend's base URL
 
@@ -9,6 +10,7 @@ const HomePage = () => {
   const [loading, setLoading] = useState(false); // Loading state
   const [error, setError] = useState(null); // Error state
   const [searchQuery, setSearchQuery] = useState(''); // Search query input
+  const navigate = useNavigate();
 
   // Fetch items from the API
   const fetchItems = async () => {
@@ -23,7 +25,6 @@ const HomePage = () => {
       const data = await response.json(); // Parse response JSON
       setItems(data); // Update items state
       setFilteredItems(data); // Initialize filtered items
-      console.log(data); // Debugging
     } catch (error) {
       console.error(`There was a problem with the fetch operation: ${error.message}`);
       setError('Failed to fetch items.');
@@ -36,6 +37,27 @@ const HomePage = () => {
   useEffect(() => {
     fetchItems();
   }, []);
+
+  // Handle Delete Item
+  const deleteItem = async (id) => {
+    const confirmed = window.confirm('Are you sure you want to delete this item?');
+    if (!confirmed) return;
+
+    try {
+      const response = await fetch(`${API_URL}/api/itemapi/items/${id}`, {
+        method: 'DELETE',
+      });
+      if (!response.ok) {
+        throw new Error('Failed to delete item.');
+      }
+
+      // Update local state to remove the deleted item
+      setItems((prevItems) => prevItems.filter((item) => item.itemId !== id));
+      setFilteredItems((prevItems) => prevItems.filter((item) => item.itemId !== id));
+    } catch (err) {
+      alert(`Error: ${err.message}`);
+    }
+  };
 
   // Update filtered items based on the search query
   const handleSearchChange = (e) => {
@@ -54,7 +76,7 @@ const HomePage = () => {
   return (
     <div className="container mt-4">
       <h1 className="text-center">Food Items</h1>
-      
+
       {/* Search bar */}
       <Form.Group className="mb-3">
         <Form.Control
@@ -93,10 +115,19 @@ const HomePage = () => {
                 />
               </td>
               <td>
-                <Button variant="success" size="sm" className="me-2">
+                <Button
+                  variant="success"
+                  size="sm"
+                  className="me-2"
+                  onClick={() => navigate(`/update/${item.itemId}`)}
+                >
                   Update
                 </Button>
-                <Button variant="danger" size="sm">
+                <Button
+                  variant="danger"
+                  size="sm"
+                  onClick={() => deleteItem(item.itemId)} // Delete item on click
+                >
                   Delete
                 </Button>
               </td>

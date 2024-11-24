@@ -1,11 +1,13 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate for navigation
 import '../styles/Header.css';
 
 const API_URL = "http://localhost:5244";
 
 const Header = ({ userEmail }) => {
-  const logo = `${API_URL}/images/logoHvit.ico`; // Dynamisk logo fra API
-  const userIcon = `${API_URL}/images/userLogo.png`; // Dynamisk brukerikon fra API
+  const navigate = useNavigate(); // Hook for dynamic navigation
+  const logo = `${API_URL}/images/logoHvit.ico`; // Dynamic logo from API
+  const userIcon = `${API_URL}/images/userLogo.png`; // Dynamic user icon from API
 
   return (
     <header className="navbar navbar-expand-lg navbar-dark shadow" style={{ backgroundColor: '#83B271' }}>
@@ -14,7 +16,6 @@ const Header = ({ userEmail }) => {
         <img src={logo} alt="Logo" className="logo me-2" />
         FOODTRACE
       </a>
-
 
       {/* Hamburger Toggle Button */}
       <button
@@ -36,7 +37,14 @@ const Header = ({ userEmail }) => {
             <a className="nav-link" href="/">Home</a>
           </li>
           <li className="nav-item">
-            <a className="nav-link" href="/items">Create Item</a>
+            {/* Replace href with a dynamic navigation handler */}
+            <button
+              className="btn btn-link nav-link text-white"
+              style={{ textDecoration: 'none' }}
+              onClick={() => navigate('/create')} // Navigate to Create Item page
+            >
+              Create Item
+            </button>
           </li>
 
           {/* Account and Log out for Hamburger Menu */}
@@ -52,8 +60,8 @@ const Header = ({ userEmail }) => {
           )}
         </ul>
 
-     {/* User Icon Dropdown for Large Screens */}
-     {userEmail && (
+        {/* User Icon Dropdown for Large Screens */}
+        {userEmail && (
           <div className="dropdown ms-auto d-none d-lg-block">
             <button
               className="btn dropdown-toggle user-icon-btn"

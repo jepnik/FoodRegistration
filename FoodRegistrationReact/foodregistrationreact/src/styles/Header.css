@@ -8,6 +8,18 @@
   color: #ffffff !important;
   font-size: 1.2rem;
 }
+.navbar .btn-link {
+  padding: 10px;
+  font-size: 1.2rem;
+  color: #ffffff;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+.navbar .btn-link:hover {
+  background-color: #395b2c;
+  border-radius: 4px;
+}
 
 .navbar-brand {
   font-size: 1.4rem;
