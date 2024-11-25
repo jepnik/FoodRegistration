@@ -34,7 +34,6 @@ obj/
 APILogs/
 net8.0/
 node_modules/
-.env*
 
 *.log
 
