@@ -1,75 +1,52 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap';
+import { Item } from '../types/item';
 
-const API_URL = 'http://localhost:5244';
+interface ItemFormProps {
+  initialData?: Item;  // initial data for update
+  onSubmit: (item: Item) => void; // callback for form submission
+  isUpdate: boolean;  // indicates whether it's update or create
+}
 
-const UpdateItem = () => {
-  const { id } = useParams(); // Get the item ID from the route
-  const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    name: '',
-    category: '',
-    certificate: '',
-    imageUrl: '',
-    energy: '',
-    carbohydrates: '',
-    sugar: '',
-    protein: '',
-    fat: '',
-    saturatedfat: '',
-    unsaturatedfat: '',
-    fibre: '',
-    salt: '',
-    countryOfOrigin: '',
-    countryOfProvenance: '',
-  });
-  const [errors, setErrors] = useState({});
-  const [loading, setLoading] = useState(true);
-  const [submissionError, setSubmissionError] = useState(null);
+const ItemForm: React.FC<ItemFormProps> = ({ initialData, onSubmit, isUpdate }) => {
+  const [formData, setFormData] = useState<Item>(
+    initialData || {
+      itemId: 0,
+      name: '',
+      category: '',
+      certificate: '',
+      imageUrl: '',
+      energy: undefined,
+      carbohydrates: undefined,
+      sugar: undefined,
+      protein: undefined,
+      fat: undefined,
+      saturatedfat: undefined,
+      unsaturatedfat: undefined,
+      fibre: undefined,
+      salt: undefined,
+      countryOfOrigin: '',
+      countryOfProvenance: '',
+    }
+  );
 
-  // Fetch the item's current data
-  useEffect(() => {
-    const fetchItem = async () => {
-      try {
-        const response = await fetch(`${API_URL}/api/itemapi/items/${id}`);
-        if (!response.ok) throw new Error('Failed to fetch item data.');
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const [submissionError, setSubmissionError] = useState<string | null>(null);
 
-        const data = await response.json();
-        setFormData(data);
-      } catch (error) {
-        setSubmissionError(error.message);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value, type } = e.target;
 
-    fetchItem();
-  }, [id]);
-
-  // Handle input change
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setFormData({
+      ...formData,
+      [name]: type === 'number' && value === '' ? undefined : value,
+    });
   };
 
-  // Validate form
   const validateForm = () => {
-    const newErrors = {};
+    const newErrors: { [key: string]: string } = {};
 
     if (!formData.name) newErrors.name = 'Name is required.';
     if (!formData.category) newErrors.category = 'Category is required.';
-    if (formData.category.length > 50) newErrors.category = 'Category cannot exceed 50 characters.';
-    if (formData.certificate && formData.certificate.length > 50) newErrors.certificate = 'Certificate cannot exceed 50 characters.';
-    if (!formData.energy || formData.energy < 0) newErrors.energy = 'Energy must be a non-negative number.';
-    if (!formData.carbohydrates || formData.carbohydrates < 0) newErrors.carbohydrates = 'Carbohydrates must be a non-negative number.';
-    if (!formData.sugar || formData.sugar < 0) newErrors.sugar = 'Sugar must be a non-negative number.';
-    if (!formData.protein || formData.protein < 0) newErrors.protein = 'Protein must be a non-negative number.';
-    if (!formData.fat || formData.fat < 0) newErrors.fat = 'Fat must be a non-negative number.';
-    if (!formData.saturatedfat || formData.saturatedfat < 0) newErrors.saturatedfat = 'Saturated fat must be a non-negative number.';
-    if (!formData.unsaturatedfat || formData.unsaturatedfat < 0) newErrors.unsaturatedfat = 'Unsaturated fat must be a non-negative number.';
-    if (!formData.fibre || formData.fibre < 0) newErrors.fibre = 'Fibre must be a non-negative number.';
-    if (!formData.salt || formData.salt < 0) newErrors.salt = 'Salt must be a non-negative number.';
     if (!formData.countryOfOrigin) newErrors.countryOfOrigin = 'Country of origin is required.';
     if (!formData.countryOfProvenance) newErrors.countryOfProvenance = 'Country of provenance is required.';
 
@@ -77,34 +54,18 @@ const UpdateItem = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  // Handle form submission
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setSubmissionError(null);
 
     if (!validateForm()) return;
-
-    try {
-      const response = await fetch(`${API_URL}/api/itemapi/items/${id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-      });
-
-      if (!response.ok) throw new Error('Failed to update item.');
-
-      navigate('/'); // Redirect to home on success
-    } catch (err) {
-      setSubmissionError(err.message);
-    }
+    onSubmit(formData);
   };
-
-  if (loading) return <p>Loading...</p>;
-  if (submissionError) return <Alert variant="danger">{submissionError}</Alert>;
 
   return (
     <div className="container mt-4">
-      <h1>Update Item</h1>
+      <h1>{isUpdate ? 'Update Item' : 'Create New Item'}</h1>
+      {submissionError && <Alert variant="danger">{submissionError}</Alert>}
       <Form onSubmit={handleSubmit}>
         <Form.Group className="mb-3">
           <Form.Label>Name</Form.Label>
@@ -150,13 +111,14 @@ const UpdateItem = () => {
           />
         </Form.Group>
 
+        {/* Numeric Fields */}
         {['energy', 'carbohydrates', 'sugar', 'protein', 'fat', 'saturatedfat', 'unsaturatedfat', 'fibre', 'salt'].map((field) => (
           <Form.Group className="mb-3" key={field}>
             <Form.Label>{field.charAt(0).toUpperCase() + field.slice(1)}</Form.Label>
             <Form.Control
               type="number"
               name={field}
-              value={formData[field]}
+              value={formData[field as keyof Item] || ''}
               onChange={handleChange}
               isInvalid={!!errors[field]}
             />
@@ -189,11 +151,11 @@ const UpdateItem = () => {
         </Form.Group>
 
         <Button variant="primary" type="submit">
-          Update Item
+          {isUpdate ? 'Update Item' : 'Create Item'}
         </Button>
       </Form>
     </div>
   );
 };
 
-export default UpdateItem;
+export default ItemForm;

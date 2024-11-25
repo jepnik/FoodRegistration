@@ -1,51 +1,40 @@
-import React, { useState, useEffect } from 'react'; // Import React and hooks
-import { Table, Button, Form } from 'react-bootstrap'; // Import required Bootstrap components
-import { useNavigate } from 'react-router-dom'; // Import useNavigate for navigation
-import API_URL from '../apiConfig';
+import React, { useState, useEffect } from 'react';
+import { Table, Button, Form } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 import { Item } from '../types/item';
-
-//const API_URL = 'http://localhost:5244'; // Adjust to match your backend's base URL
+import API_URL from '../apiConfig';
 
 const HomePage: React.FC = () => {
-  const [items, setItems] = useState<Item[]>([]); // All items fetched from the API
-  const [filteredItems, setFilteredItems] = useState<Item[]>([]); // Items after filtering
-  const [loading, setLoading] = useState<boolean>(false); // Loading state
-  const [error, setError] = useState<string | null>(null); // Error state
-  const [searchQuery, setSearchQuery] = useState<string>(''); // Search query input
+  const [items, setItems] = useState<Item[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
 
-
-  // Fetch items from the API
   const fetchItems = async () => {
     setLoading(true);
     setError(null);
 
     try {
-      const response = await fetch(`${API_URL}/api/itemapi/items`); // Adjust endpoint as needed
+      const response = await fetch(`${API_URL}/api/itemapi/items`);
       if (!response.ok) {
-        throw new Error('Network response was not ok');
+        throw new Error('Failed to fetch items.');
       }
-      const data: Item[] = await response.json(); // Parse response JSON
-      setItems(data); // Update items state
-      setFilteredItems(data); // Initialize filtered items
-      console.log(data);
-    } catch (error) {
-      console.error(`There was a problem with the fetch operation: ${error.message}`);
+      const data: Item[] = await response.json();
+      setItems(data);
+    } catch (err) {
       setError('Failed to fetch items.');
     } finally {
-      setLoading(false); // End loading
+      setLoading(false);
     }
   };
 
-  // Fetch items when the component mounts
   useEffect(() => {
     fetchItems();
   }, []);
 
-  // Handle Delete Item
-  const deleteItem = async (id: number) => {
-    const confirmed = window.confirm('Are you sure you want to delete this item?');
-    if (!confirmed) return;
+  const handleDelete = async (id: number) => {
+    if (!window.confirm('Are you sure you want to delete this item?')) return;
 
     try {
       const response = await fetch(`${API_URL}/api/itemapi/items/${id}`, {
@@ -54,40 +43,33 @@ const HomePage: React.FC = () => {
       if (!response.ok) {
         throw new Error('Failed to delete item.');
       }
-
-      // Update local state to remove the deleted item
       setItems((prevItems) => prevItems.filter((item) => item.itemId !== id));
-      setFilteredItems((prevItems) => prevItems.filter((item) => item.itemId !== id));
-    } catch (error) {
-      alert(`Error: ${error.message}`);
+    } catch (err) {
+      alert('Failed to delete item.');
     }
   };
 
-  // be abel to seacrh for big and small letter for name, category and certificate in the search bar 
-  const filtered = items.filter(
+  const filteredItems = items.filter(
     (item) =>
       item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.certificate.toLowerCase().includes(searchQuery.toLowerCase())
+      item.category.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p style={{ color: 'red' }}>{error}</p>;
 
   return (
     <div className="container mt-4">
-      <h1 className="text-center">Food Items</h1>
-
-      {/* Search bar */}
+      <h1>Food Items</h1>
       <Form.Group className="mb-3">
         <Form.Control
           type="text"
-          placeholder="Search by name, category, or certificate"
+          placeholder="Search by name or category"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
       </Form.Group>
-      {/* Error message display */}
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      {/* Table View */}
+
       <Table striped bordered hover>
         <thead>
           <tr>
@@ -105,28 +87,23 @@ const HomePage: React.FC = () => {
               <td>{item.itemId}</td>
               <td>{item.name}</td>
               <td>{item.category}</td>
-              <td>{item.certificate}</td>
+              <td>{item.certificate || 'N/A'}</td>
               <td>
-                <img
-                  src={`${API_URL}${item.imageUrl}`}
-                  alt={item.name}
-                  style={{ width: '60px', height: '60px' }}
-                />
+                {item.imageUrl ? (
+                  <img
+                    src={`${API_URL}${item.imageUrl}`}
+                    alt={item.name}
+                    style={{ width: '60px', height: '60px' }}
+                  />
+                ) : (
+                  'No Image'
+                )}
               </td>
               <td>
-                <Button
-                  variant="success"
-                  size="sm"
-                  className="me-2"
-                  onClick={() => navigate(`/update/${item.itemId}`)}
-                >
+                <Button variant="success" size="sm" onClick={() => navigate(`/update/${item.itemId}`)}>
                   Update
                 </Button>
-                <Button
-                  variant="danger"
-                  size="sm"
-                  onClick={() => deleteItem(item.itemId)} // Delete item on click
-                >
+                <Button variant="danger" size="sm" onClick={() => handleDelete(item.itemId)}>
                   Delete
                 </Button>
               </td>
@@ -134,10 +111,8 @@ const HomePage: React.FC = () => {
           ))}
         </tbody>
       </Table>
-      <Button href='/create' className="btn btn-confirm mt-3">Create new item</Button>  
     </div>
   );
 };
-
 
 export default HomePage;

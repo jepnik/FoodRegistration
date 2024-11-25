@@ -1,3 +1,4 @@
-const API_URL = process.env.REACT_APP_API_BASE_URL || '';
+// apiConfig.ts
+const API_URL = 'http://localhost:5244'; // This can be changed if needed for production or other environments
 
 export default API_URL;

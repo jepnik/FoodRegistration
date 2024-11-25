@@ -2,8 +2,8 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import Layout from './shared/Layout';
 import HomePage from './home/HomePage';
-import CreateItem from './create/CreateItem'; 
-import UpdateItem from './update/UpdateItem';
+import CreateItem from './pages/CreateItem'; 
+import UpdateItem from './pages/UpdateItem';
 import './App.css';
 
 function App() {
