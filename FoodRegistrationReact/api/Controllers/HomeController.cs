@@ -7,7 +7,7 @@ namespace FoodRegistration.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class ItemAPIController : ControllerBase
+public class ItemAPIController : Controller
 {
     private readonly IItemRepository _itemRepository;
     private readonly ILogger<ItemAPIController> _logger;
