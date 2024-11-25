@@ -9,8 +9,8 @@ const HomePage: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>('');
-  const [sortColumn, setSortColumn] = useState<string>('name'); // Column to sort by
-  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc'); // Sorting direction
+  const [sortColumn, setSortColumn] = useState<string>('id'); // Default column to sort by is 'id'
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc'); // Default direction is 'asc'
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -33,7 +33,7 @@ const HomePage: React.FC = () => {
     fetchItems();
   }, []);
 
-  // Sorting function for Name and ID
+  // Sorting function for Name, ID, Category, and Certificate
   const handleSort = (column: string) => {
     const newSortDirection = sortColumn === column && sortDirection === 'asc' ? 'desc' : 'asc';
     setSortColumn(column);
@@ -41,12 +41,16 @@ const HomePage: React.FC = () => {
 
     const sortedItems = [...items];
     sortedItems.sort((a, b) => {
-      if (column === 'name') {
+      if (column === 'name' || column === 'certificate') {
         return newSortDirection === 'asc'
-          ? a.name.toLowerCase().localeCompare(b.name.toLowerCase())
-          : b.name.toLowerCase().localeCompare(a.name.toLowerCase());
+          ? a[column].toLowerCase().localeCompare(b[column].toLowerCase())
+          : b[column].toLowerCase().localeCompare(a[column].toLowerCase());
       } else if (column === 'id') {
         return newSortDirection === 'asc' ? a.itemId - b.itemId : b.itemId - a.itemId;
+      } else if (column === 'category') {
+        return newSortDirection === 'asc'
+          ? a.category.toLowerCase().localeCompare(b.category.toLowerCase())
+          : b.category.toLowerCase().localeCompare(a.category.toLowerCase());
       }
       return 0;
     });
@@ -70,14 +74,16 @@ const HomePage: React.FC = () => {
     }
   };
 
-  // Filtering items by name or category
-  const filtered = items.filter(
+  // Filtering items by name, category, or certificate
+  const filteredItems = items.filter(
     (item) =>
-      item.itemId.toString().includes(searchQuery) ||
+      item.itemId.toString().includes(searchQuery)||
       item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       item.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.certificate && item.certificate.toLowerCase().includes(searchQuery.toLowerCase()
-  ));
+      (item.certificate && item.certificate.toLowerCase().includes(searchQuery.toLowerCase()))
+
+  );
+
   if (loading) return <p>Loading...</p>;
   if (error) return <p style={{ color: 'red' }}>{error}</p>;
 
@@ -89,7 +95,7 @@ const HomePage: React.FC = () => {
       <Form.Group className="mb-3">
         <Form.Control
           type="text"
-          placeholder="Search by name or category"
+          placeholder="Search"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
@@ -99,20 +105,52 @@ const HomePage: React.FC = () => {
       <Table striped bordered hover>
         <thead>
           <tr>
-            <th onClick={() => handleSort('id')}>
-              ID {sortColumn === 'id' && (sortDirection === 'asc' ? '↑' : '↓')}
+            <th
+              onClick={() => handleSort('id')}
+              style={{
+                cursor: 'pointer',
+                fontWeight: sortColumn === 'id' ? 'bold' : 'normal',
+              }}
+            >
+              ID{' '}
+              {sortColumn === 'id' && (sortDirection === 'asc' ? '↑' : '↓')}
             </th>
-            <th onClick={() => handleSort('name')}>
-              Name {sortColumn === 'name' && (sortDirection === 'asc' ? '↑' : '↓')}
+            <th
+              onClick={() => handleSort('name')}
+              style={{
+                cursor: 'pointer',
+                fontWeight: sortColumn === 'name' ? 'bold' : 'normal',
+              }}
+            >
+              Name{' '}
+              {sortColumn === 'name' && (sortDirection === 'asc' ? '↑' : '↓')}
             </th>
-            <th>Category</th>
-            <th>Certificate</th>
+            <th
+              onClick={() => handleSort('category')}
+              style={{
+                cursor: 'pointer',
+                fontWeight: sortColumn === 'category' ? 'bold' : 'normal',
+              }}
+            >
+              Category{' '}
+              {sortColumn === 'category' && (sortDirection === 'asc' ? '↑' : '↓')}
+            </th>
+            <th
+              onClick={() => handleSort('certificate')}
+              style={{
+                cursor: 'pointer',
+                fontWeight: sortColumn === 'certificate' ? 'bold' : 'normal',
+              }}
+            >
+              Certificate{' '}
+              {sortColumn === 'certificate' && (sortDirection === 'asc' ? '↑' : '↓')}
+            </th>
             <th>Image</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          {filtered.map((item) => (
+          {filteredItems.map((item) => (
             <tr key={item.itemId}>
               <td>{item.itemId}</td>
               <td>{item.name}</td>

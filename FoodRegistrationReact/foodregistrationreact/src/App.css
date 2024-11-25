@@ -26,3 +26,7 @@
 .create-button-container button {
   font-size: 1.1rem; /* Gjør knappen større */
 }
+.sort-arrow {
+  font-size: 2.5em;  /* You can adjust the size */
+  font-weight: bold;
+}
