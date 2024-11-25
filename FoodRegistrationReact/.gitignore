@@ -48,6 +48,7 @@ FoodRegistrationReact/
 *.db-shm
 *.db-wal
 *.db
+FoodRegistrationReact\api\bin\Debug\net8.0\api.dll
 
 .vs/
 *.csproj.user
