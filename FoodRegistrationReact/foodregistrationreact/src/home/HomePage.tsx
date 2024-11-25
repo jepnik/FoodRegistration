@@ -6,33 +6,54 @@ import API_URL from '../apiConfig';
 
 const HomePage: React.FC = () => {
   const [items, setItems] = useState<Item[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [sortColumn, setSortColumn] = useState<string>('name'); // Column to sort by
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc'); // Sorting direction
   const navigate = useNavigate();
 
-  const fetchItems = async () => {
-    setLoading(true);
-    setError(null);
-
-    try {
-      const response = await fetch(`${API_URL}/api/itemapi/items`);
-      if (!response.ok) {
-        throw new Error('Failed to fetch items.');
-      }
-      const data: Item[] = await response.json();
-      setItems(data);
-    } catch (err) {
-      setError('Failed to fetch items.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
+    // Fetch items when component mounts
+    const fetchItems = async () => {
+      try {
+        const response = await fetch(`${API_URL}/api/itemapi/items`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch items.');
+        }
+        const data: Item[] = await response.json();
+        setItems(data);
+      } catch (error) {
+        setError('Failed to fetch items.');
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
     fetchItems();
   }, []);
 
+  // Sorting function for Name and ID
+  const handleSort = (column: string) => {
+    const newSortDirection = sortColumn === column && sortDirection === 'asc' ? 'desc' : 'asc';
+    setSortColumn(column);
+    setSortDirection(newSortDirection);
+
+    const sortedItems = [...items];
+    sortedItems.sort((a, b) => {
+      if (column === 'name') {
+        return newSortDirection === 'asc'
+          ? a.name.toLowerCase().localeCompare(b.name.toLowerCase())
+          : b.name.toLowerCase().localeCompare(a.name.toLowerCase());
+      } else if (column === 'id') {
+        return newSortDirection === 'asc' ? a.itemId - b.itemId : b.itemId - a.itemId;
+      }
+      return 0;
+    });
+    setItems(sortedItems);
+  };
+
+  // Handling item deletion
   const handleDelete = async (id: number) => {
     if (!window.confirm('Are you sure you want to delete this item?')) return;
 
@@ -44,23 +65,27 @@ const HomePage: React.FC = () => {
         throw new Error('Failed to delete item.');
       }
       setItems((prevItems) => prevItems.filter((item) => item.itemId !== id));
-    } catch (err) {
+    } catch (error) {
       alert('Failed to delete item.');
     }
   };
 
-  const filteredItems = items.filter(
+  // Filtering items by name or category
+  const filtered = items.filter(
     (item) =>
+      item.itemId.toString().includes(searchQuery) ||
       item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.category.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
+      item.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.certificate && item.certificate.toLowerCase().includes(searchQuery.toLowerCase()
+  ));
   if (loading) return <p>Loading...</p>;
   if (error) return <p style={{ color: 'red' }}>{error}</p>;
 
   return (
     <div className="container mt-4">
       <h1>Food Items</h1>
+
+      {/* Search bar */}
       <Form.Group className="mb-3">
         <Form.Control
           type="text"
@@ -70,11 +95,16 @@ const HomePage: React.FC = () => {
         />
       </Form.Group>
 
+      {/* Table View */}
       <Table striped bordered hover>
         <thead>
           <tr>
-            <th>ID</th>
-            <th>Name</th>
+            <th onClick={() => handleSort('id')}>
+              ID {sortColumn === 'id' && (sortDirection === 'asc' ? '↑' : '↓')}
+            </th>
+            <th onClick={() => handleSort('name')}>
+              Name {sortColumn === 'name' && (sortDirection === 'asc' ? '↑' : '↓')}
+            </th>
             <th>Category</th>
             <th>Certificate</th>
             <th>Image</th>
@@ -82,7 +112,7 @@ const HomePage: React.FC = () => {
           </tr>
         </thead>
         <tbody>
-          {filteredItems.map((item) => (
+          {filtered.map((item) => (
             <tr key={item.itemId}>
               <td>{item.itemId}</td>
               <td>{item.name}</td>

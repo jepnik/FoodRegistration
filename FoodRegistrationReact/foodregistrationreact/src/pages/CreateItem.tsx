@@ -1,8 +1,8 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import ItemForm from '../components/ItemForm'; // Assuming this form handles the submission
-import { Item } from '../types/item'; // Correctly import Item type
-import API_URL from '../apiConfig'; // Ensure correct import of API_URL
+import ItemForm from '../components/ItemForm'; 
+import { Item } from '../types/item'; 
+import API_URL from '../apiConfig'; 
 
 const CreateItem: React.FC = () => {
   const navigate = useNavigate();
@@ -27,7 +27,6 @@ const CreateItem: React.FC = () => {
 
   return (
     <div>
-      <h2>Create New Item</h2>
       <ItemForm onSubmit={handleCreate} isUpdate={false} /> {/* Pass handleCreate to ItemForm */}
     </div>
   );

@@ -58,7 +58,6 @@ const UpdateItem: React.FC = () => {
 
   return (
     <div>
-      <h2>Update Item</h2>
       <ItemForm initialData={item} onSubmit={handleUpdate} isUpdate={true} />
     </div>
   );
