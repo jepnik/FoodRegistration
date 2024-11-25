@@ -33,7 +33,8 @@ bin/
 obj/
 APILogs/
 net8.0/
-FoodRegistrationReact/
+node_modules/
+.env*
 
 *.log
 

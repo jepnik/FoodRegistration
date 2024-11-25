@@ -1,0 +1,28 @@
+.table-container {
+  max-width: 80%; /* Begrens tabellens bredde */
+  margin: 0 auto; /* Sentrer tabellen horisontalt */
+}
+
+.App {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Fyll hele høyden av skjermen */  
+}
+
+/* Innholdet på siden */
+.content {
+  flex: 1; /* Lar innholdet ta opp all tilgjengelig plass over footer */
+  padding-top: 100px; /* Litt padding på topp og bunn */
+  padding-bottom: 0px;
+  overflow-y: auto; /* Tillater scrolling */
+}
+
+.create-button-container {
+  display: flex;
+  justify-content: left; /* Midtsentrerer knappen */
+  margin-top: 20px; /* Gir avstand fra tabellen */
+}
+
+.create-button-container button {
+  font-size: 1.1rem; /* Gjør knappen større */
+}
