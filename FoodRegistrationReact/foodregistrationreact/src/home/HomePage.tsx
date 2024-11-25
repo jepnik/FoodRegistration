@@ -134,6 +134,7 @@ const HomePage: React.FC = () => {
           ))}
         </tbody>
       </Table>
+      <Button href='/create' className="btn btn-confirm mt-3">Create new item</Button>  
     </div>
   );
 };

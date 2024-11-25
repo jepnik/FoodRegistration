@@ -49,10 +49,10 @@ public static class DBInit
                 },
                 new Item
                 {
-                    Name = "Banana",
+                    Name = "Biff",
                     Category = "Meat",
                     Certificate = "Fair Trade",
-                    ImageUrl = "wwwroot/images/biff.jpg",
+                    ImageUrl = "/images/biff.jpg",
                     
                     // Ernæringsfakta
                     Energy = 89,
