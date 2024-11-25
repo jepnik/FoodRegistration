@@ -50,6 +50,7 @@ node_modules/
 *.db-wal
 *.db
 FoodRegistrationReact\api\bin\Debug\net8.0\api.dll
+FoodRegistrationReact\api\FoodRegistration.db
 
 .vs/
 *.csproj.user
