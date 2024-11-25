@@ -1,0 +1,16 @@
+{
+    "compilerOptions": {
+        "target": "es2016",                  // Compile to ES6 JavaScript
+        "module": "commonjs",             // Use CommonJS module system
+        "jsx": "react-jsx", // Enable JSX support in TypeScript for React 17+
+        "esModuleInterop": true,          // Enable interoperability between CommonJS and ES Modules
+        "baseUrl": "./src", // Base directory for resolving modules
+        "paths": {
+            "*": [
+                "node_modules/*"
+            ] // Module resolution configuration
+        }
+    },
+    "include": ["src/**/*"],            // Include all files in the src directory
+    "exclude": ["node_modules", "build"] // Exclude node_modules and build directories
+}

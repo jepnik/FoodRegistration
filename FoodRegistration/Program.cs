@@ -48,13 +48,7 @@ if (app.Environment.IsDevelopment())
     DBInit.Seed(app); // Seed the database in development mode
 }
 
-
-app.UseHttpsRedirection();
-
-app.UseHttpsRedirection();
 app.UseStaticFiles();
-
-app.UseRouting();
 
 app.UseSession();
 
@@ -64,14 +58,7 @@ app.UseAuthentication();
 
 app.UseMiddleware<AuthenticationMiddleware>();
 
-app.UseRouting();
-
-// Configure route mappings for both MVC and API
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}"); // MVC route
-
-app.MapControllers(); // API route mapping
+app.MapDefaultControllerRoute();
 
 app.Run();
 
