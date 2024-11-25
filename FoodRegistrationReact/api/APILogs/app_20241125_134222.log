@@ -1,0 +1,16 @@
+2024-11-25 13:42:23.672 +01:00 [INF] Now listening on: https://localhost:7217
+2024-11-25 13:42:23.683 +01:00 [INF] Now listening on: http://localhost:5244
+2024-11-25 13:42:23.690 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2024-11-25 13:42:23.692 +01:00 [INF] Hosting environment: Development
+2024-11-25 13:42:23.694 +01:00 [INF] Content root path: C:\Users\tine_\OneDrive\Skrivebord\ITPE-Eksamen\sub2.2\FoodRegistration\FoodRegistrationReact\api
+2024-11-25 13:44:38.391 +01:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5244/api/itemapi/items - null null
+2024-11-25 13:44:38.461 +01:00 [INF] CORS policy execution successful.
+2024-11-25 13:44:38.478 +01:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5244/api/itemapi/items - 204 null null 89.4834ms
+2024-11-25 13:44:38.487 +01:00 [INF] Request starting HTTP/1.1 POST http://localhost:5244/api/itemapi/items - application/json 258
+2024-11-25 13:44:38.491 +01:00 [INF] CORS policy execution successful.
+2024-11-25 13:44:38.493 +01:00 [INF] Executing endpoint 'FoodRegistration.Controllers.ItemAPIController.CreateItem (api)'
+2024-11-25 13:44:38.515 +01:00 [INF] Route matched with {action = "CreateItem", controller = "ItemAPI"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] CreateItem(FoodRegistration.Models.Item) on controller FoodRegistration.Controllers.ItemAPIController (api).
+2024-11-25 13:44:38.934 +01:00 [INF] Executing CreatedAtActionResult, writing value of type 'FoodRegistration.Models.Item'.
+2024-11-25 13:44:38.985 +01:00 [INF] Executed action FoodRegistration.Controllers.ItemAPIController.CreateItem (api) in 464.9411ms
+2024-11-25 13:44:38.985 +01:00 [INF] Executed endpoint 'FoodRegistration.Controllers.ItemAPIController.CreateItem (api)'
+2024-11-25 13:44:38.989 +01:00 [INF] Request finished HTTP/1.1 POST http://localhost:5244/api/itemapi/items - 201 355 application/json; charset=utf-8 502.1847ms

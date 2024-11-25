@@ -4,7 +4,12 @@ import '../styles/Header.css';
 
 const API_URL = "http://localhost:5244";
 
-const Header = ({ userEmail }) => {
+// Define the props type
+interface HeaderProps {
+  userEmail?: string; // userEmail is optional and a string
+}
+
+const Header: React.FC<HeaderProps> = ({ userEmail }) => {
   const navigate = useNavigate(); // Hook for dynamic navigation
   const logo = `${API_URL}/images/logoHvit.ico`; // Dynamic logo from API
   const userIcon = `${API_URL}/images/userLogo.png`; // Dynamic user icon from API

@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\documents\\Eksamen\\FoodRegistration\\FoodRegistrationReact\\api\\api.csproj": {}
+    "C:\\Users\\tine_\\OneDrive\\Skrivebord\\ITPE-Eksamen\\sub2.2\\FoodRegistration\\FoodRegistrationReact\\api\\api.csproj": {}
   },
   "projects": {
-    "C:\\documents\\Eksamen\\FoodRegistration\\FoodRegistrationReact\\api\\api.csproj": {
+    "C:\\Users\\tine_\\OneDrive\\Skrivebord\\ITPE-Eksamen\\sub2.2\\FoodRegistration\\FoodRegistrationReact\\api\\api.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\documents\\Eksamen\\FoodRegistration\\FoodRegistrationReact\\api\\api.csproj",
+        "projectUniqueName": "C:\\Users\\tine_\\OneDrive\\Skrivebord\\ITPE-Eksamen\\sub2.2\\FoodRegistration\\FoodRegistrationReact\\api\\api.csproj",
         "projectName": "api",
-        "projectPath": "C:\\documents\\Eksamen\\FoodRegistration\\FoodRegistrationReact\\api\\api.csproj",
-        "packagesPath": "C:\\Users\\hallv\\.nuget\\packages\\",
-        "outputPath": "C:\\documents\\Eksamen\\FoodRegistration\\FoodRegistrationReact\\api\\obj\\",
+        "projectPath": "C:\\Users\\tine_\\OneDrive\\Skrivebord\\ITPE-Eksamen\\sub2.2\\FoodRegistration\\FoodRegistrationReact\\api\\api.csproj",
+        "packagesPath": "C:\\Users\\tine_\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\tine_\\OneDrive\\Skrivebord\\ITPE-Eksamen\\sub2.2\\FoodRegistration\\FoodRegistrationReact\\api\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\hallv\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\tine_\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"

@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from 'react'; // Import React and hooks
 import { Table, Button, Form } from 'react-bootstrap'; // Import required Bootstrap components
 import { useNavigate } from 'react-router-dom'; // Import useNavigate for navigation
+import API_URL from '../apiConfig';
+import { Item } from '../types/item';
 
-const API_URL = 'http://localhost:5244'; // Adjust to match your backend's base URL
+//const API_URL = 'http://localhost:5244'; // Adjust to match your backend's base URL
 
-const HomePage = () => {
-  const [items, setItems] = useState([]); // All items fetched from the API
-  const [filteredItems, setFilteredItems] = useState([]); // Items after filtering
-  const [loading, setLoading] = useState(false); // Loading state
-  const [error, setError] = useState(null); // Error state
-  const [searchQuery, setSearchQuery] = useState(''); // Search query input
+const HomePage: React.FC = () => {
+  const [items, setItems] = useState<Item[]>([]); // All items fetched from the API
+  const [filteredItems, setFilteredItems] = useState<Item[]>([]); // Items after filtering
+  const [loading, setLoading] = useState<boolean>(false); // Loading state
+  const [error, setError] = useState<string | null>(null); // Error state
+  const [searchQuery, setSearchQuery] = useState<string>(''); // Search query input
   const navigate = useNavigate();
+
 
   // Fetch items from the API
   const fetchItems = async () => {
@@ -22,9 +25,10 @@ const HomePage = () => {
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
-      const data = await response.json(); // Parse response JSON
+      const data: Item[] = await response.json(); // Parse response JSON
       setItems(data); // Update items state
       setFilteredItems(data); // Initialize filtered items
+      console.log(data);
     } catch (error) {
       console.error(`There was a problem with the fetch operation: ${error.message}`);
       setError('Failed to fetch items.');
@@ -39,7 +43,7 @@ const HomePage = () => {
   }, []);
 
   // Handle Delete Item
-  const deleteItem = async (id) => {
+  const deleteItem = async (id: number) => {
     const confirmed = window.confirm('Are you sure you want to delete this item?');
     if (!confirmed) return;
 
@@ -54,24 +58,19 @@ const HomePage = () => {
       // Update local state to remove the deleted item
       setItems((prevItems) => prevItems.filter((item) => item.itemId !== id));
       setFilteredItems((prevItems) => prevItems.filter((item) => item.itemId !== id));
-    } catch (err) {
-      alert(`Error: ${err.message}`);
+    } catch (error) {
+      alert(`Error: ${error.message}`);
     }
   };
 
-  // Update filtered items based on the search query
-  const handleSearchChange = (e) => {
-    const query = e.target.value.toLowerCase();
-    setSearchQuery(query);
+  // be abel to seacrh for big and small letter for name, category and certificate in the search bar 
+  const filtered = items.filter(
+    (item) =>
+      item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.certificate.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
-    const filtered = items.filter(
-      (item) =>
-        item.name.toLowerCase().includes(query) ||
-        (item.category && item.category.toLowerCase().includes(query)) || // Optional category check
-        (item.certificate && item.certificate.toLowerCase().includes(query)) // Optional certificate check
-    );
-    setFilteredItems(filtered);
-  };
 
   return (
     <div className="container mt-4">
@@ -83,7 +82,7 @@ const HomePage = () => {
           type="text"
           placeholder="Search by name, category, or certificate"
           value={searchQuery}
-          onChange={handleSearchChange}
+          onChange={(e) => setSearchQuery(e.target.value)}
         />
       </Form.Group>
       {/* Error message display */}
@@ -138,5 +137,6 @@ const HomePage = () => {
     </div>
   );
 };
+
 
 export default HomePage;

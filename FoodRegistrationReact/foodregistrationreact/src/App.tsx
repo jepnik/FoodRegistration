@@ -6,7 +6,7 @@ import CreateItem from './create/CreateItem';
 import UpdateItem from './update/UpdateItem';
 import './App.css';
 
-function App() {
+const App: React.FC = () => {
   const userEmail = 'user@foodcompany.com'; // Example, replace with session data
 
   return (
