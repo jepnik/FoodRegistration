@@ -29,12 +29,29 @@ const CreateItem: React.FC = () => {
   };
 
   return (
-    <div className="container mt-4">
-      <h1>Create New Item</h1>
-      <ItemForm
-        onSubmit={handleCreate}
-        isUpdate={false}
-      />
+    <div
+      className="d-flex justify-content-center align-items-center"
+      style={{ minHeight: '100vh', backgroundColor: '#f8f9fa' }}
+    >
+      <div className="card p-4 shadow" style={{ width: '600px' }}>
+        <h1 className="text-center mb-4">Create New Item</h1>
+        <ItemForm onSubmit={handleCreate} isUpdate={false} />
+        <div className="d-flex justify-content-between mt-3">
+          <button
+            className="btn btn-primary"
+            type="submit"
+            form="item-form"
+          >
+            Create Item
+          </button>
+          <button
+            className="btn btn-secondary"
+            onClick={() => navigate('/')}
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
     </div>
   );
 };

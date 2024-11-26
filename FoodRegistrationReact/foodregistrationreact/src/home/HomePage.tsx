@@ -20,7 +20,7 @@ const HomePage: React.FC = () => {
   useEffect(() => {
     const fetchItems = async () => {
       try {
-        const response = await fetch(`${API_URL}/api/itemapi/items`);
+        const response = await fetch(`${API_URL}/api/items`);
         if (!response.ok) {
           throw new Error('Failed to fetch items.');
         }
@@ -41,7 +41,7 @@ const HomePage: React.FC = () => {
     if (!window.confirm('Are you sure you want to delete this item?')) return;
 
     try {
-      const response = await fetch(`${API_URL}/api/itemapi/items/${id}`, {
+      const response = await fetch(`${API_URL}/api/items/${id}`, {
         method: 'DELETE',
       });
       if (!response.ok) {
@@ -125,10 +125,10 @@ const HomePage: React.FC = () => {
         <thead>
           <tr>
             <th
-              onClick={() => handleSort('id')}
-              style={{ cursor: 'pointer', fontWeight: sortColumn === 'id' ? 'bold' : 'normal' }}
+              onClick={() => handleSort('itemId')}
+              style={{ cursor: 'pointer', fontWeight: sortColumn === 'itemId' ? 'bold' : 'normal' }}
             >
-              ID {sortColumn === 'id' && (sortDirection === 'asc' ? '↑' : '↓')}
+              ID {sortColumn === 'itemId' && (sortDirection === 'asc' ? '↑' : '↓')}
             </th>
             <th
               onClick={() => handleSort('name')}
@@ -156,7 +156,7 @@ const HomePage: React.FC = () => {
           {filteredItems.map((item) => (
             <tr
               key={item.itemId}
-              style={{ cursor: 'pointer' }}
+              style={{ cursor: 'pointer', backgroundColor: '#f9f9f9', borderRadius: '5px' }}
               onClick={() => handleRowClick(item.itemId)}
             >
               <td>{item.itemId}</td>
@@ -168,7 +168,7 @@ const HomePage: React.FC = () => {
                   <img
                     src={`${API_URL}${item.imageUrl}`}
                     alt={item.name}
-                    style={{ width: '60px', height: '60px' }}
+                    style={{ width: '60px', height: '60px', objectFit: 'cover' }}
                   />
                 ) : (
                   'No Image'

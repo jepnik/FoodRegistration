@@ -30,3 +30,12 @@
   font-size: 2.5em;  /* You can adjust the size */
   font-weight: bold;
 }
+
+.custom-hover-table tbody tr:hover {
+  background-color: #e9ecef !important; /* Light gray hover effect */
+  transition: background-color 0.3s ease; /* Smooth transition */
+}
+
+.custom-hover-table tbody tr {
+  transition: background-color 0.3s ease; /* Smooth transition for the row */
+}

@@ -2,460 +2,226 @@ using Microsoft.AspNetCore.Mvc;
 using FoodRegistration.Models;
 using FoodRegistration.DAL;
 using FoodRegistration.ViewModels;
+using Microsoft.Extensions.Logging;
 
-namespace FoodRegistration.Controllers;
-
-[ApiController]
-[Route("api/[controller]")]
-public class HomeAPIController : Controller
-{
-    private readonly IItemRepository _itemRepository;
-    private readonly ILogger<HomeController> _logger;
-
-    public HomeAPIController(IItemRepository itemRepository, ILogger<HomeController> logger)
-    {
-        _itemRepository = itemRepository;
-        _logger = logger;
-    }
-
-    [HttpGet("api/items")]
-    public async Task<IActionResult> GetAllItems()
-    {
-        var items = await _itemRepository.GetAll();
-        return Ok(items);
-    }
-
-    [HttpGet("api/items/{id}")]
-    public async Task<IActionResult> GetItemById(int id)
-    {
-        var item = await _itemRepository.GetItemById(id);
-        if (item == null)
-        {
-            return NotFound("Item not found.");
-        }
-        return Ok(item);
-    }
-
-    [HttpPost("api/items")]
-    public async Task<IActionResult> CreateItem([FromBody] Item item)
-    {
-        if (!ModelState.IsValid)
-        {
-            return BadRequest(ModelState);
-        }
-
-        item.CreatedDate = DateTime.Now;
-        await _itemRepository.Create(item);
-        return CreatedAtAction(nameof(GetItemById), new { id = item.ItemId }, item);
-    }
-
-    [HttpPut("api/items/{id}")]
-    public async Task<IActionResult> UpdateItem(int id, [FromBody] Item updatedItem)
-    {
-        var existingItem = await _itemRepository.GetItemById(id);
-        if (existingItem == null)
-        {
-            return NotFound("Item not found.");
-        }
-
-        existingItem.Name = updatedItem.Name;
-        existingItem.Category = updatedItem.Category;
-        existingItem.Certificate = updatedItem.Certificate;
-        existingItem.ImageUrl = updatedItem.ImageUrl;
-        existingItem.Energy = updatedItem.Energy;
-        existingItem.Carbohydrates = updatedItem.Carbohydrates;
-        existingItem.Sugar = updatedItem.Sugar;
-        existingItem.Protein = updatedItem.Protein;
-        existingItem.Fat = updatedItem.Fat;
-        existingItem.Saturatedfat = updatedItem.Saturatedfat;
-        existingItem.Unsaturatedfat = updatedItem.Unsaturatedfat;
-        existingItem.Fibre = updatedItem.Fibre;
-        existingItem.Salt = updatedItem.Salt;
-        existingItem.CountryOfOrigin = updatedItem.CountryOfOrigin;
-        existingItem.CountryOfProvenance = updatedItem.CountryOfProvenance;
-        existingItem.UpdatedDate = DateTime.Now;
-
-        await _itemRepository.Update(existingItem);
-        return NoContent();
-    }
-
-    [HttpDelete("api/items/{id}")]
-    public async Task<IActionResult> DeleteItem(int id)
-    {
-        var success = await _itemRepository.Delete(id);
-        if (!success)
-        {
-            return NotFound("Item not found.");
-        }
-        return NoContent();
-    }
-
-}
-
-public class HomeController : Controller
-{
-    //Interface for item databse
-    private readonly IItemRepository _itemRepository;
-    // Logger for error handling
-    private readonly ILogger<HomeController> _logger;
-
-    // Constructor for dependency injection
-    public HomeController(IItemRepository itemRepository, ILogger<HomeController> logger)
-    {
-        _itemRepository = itemRepository ?? throw new ArgumentNullException(nameof(itemRepository)); // Ensure the DbContext is not null
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger)); // Ensure the logger is not null
-    }
-
-    // Main index page showing table with added items
-    public async Task<IActionResult> Index()
-    {
-        var items = await _itemRepository.GetAll();
-        if (items == null)
-        {
-            _logger.LogError("[HomeController] Item list not found while executing _itemRepository.GetAll()");
-            return NotFound("Item list not found");
-        }
-        var itemsViewModel = new ItemsViewModel(items, "Index");
-        return View(itemsViewModel);
-    }
-
-    // Details page for an item by ID
-    public async Task<IActionResult> Details(int id)
-    {
-        var item = await _itemRepository.GetItemById(id);
-        // Check if the ID is valid (e.g., greater than 0)
-        if (item == null)
-        {
-            _logger.LogError("[HomeController] Item not found for the ItemId {ItemId:0000}", id);
-            return NotFound("Item not found for the ItemId");
-        }
-        return View(item);
-    }
-
-    //Create item form 
-    [HttpGet]
-    public IActionResult Create()
-    {
-        return View();
-    }
-
-    //Submit the Create item form with validation
-    [HttpPost]
-    public async Task<IActionResult> Create(Item item)
-    {
-        if (!ModelState.IsValid)
-        {
-            // Log validation errors
-            foreach (var state in ModelState)
-            {
-                foreach (var error in state.Value.Errors)
-                {
-                    _logger.LogError($"Field: {state.Key}, Error: {error.ErrorMessage}");
-                }
-            }
-            //retunrs to view with validation errors
-            return View(item);
-        }
-
-        item.CreatedDate = DateTime.Now; // Set created date to now
-        await _itemRepository.Create(item); // Save new item to database
-        return RedirectToAction(nameof(Index));
-    }
-
-    //Render the Update item form for a specific item by it's ItemId
-    [HttpGet]
-    public async Task<IActionResult> Update(int id)
-    {
-        var item = await _itemRepository.GetItemById(id);
-        if (item == null)
-        {
-            _logger.LogError("[HomeController] Item not found when updating the ItemId {ItemId:0000}", id);
-            return BadRequest("Item not found for the ItemId");
-        }
-        return View(item);
-    }
-
-    //Submit the Update form and save changes to the item
-    [HttpPost]
-    public async Task<IActionResult> Update(Item item)
-    {
-        if (ModelState.IsValid)
-        {
-            //Retrieve the existing item from the database
-            var existingItem = await _itemRepository.GetItemById(item.ItemId);
-
-            if (existingItem == null)
-            {
-                _logger.LogError("[HomeController] Item not found when updating the ItemId {ItemId:0000}", item.ItemId);
-                return NotFound("Item not found.");
-            }
-
-            //Keep original CreatedDate, only updates other properties
-            existingItem.Name = item.Name;
-            existingItem.Category = item.Category;
-            existingItem.Certificate = item.Certificate;
-            existingItem.ImageUrl = item.ImageUrl;
-            existingItem.Energy = item.Energy;
-            existingItem.Carbohydrates = item.Carbohydrates;
-            existingItem.Sugar = item.Sugar;
-            existingItem.Protein = item.Protein;
-            existingItem.Fat = item.Fat;
-            existingItem.Saturatedfat = item.Saturatedfat;
-            existingItem.Unsaturatedfat = item.Unsaturatedfat;
-            existingItem.Fibre = item.Fibre;
-            existingItem.Salt = item.Salt;
-            existingItem.CountryOfOrigin = item.CountryOfOrigin;
-            existingItem.CountryOfProvenance = item.CountryOfProvenance;
-            //Sett UpdatedDate til nåværende tidspunkt
-            existingItem.UpdatedDate = DateTime.Now;
-
-            // Saves updates to database
-            await _itemRepository.Update(existingItem);
-
-            return RedirectToAction(nameof(Index));
-        }
-        // Reload view if validation fails 
-        return View(item);
-    }
-
-    //Show confirmation page for deleting an item
-    [HttpGet]
-    public async Task<IActionResult> Delete(int id)
-    {
-        var item = await _itemRepository.GetItemById(id);
-        if (item == null)
-        {
-            _logger.LogError("[HomeController] Item not found for the ItemId {ItemId:0000}", id);
-            return BadRequest("Item not found for the ItemId");
-        }
-        return View(item);
-    }
-
-    // Confirm and delete item from the database
-    [HttpPost]
-    public async Task<IActionResult> DeleteConfirmed(int id)
-    {
-        bool returnOk = await _itemRepository.Delete(id);
-        if (!returnOk)
-        {
-            _logger.LogError("[HomeController] Item deletion failed for the ItemId {ItemId:0000}", id);
-            return BadRequest("Item deletion failed");
-        }
-        return RedirectToAction(nameof(Index));
-    }
-}
-/* 
+namespace FoodRegistration.Controllers
 {
     public class HomeController : Controller
-{
-    private readonly IItemRepository _itemRepository;
-    private readonly ILogger<HomeController> _logger;
-
-    public HomeController(IItemRepository itemRepository, ILogger<HomeController> logger)
     {
-        _itemRepository = itemRepository ?? throw new ArgumentNullException(nameof(itemRepository));
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-    }
+        private readonly IItemRepository _itemRepository;
+        private readonly ILogger<HomeController> _logger;
 
-    // ----- Existing MVC Functionality -----
-
-    public async Task<IActionResult> Index()
-    {
-        var items = await _itemRepository.GetAll();
-        if (items == null)
+        public HomeController(IItemRepository itemRepository, ILogger<HomeController> logger)
         {
-            _logger.LogError("Failed to fetch items for Index.");
-            return NotFound("Items not found.");
+            _itemRepository = itemRepository ?? throw new ArgumentNullException(nameof(itemRepository));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        var viewModel = new ItemsViewModel(items, "Index");
-        return View(viewModel);
-    }
-
-    public async Task<IActionResult> Details(int id)
-    {
-        var item = await _itemRepository.GetItemById(id);
-        if (item == null)
+        /// <summary>
+        /// Displays the main index page with a list of items.
+        /// </summary>
+        public async Task<IActionResult> Index()
         {
-            _logger.LogError("Item not found for ID {ItemId}", id);
-            return NotFound("Item not found.");
-        }
-
-        return View(item);
-    }
-
-    [HttpGet]
-    public IActionResult Create()
-    {
-        return View();
-    }
-
-    [HttpPost]
-    public async Task<IActionResult> Create(Item item)
-    {
-        if (!ModelState.IsValid)
-        {
-            foreach (var state in ModelState)
+            try
             {
-                foreach (var error in state.Value.Errors)
+                var items = await _itemRepository.GetAll();
+                if (items == null || !items.Any())
                 {
-                    _logger.LogError("Validation error: {Error}", error.ErrorMessage);
+                    _logger.LogWarning("No items found to display on the index page.");
+                    return View(new List<Item>()); // Return an empty view model if no items exist.
                 }
+
+                var viewModel = new ItemsViewModel(items, "Index");
+                return View(viewModel);
             }
-            return View(item);
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while loading the index page.");
+                return StatusCode(500, "Internal server error.");
+            }
         }
 
-        item.CreatedDate = DateTime.Now;
-        await _itemRepository.Create(item);
-        return RedirectToAction(nameof(Index));
-    }
-
-    [HttpGet]
-    public async Task<IActionResult> Update(int id)
-    {
-        var item = await _itemRepository.GetItemById(id);
-        if (item == null)
+        /// <summary>
+        /// Displays the details of an item by its ID.
+        /// </summary>
+        public async Task<IActionResult> Details(int id)
         {
-            _logger.LogError("Item not found for update with ID {ItemId}", id);
-            return NotFound("Item not found.");
+            try
+            {
+                var item = await _itemRepository.GetItemById(id);
+                if (item == null)
+                {
+                    _logger.LogWarning($"Item with ID {id} not found.");
+                    return NotFound($"Item with ID {id} not found.");
+                }
+
+                return View(item);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error occurred while fetching details for item ID {id}.");
+                return StatusCode(500, "Internal server error.");
+            }
         }
 
-        return View(item);
-    }
-
-    [HttpPost]
-    public async Task<IActionResult> Update(Item item)
-    {
-        if (!ModelState.IsValid)
+        /// <summary>
+        /// Displays the Create Item form.
+        /// </summary>
+        [HttpGet]
+        public IActionResult Create()
         {
-            return View(item);
+            return View();
         }
 
-        var existingItem = await _itemRepository.GetItemById(item.ItemId);
-        if (existingItem == null)
+        /// <summary>
+        /// Handles the creation of a new item after form submission.
+        /// </summary>
+        [HttpPost]
+        public async Task<IActionResult> Create(Item item)
         {
-            _logger.LogError("Item not found for update with ID {ItemId}", item.ItemId);
-            return NotFound("Item not found.");
+            if (!ModelState.IsValid)
+            {
+                foreach (var state in ModelState)
+                {
+                    foreach (var error in state.Value.Errors)
+                    {
+                        _logger.LogWarning($"Validation error: {error.ErrorMessage}");
+                    }
+                }
+                return View(item); // Return the form with validation errors.
+            }
+
+            try
+            {
+                item.CreatedDate = DateTime.UtcNow;
+                await _itemRepository.Create(item);
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while creating an item.");
+                return StatusCode(500, "Internal server error.");
+            }
         }
 
-        existingItem.Name = item.Name;
-        existingItem.Category = item.Category;
-        existingItem.Certificate = item.Certificate;
-        existingItem.ImageUrl = item.ImageUrl;
-        existingItem.Energy = item.Energy;
-        existingItem.Carbohydrates = item.Carbohydrates;
-        existingItem.Sugar = item.Sugar;
-        existingItem.Protein = item.Protein;
-        existingItem.Fat = item.Fat;
-        existingItem.Saturatedfat = item.Saturatedfat;
-        existingItem.Unsaturatedfat = item.Unsaturatedfat;
-        existingItem.Fibre = item.Fibre;
-        existingItem.Salt = item.Salt;
-        existingItem.CountryOfOrigin = item.CountryOfOrigin;
-        existingItem.CountryOfProvenance = item.CountryOfProvenance;
-        existingItem.UpdatedDate = DateTime.Now;
-
-        await _itemRepository.Update(existingItem);
-        return RedirectToAction(nameof(Index));
-    }
-
-    [HttpGet]
-    public async Task<IActionResult> Delete(int id)
-    {
-        var item = await _itemRepository.GetItemById(id);
-        if (item == null)
+        /// <summary>
+        /// Displays the Update Item form for a specific item ID.
+        /// </summary>
+        [HttpGet]
+        public async Task<IActionResult> Update(int id)
         {
-            _logger.LogError("Item not found for delete with ID {ItemId}", id);
-            return NotFound("Item not found.");
+            try
+            {
+                var item = await _itemRepository.GetItemById(id);
+                if (item == null)
+                {
+                    _logger.LogWarning($"Item with ID {id} not found for update.");
+                    return NotFound($"Item with ID {id} not found.");
+                }
+
+                return View(item);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error occurred while fetching item ID {id} for update.");
+                return StatusCode(500, "Internal server error.");
+            }
         }
 
-        return View(item);
-    }
-
-    [HttpPost]
-    public async Task<IActionResult> DeleteConfirmed(int id)
-    {
-        var success = await _itemRepository.Delete(id);
-        if (!success)
+        /// <summary>
+        /// Handles the update of an existing item after form submission.
+        /// </summary>
+        [HttpPost]
+        public async Task<IActionResult> Update(Item item)
         {
-            _logger.LogError("Failed to delete item with ID {ItemId}", id);
-            return BadRequest("Failed to delete item.");
+            if (!ModelState.IsValid)
+            {
+                return View(item); // Return the form with validation errors.
+            }
+
+            try
+            {
+                var existingItem = await _itemRepository.GetItemById(item.ItemId);
+                if (existingItem == null)
+                {
+                    _logger.LogWarning($"Item with ID {item.ItemId} not found for update.");
+                    return NotFound($"Item with ID {item.ItemId} not found.");
+                }
+
+                // Update only the properties allowed to be modified
+                existingItem.Name = item.Name;
+                existingItem.Category = item.Category;
+                existingItem.Certificate = item.Certificate;
+                existingItem.ImageUrl = item.ImageUrl;
+                existingItem.Energy = item.Energy;
+                existingItem.Carbohydrates = item.Carbohydrates;
+                existingItem.Sugar = item.Sugar;
+                existingItem.Protein = item.Protein;
+                existingItem.Fat = item.Fat;
+                existingItem.Saturatedfat = item.Saturatedfat;
+                existingItem.Unsaturatedfat = item.Unsaturatedfat;
+                existingItem.Fibre = item.Fibre;
+                existingItem.Salt = item.Salt;
+                existingItem.CountryOfOrigin = item.CountryOfOrigin;
+                existingItem.CountryOfProvenance = item.CountryOfProvenance;
+                existingItem.UpdatedDate = DateTime.UtcNow;
+
+                await _itemRepository.Update(existingItem);
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error occurred while updating item ID {item.ItemId}.");
+                return StatusCode(500, "Internal server error.");
+            }
         }
 
-        return RedirectToAction(nameof(Index));
-    }
-
-    // ----- API Functionality for React Frontend -----
-
-    [HttpGet("api/items")]
-    public async Task<IActionResult> GetAllItems()
-    {
-        var items = await _itemRepository.GetAll();
-        return Ok(items);
-    }
-
-    [HttpGet("api/items/{id}")]
-    public async Task<IActionResult> GetItemById(int id)
-    {
-        var item = await _itemRepository.GetItemById(id);
-        if (item == null)
+        /// <summary>
+        /// Displays a confirmation page before deleting an item.
+        /// </summary>
+        [HttpGet]
+        public async Task<IActionResult> Delete(int id)
         {
-            return NotFound("Item not found.");
-        }
-        return Ok(item);
-    }
+            try
+            {
+                var item = await _itemRepository.GetItemById(id);
+                if (item == null)
+                {
+                    _logger.LogWarning($"Item with ID {id} not found for deletion.");
+                    return NotFound($"Item with ID {id} not found.");
+                }
 
-    [HttpPost("api/items")]
-    public async Task<IActionResult> CreateItem([FromBody] Item item)
-    {
-        if (!ModelState.IsValid)
+                return View(item);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error occurred while fetching item ID {id} for deletion.");
+                return StatusCode(500, "Internal server error.");
+            }
+        }
+
+        /// <summary>
+        /// Handles the deletion of an item after confirmation.
+        /// </summary>
+        [HttpPost]
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            return BadRequest(ModelState);
+            try
+            {
+                var success = await _itemRepository.Delete(id);
+                if (!success)
+                {
+                    _logger.LogWarning($"Item with ID {id} not found or could not be deleted.");
+                    return NotFound($"Item with ID {id} not found.");
+                }
+
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error occurred while deleting item ID {id}.");
+                return StatusCode(500, "Internal server error.");
+            }
         }
-
-        item.CreatedDate = DateTime.Now;
-        await _itemRepository.Create(item);
-        return CreatedAtAction(nameof(GetItemById), new { id = item.ItemId }, item);
     }
-
-    [HttpPut("api/items/{id}")]
-    public async Task<IActionResult> UpdateItem(int id, [FromBody] Item updatedItem)
-    {
-        var existingItem = await _itemRepository.GetItemById(id);
-        if (existingItem == null)
-        {
-            return NotFound("Item not found.");
-        }
-
-        existingItem.Name = updatedItem.Name;
-        existingItem.Category = updatedItem.Category;
-        existingItem.Certificate = updatedItem.Certificate;
-        existingItem.ImageUrl = updatedItem.ImageUrl;
-        existingItem.Energy = updatedItem.Energy;
-        existingItem.Carbohydrates = updatedItem.Carbohydrates;
-        existingItem.Sugar = updatedItem.Sugar;
-        existingItem.Protein = updatedItem.Protein;
-        existingItem.Fat = updatedItem.Fat;
-        existingItem.Saturatedfat = updatedItem.Saturatedfat;
-        existingItem.Unsaturatedfat = updatedItem.Unsaturatedfat;
-        existingItem.Fibre = updatedItem.Fibre;
-        existingItem.Salt = updatedItem.Salt;
-        existingItem.CountryOfOrigin = updatedItem.CountryOfOrigin;
-        existingItem.CountryOfProvenance = updatedItem.CountryOfProvenance;
-        existingItem.UpdatedDate = DateTime.Now;
-
-        await _itemRepository.Update(existingItem);
-        return NoContent();
-    }
-
-    [HttpDelete("api/items/{id}")]
-    public async Task<IActionResult> DeleteItem(int id)
-    {
-        var success = await _itemRepository.Delete(id);
-        if (!success)
-        {
-            return NotFound("Item not found.");
-        }
-        return NoContent();
-    }
-} */
+}

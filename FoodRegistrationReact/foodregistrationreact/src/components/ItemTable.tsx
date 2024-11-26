@@ -7,20 +7,20 @@ interface ItemTableProps {
   items: Item[];
   onDelete: (id: number) => void; // Callback to handle delete action
   onUpdate: (id: number) => void; // Callback to handle update action
+  onRowClick: (id: number) => void; // Callback to handle row click (ItemDetails)
 }
 
-const ItemTable: React.FC<ItemTableProps> = ({ items, onDelete, onUpdate }) => {
-  const [selectedItemId, setSelectedItemId] = useState<number | null>(null);
-  const [showDetails, setShowDetails] = useState<boolean>(false);
-
-  const handleRowClick = (itemId: number) => {
-    setSelectedItemId(itemId);
-    setShowDetails(true);
-  };
+const ItemTable: React.FC<ItemTableProps> = ({
+  items,
+  onDelete,
+  onUpdate,
+  onRowClick,
+}) => {
+  const [hoveredRow, setHoveredRow] = useState<number | null>(null);
 
   return (
-    <div>
-      <Table striped bordered hover>
+    <div className="table-responsive">
+      <Table striped bordered hover className="custom-hover-table">
         <thead>
           <tr>
             <th>ID</th>
@@ -35,8 +35,13 @@ const ItemTable: React.FC<ItemTableProps> = ({ items, onDelete, onUpdate }) => {
           {items.map((item) => (
             <tr
               key={item.itemId}
-              onClick={() => handleRowClick(item.itemId)}
-              style={{ cursor: 'pointer' }}
+              onClick={() => onRowClick(item.itemId)}
+              style={{
+                cursor: 'pointer',
+                backgroundColor: hoveredRow === item.itemId ? '#f8f9fa' : '',
+              }}
+              onMouseEnter={() => setHoveredRow(item.itemId)}
+              onMouseLeave={() => setHoveredRow(null)}
             >
               <td>{item.itemId}</td>
               <td>{item.name}</td>
@@ -47,7 +52,7 @@ const ItemTable: React.FC<ItemTableProps> = ({ items, onDelete, onUpdate }) => {
                   <img
                     src={item.imageUrl}
                     alt={item.name}
-                    style={{ width: '60px', height: '60px' }}
+                    style={{ width: '60px', height: '60px', objectFit: 'cover' }}
                   />
                 ) : (
                   'No Image'
@@ -55,6 +60,7 @@ const ItemTable: React.FC<ItemTableProps> = ({ items, onDelete, onUpdate }) => {
               </td>
               <td>
                 <button
+                  className="btn btn-primary btn-sm me-2"
                   onClick={(e) => {
                     e.stopPropagation(); // Prevent row click
                     onUpdate(item.itemId);
@@ -63,6 +69,7 @@ const ItemTable: React.FC<ItemTableProps> = ({ items, onDelete, onUpdate }) => {
                   Update
                 </button>
                 <button
+                  className="btn btn-danger btn-sm"
                   onClick={(e) => {
                     e.stopPropagation(); // Prevent row click
                     onDelete(item.itemId);
@@ -75,17 +82,8 @@ const ItemTable: React.FC<ItemTableProps> = ({ items, onDelete, onUpdate }) => {
           ))}
         </tbody>
       </Table>
-
-      {selectedItemId && (
-        <ItemDetails
-          show={showDetails}
-          onHide={() => setShowDetails(false)}
-          itemId={selectedItemId}
-        />
-      )}
     </div>
   );
 };
 
 export default ItemTable;
-
