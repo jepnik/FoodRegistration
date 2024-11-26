@@ -18,9 +18,6 @@ namespace FoodRegistration.Controllers
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        /// <summary>
-        /// Retrieves all items.
-        /// </summary>
         [HttpGet]
         public async Task<IActionResult> GetAllItems()
         {
@@ -32,13 +29,10 @@ namespace FoodRegistration.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error occurred while fetching all items.");
-                return StatusCode(500, "Internal server error.");
+                return StatusCode(500, new { message = "Internal server error." });
             }
         }
 
-        /// <summary>
-        /// Retrieves a single item by ID.
-        /// </summary>
         [HttpGet("{id}")]
         public async Task<IActionResult> GetItemById(int id)
         {
@@ -47,50 +41,48 @@ namespace FoodRegistration.Controllers
                 var item = await _itemRepository.GetItemById(id);
                 if (item == null)
                 {
-                    return NotFound($"Item with ID {id} not found.");
+                    return NotFound(new { message = $"Item with ID {id} not found." });
                 }
                 return Ok(item);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"Error occurred while fetching item with ID {id}.");
-                return StatusCode(500, "Internal server error.");
+                return StatusCode(500, new { message = "Internal server error." });
             }
         }
 
-        /// <summary>
-        /// Creates a new item.
-        /// </summary>
         [HttpPost]
         public async Task<IActionResult> CreateItem([FromBody] Item item)
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                _logger.LogWarning("Invalid model state: {ModelState}", ModelState);
+                return BadRequest(new { message = "Invalid request data.", details = ModelState });
             }
 
             try
             {
                 item.CreatedDate = DateTime.UtcNow;
                 await _itemRepository.Create(item);
+
+                _logger.LogInformation("Item created successfully: {@Item}", item);
                 return CreatedAtAction(nameof(GetItemById), new { id = item.ItemId }, item);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error occurred while creating an item.");
-                return StatusCode(500, "Internal server error.");
+                return StatusCode(500, new { message = "Internal server error." });
             }
         }
 
-        /// <summary>
-        /// Updates an existing item.
-        /// </summary>
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateItem(int id, [FromBody] Item updatedItem)
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                _logger.LogWarning("Invalid model state: {ModelState}", ModelState);
+                return BadRequest(new { message = "Invalid request data.", details = ModelState });
             }
 
             try
@@ -98,7 +90,7 @@ namespace FoodRegistration.Controllers
                 var existingItem = await _itemRepository.GetItemById(id);
                 if (existingItem == null)
                 {
-                    return NotFound($"Item with ID {id} not found.");
+                    return NotFound(new { message = $"Item with ID {id} not found." });
                 }
 
                 existingItem.Name = updatedItem.Name;
@@ -119,18 +111,17 @@ namespace FoodRegistration.Controllers
                 existingItem.UpdatedDate = DateTime.UtcNow;
 
                 await _itemRepository.Update(existingItem);
+
+                _logger.LogInformation("Item updated successfully: {@Item}", existingItem);
                 return NoContent();
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"Error occurred while updating item with ID {id}.");
-                return StatusCode(500, "Internal server error.");
+                return StatusCode(500, new { message = "Internal server error." });
             }
         }
 
-        /// <summary>
-        /// Deletes an item by ID.
-        /// </summary>
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteItem(int id)
         {
@@ -139,14 +130,16 @@ namespace FoodRegistration.Controllers
                 var success = await _itemRepository.Delete(id);
                 if (!success)
                 {
-                    return NotFound($"Item with ID {id} not found.");
+                    return NotFound(new { message = $"Item with ID {id} not found." });
                 }
+
+                _logger.LogInformation($"Item with ID {id} deleted successfully.");
                 return NoContent();
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"Error occurred while deleting item with ID {id}.");
-                return StatusCode(500, "Internal server error.");
+                return StatusCode(500, new { message = "Internal server error." });
             }
         }
     }
