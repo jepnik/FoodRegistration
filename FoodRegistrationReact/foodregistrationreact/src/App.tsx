@@ -1,12 +1,15 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import { AuthProvider } from "./components/AuthContext";
+import PrivateRoute from "./components/PrivateRoute";
 import Layout from './shared/Layout';
 import HomePage from './home/HomePage';
 import CreateItem from './pages/CreateItem'; 
 import UpdateItem from './pages/UpdateItem';
+import Login from './account/Login';
 import './App.css';
 
-function App() {
+const App: React.FC = () => {
   const userEmail = 'user@foodcompany.com'; // Example, replace with session data
 
   return (
@@ -16,6 +19,7 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/create" element={<CreateItem />} /> {/* New Route */}
           <Route path="/update/:id" element={<UpdateItem />} /> {/* New Route */}
+          <Route path="/login" element={<Login />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Layout>
