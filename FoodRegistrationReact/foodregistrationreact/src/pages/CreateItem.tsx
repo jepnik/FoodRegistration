@@ -1,8 +1,8 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import ItemForm from '../components/ItemForm'; 
-import { Item } from '../types/item'; 
-import API_URL from '../apiConfig'; 
+import ItemForm from '../components/ItemForm';
+import { Item } from '../types/item';
+import API_URL from '../apiConfig';
 
 const CreateItem: React.FC = () => {
   const navigate = useNavigate();
@@ -10,24 +10,31 @@ const CreateItem: React.FC = () => {
   const handleCreate = async (newItem: Item) => {
     try {
       const response = await fetch(`${API_URL}/api/itemapi/items`, {
-        method: 'POST', // Using POST to create new item
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(newItem), // Sending new item data
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newItem),
       });
 
       if (!response.ok) {
         throw new Error('Failed to create item.');
       }
 
-      navigate('/'); // Navigate back after successful creation
-    } catch (err) {
-      console.error('Error creating item:', err);
+      alert('Item created successfully!');
+      navigate('/'); // Navigate back to homepage
+    } catch (error) {
+      alert(`Error: ${(error as Error).message}`);
     }
   };
 
   return (
-    <div>
-      <ItemForm onSubmit={handleCreate} isUpdate={false} /> {/* Pass handleCreate to ItemForm */}
+    <div className="container mt-4">
+      <h1>Create New Item</h1>
+      <ItemForm
+        onSubmit={handleCreate}
+        isUpdate={false}
+      />
     </div>
   );
 };
