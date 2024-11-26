@@ -1,20 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Button, Form } from 'react-bootstrap';
+import { Button, Form, Table, Alert } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { Item } from '../types/item';
 import API_URL from '../apiConfig';
+import ItemDetails from '../components/ItemDetails';
 
 const HomePage: React.FC = () => {
   const [items, setItems] = useState<Item[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>('');
-  const [sortColumn, setSortColumn] = useState<string>('id'); // Default column to sort by is 'id'
-  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc'); // Default direction is 'asc'
+  const [sortColumn, setSortColumn] = useState<string>('id');
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+  const [selectedItemId, setSelectedItemId] = useState<number | null>(null);
+  const [showDetails, setShowDetails] = useState<boolean>(false);
   const navigate = useNavigate();
 
+  // Fetch items from API
   useEffect(() => {
-    // Fetch items when component mounts
     const fetchItems = async () => {
       try {
         const response = await fetch(`${API_URL}/api/itemapi/items`);
@@ -23,9 +26,9 @@ const HomePage: React.FC = () => {
         }
         const data: Item[] = await response.json();
         setItems(data);
-      } catch (error) {
+      } catch (err) {
         setError('Failed to fetch items.');
-        console.error(error);
+        console.error(err);
       } finally {
         setLoading(false);
       }
@@ -33,31 +36,7 @@ const HomePage: React.FC = () => {
     fetchItems();
   }, []);
 
-  // Sorting function for Name, ID, Category, and Certificate
-  const handleSort = (column: string) => {
-    const newSortDirection = sortColumn === column && sortDirection === 'asc' ? 'desc' : 'asc';
-    setSortColumn(column);
-    setSortDirection(newSortDirection);
-
-    const sortedItems = [...items];
-    sortedItems.sort((a, b) => {
-      if (column === 'name' || column === 'certificate') {
-        return newSortDirection === 'asc'
-          ? a[column].toLowerCase().localeCompare(b[column].toLowerCase())
-          : b[column].toLowerCase().localeCompare(a[column].toLowerCase());
-      } else if (column === 'id') {
-        return newSortDirection === 'asc' ? a.itemId - b.itemId : b.itemId - a.itemId;
-      } else if (column === 'category') {
-        return newSortDirection === 'asc'
-          ? a.category.toLowerCase().localeCompare(b.category.toLowerCase())
-          : b.category.toLowerCase().localeCompare(a.category.toLowerCase());
-      }
-      return 0;
-    });
-    setItems(sortedItems);
-  };
-
-  // Handling item deletion
+  // Delete an item
   const handleDelete = async (id: number) => {
     if (!window.confirm('Are you sure you want to delete this item?')) return;
 
@@ -69,23 +48,54 @@ const HomePage: React.FC = () => {
         throw new Error('Failed to delete item.');
       }
       setItems((prevItems) => prevItems.filter((item) => item.itemId !== id));
-    } catch (error) {
+    } catch (err) {
       alert('Failed to delete item.');
     }
   };
 
-  // Filtering items by name, category, or certificate
+  // Sorting functionality
+  const handleSort = (column: string) => {
+    const newSortDirection = sortColumn === column && sortDirection === 'asc' ? 'desc' : 'asc';
+    setSortColumn(column);
+    setSortDirection(newSortDirection);
+
+    const sortedItems = [...items].sort((a, b) => {
+      const aValue = a[column as keyof Item];
+      const bValue = b[column as keyof Item];
+
+      if (typeof aValue === 'string' && typeof bValue === 'string') {
+        return newSortDirection === 'asc'
+          ? aValue.localeCompare(bValue)
+          : bValue.localeCompare(aValue);
+      }
+
+      if (typeof aValue === 'number' && typeof bValue === 'number') {
+        return newSortDirection === 'asc' ? aValue - bValue : bValue - aValue;
+      }
+
+      return 0;
+    });
+
+    setItems(sortedItems);
+  };
+
+  // Filter items based on search query
   const filteredItems = items.filter(
     (item) =>
-      item.itemId.toString().includes(searchQuery)||
+      item.itemId.toString().includes(searchQuery) ||
       item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       item.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
       (item.certificate && item.certificate.toLowerCase().includes(searchQuery.toLowerCase()))
-
   );
 
+  // Show item details in modal
+  const handleRowClick = (itemId: number) => {
+    setSelectedItemId(itemId);
+    setShowDetails(true);
+  };
+
   if (loading) return <p>Loading...</p>;
-  if (error) return <p style={{ color: 'red' }}>{error}</p>;
+  if (error) return <Alert variant="danger">{error}</Alert>;
 
   return (
     <div className="container mt-4">
@@ -95,11 +105,20 @@ const HomePage: React.FC = () => {
       <Form.Group className="mb-3">
         <Form.Control
           type="text"
-          placeholder="Search"
+          placeholder="Search by ID, Name, Category, or Certificate"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
       </Form.Group>
+
+      {/* Button to Create Item */}
+      <Button
+        variant="primary"
+        onClick={() => navigate('/create')}
+        className="mb-3"
+      >
+        Create New Item
+      </Button>
 
       {/* Table View */}
       <Table striped bordered hover>
@@ -107,43 +126,27 @@ const HomePage: React.FC = () => {
           <tr>
             <th
               onClick={() => handleSort('id')}
-              style={{
-                cursor: 'pointer',
-                fontWeight: sortColumn === 'id' ? 'bold' : 'normal',
-              }}
+              style={{ cursor: 'pointer', fontWeight: sortColumn === 'id' ? 'bold' : 'normal' }}
             >
-              ID{' '}
-              {sortColumn === 'id' && (sortDirection === 'asc' ? '↑' : '↓')}
+              ID {sortColumn === 'id' && (sortDirection === 'asc' ? '↑' : '↓')}
             </th>
             <th
               onClick={() => handleSort('name')}
-              style={{
-                cursor: 'pointer',
-                fontWeight: sortColumn === 'name' ? 'bold' : 'normal',
-              }}
+              style={{ cursor: 'pointer', fontWeight: sortColumn === 'name' ? 'bold' : 'normal' }}
             >
-              Name{' '}
-              {sortColumn === 'name' && (sortDirection === 'asc' ? '↑' : '↓')}
+              Name {sortColumn === 'name' && (sortDirection === 'asc' ? '↑' : '↓')}
             </th>
             <th
               onClick={() => handleSort('category')}
-              style={{
-                cursor: 'pointer',
-                fontWeight: sortColumn === 'category' ? 'bold' : 'normal',
-              }}
+              style={{ cursor: 'pointer', fontWeight: sortColumn === 'category' ? 'bold' : 'normal' }}
             >
-              Category{' '}
-              {sortColumn === 'category' && (sortDirection === 'asc' ? '↑' : '↓')}
+              Category {sortColumn === 'category' && (sortDirection === 'asc' ? '↑' : '↓')}
             </th>
             <th
               onClick={() => handleSort('certificate')}
-              style={{
-                cursor: 'pointer',
-                fontWeight: sortColumn === 'certificate' ? 'bold' : 'normal',
-              }}
+              style={{ cursor: 'pointer', fontWeight: sortColumn === 'certificate' ? 'bold' : 'normal' }}
             >
-              Certificate{' '}
-              {sortColumn === 'certificate' && (sortDirection === 'asc' ? '↑' : '↓')}
+              Certificate {sortColumn === 'certificate' && (sortDirection === 'asc' ? '↑' : '↓')}
             </th>
             <th>Image</th>
             <th>Actions</th>
@@ -151,7 +154,11 @@ const HomePage: React.FC = () => {
         </thead>
         <tbody>
           {filteredItems.map((item) => (
-            <tr key={item.itemId}>
+            <tr
+              key={item.itemId}
+              style={{ cursor: 'pointer' }}
+              onClick={() => handleRowClick(item.itemId)}
+            >
               <td>{item.itemId}</td>
               <td>{item.name}</td>
               <td>{item.category}</td>
@@ -168,10 +175,24 @@ const HomePage: React.FC = () => {
                 )}
               </td>
               <td>
-                <Button variant="success" size="sm" onClick={() => navigate(`/update/${item.itemId}`)}>
+                <Button
+                  variant="success"
+                  size="sm"
+                  onClick={(e) => {
+                    e.stopPropagation(); // Prevent row click
+                    navigate(`/update/${item.itemId}`);
+                  }}
+                >
                   Update
                 </Button>
-                <Button variant="danger" size="sm" onClick={() => handleDelete(item.itemId)}>
+                <Button
+                  variant="danger"
+                  size="sm"
+                  onClick={(e) => {
+                    e.stopPropagation(); // Prevent row click
+                    handleDelete(item.itemId);
+                  }}
+                >
                   Delete
                 </Button>
               </td>
@@ -179,6 +200,15 @@ const HomePage: React.FC = () => {
           ))}
         </tbody>
       </Table>
+
+      {/* Modal for Item Details */}
+      {selectedItemId && (
+        <ItemDetails
+          show={showDetails}
+          onHide={() => setShowDetails(false)}
+          itemId={selectedItemId}
+        />
+      )}
     </div>
   );
 };

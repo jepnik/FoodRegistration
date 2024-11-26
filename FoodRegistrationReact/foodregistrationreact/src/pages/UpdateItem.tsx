@@ -1,184 +1,188 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Button, Form } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { Form, Button, Alert } from 'react-bootstrap';
 import { Item } from '../types/item';
 import API_URL from '../apiConfig';
 
-const HomePage: React.FC = () => {
-  const [items, setItems] = useState<Item[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
-  const [searchQuery, setSearchQuery] = useState<string>('');
-  const [sortColumn, setSortColumn] = useState<string>('id'); // Default column to sort by is 'id'
-  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc'); // Default direction is 'asc'
+const UpdateItem: React.FC = () => {
+  const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const [formData, setFormData] = useState<Item | null>(null);
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const [submissionError, setSubmissionError] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
 
+  // Fetch the item details when component mounts
   useEffect(() => {
-    // Fetch items when component mounts
-    const fetchItems = async () => {
+    const fetchItem = async () => {
       try {
-        const response = await fetch(`${API_URL}/api/itemapi/items`);
+        const response = await fetch(`${API_URL}/api/itemapi/items/${id}`);
         if (!response.ok) {
-          throw new Error('Failed to fetch items.');
+          throw new Error('Failed to fetch item.');
         }
-        const data: Item[] = await response.json();
-        setItems(data);
+        const data: Item = await response.json();
+        setFormData(data);
       } catch (error) {
-        setError('Failed to fetch items.');
+        setSubmissionError('Failed to fetch the item.');
         console.error(error);
       } finally {
         setLoading(false);
       }
     };
-    fetchItems();
-  }, []);
 
-  // Sorting function for Name, ID, Category, and Certificate
-  const handleSort = (column: string) => {
-    const newSortDirection = sortColumn === column && sortDirection === 'asc' ? 'desc' : 'asc';
-    setSortColumn(column);
-    setSortDirection(newSortDirection);
+    fetchItem();
+  }, [id]);
 
-    const sortedItems = [...items];
-    sortedItems.sort((a, b) => {
-      if (column === 'name' || column === 'certificate') {
-        return newSortDirection === 'asc'
-          ? a[column].toLowerCase().localeCompare(b[column].toLowerCase())
-          : b[column].toLowerCase().localeCompare(a[column].toLowerCase());
-      } else if (column === 'id') {
-        return newSortDirection === 'asc' ? a.itemId - b.itemId : b.itemId - a.itemId;
-      } else if (column === 'category') {
-        return newSortDirection === 'asc'
-          ? a.category.toLowerCase().localeCompare(b.category.toLowerCase())
-          : b.category.toLowerCase().localeCompare(a.category.toLowerCase());
-      }
-      return 0;
-    });
-    setItems(sortedItems);
+  // Handle input changes
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value, type } = e.target;
+
+    setFormData((prev) => (prev ? {
+      ...prev,
+      [name]: type === 'number' ? (parseFloat(value) || undefined) : value,
+    } : null));
   };
 
-  // Handling item deletion
-  const handleDelete = async (id: number) => {
-    if (!window.confirm('Are you sure you want to delete this item?')) return;
+  // Validate the form data
+  const validateForm = () => {
+    const newErrors: { [key: string]: string } = {};
+
+    if (!formData?.name) newErrors.name = 'Name is required.';
+    if (!formData?.category) newErrors.category = 'Category is required.';
+    if (!formData?.countryOfOrigin) newErrors.countryOfOrigin = 'Country of origin is required.';
+    if (!formData?.countryOfProvenance) newErrors.countryOfProvenance = 'Country of provenance is required.';
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  // Handle form submission
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setSubmissionError(null);
+
+    if (!validateForm() || !formData) return;
 
     try {
       const response = await fetch(`${API_URL}/api/itemapi/items/${id}`, {
-        method: 'DELETE',
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
       });
+
       if (!response.ok) {
-        throw new Error('Failed to delete item.');
+        throw new Error('Failed to update item.');
       }
-      setItems((prevItems) => prevItems.filter((item) => item.itemId !== id));
+
+      alert('Item updated successfully!');
+      navigate('/'); // Redirect to the homepage after successful update
     } catch (error) {
-      alert('Failed to delete item.');
+      setSubmissionError('Failed to update the item.');
+      console.error(error);
     }
   };
 
-  // Filtering items by name, category, or certificate
-  const filteredItems = items.filter(
-    (item) =>
-      item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      (item.certificate && item.certificate.toLowerCase().includes(searchQuery.toLowerCase()))
-  );
-
   if (loading) return <p>Loading...</p>;
-  if (error) return <p style={{ color: 'red' }}>{error}</p>;
+  if (submissionError) return <Alert variant="danger">{submissionError}</Alert>;
 
   return (
     <div className="container mt-4">
-      <h1>Food Items</h1>
+      <h1>Update Item</h1>
+      <Form onSubmit={handleSubmit}>
+        {/* Name Field */}
+        <Form.Group className="mb-3">
+          <Form.Label>Name</Form.Label>
+          <Form.Control
+            type="text"
+            name="name"
+            value={formData?.name || ''}
+            onChange={handleChange}
+            isInvalid={!!errors.name}
+          />
+          <Form.Control.Feedback type="invalid">{errors.name}</Form.Control.Feedback>
+        </Form.Group>
 
-      {/* Search bar */}
-      <Form.Group className="mb-3">
-        <Form.Control
-          type="text"
-          placeholder="Search by name, category, or certificate"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-        />
-      </Form.Group>
+        {/* Category Field */}
+        <Form.Group className="mb-3">
+          <Form.Label>Category</Form.Label>
+          <Form.Control
+            type="text"
+            name="category"
+            value={formData?.category || ''}
+            onChange={handleChange}
+            isInvalid={!!errors.category}
+          />
+          <Form.Control.Feedback type="invalid">{errors.category}</Form.Control.Feedback>
+        </Form.Group>
 
-      {/* Table View */}
-      <Table striped bordered hover>
-        <thead>
-          <tr>
-            <th
-              onClick={() => handleSort('id')}
-              style={{
-                cursor: 'pointer',
-                fontWeight: sortColumn === 'id' ? 'bold' : 'normal',
-              }}
-            >
-              ID{' '}
-              {sortColumn === 'id' && (sortDirection === 'asc' ? '↑' : '↓')}
-            </th>
-            <th
-              onClick={() => handleSort('name')}
-              style={{
-                cursor: 'pointer',
-                fontWeight: sortColumn === 'name' ? 'bold' : 'normal',
-              }}
-            >
-              Name{' '}
-              {sortColumn === 'name' && (sortDirection === 'asc' ? '↑' : '↓')}
-            </th>
-            <th
-              onClick={() => handleSort('category')}
-              style={{
-                cursor: 'pointer',
-                fontWeight: sortColumn === 'category' ? 'bold' : 'normal',
-              }}
-            >
-              Category{' '}
-              {sortColumn === 'category' && (sortDirection === 'asc' ? '↑' : '↓')}
-            </th>
-            <th
-              onClick={() => handleSort('certificate')}
-              style={{
-                cursor: 'pointer',
-                fontWeight: sortColumn === 'certificate' ? 'bold' : 'normal',
-              }}
-            >
-              Certificate{' '}
-              {sortColumn === 'certificate' && (sortDirection === 'asc' ? '↑' : '↓')}
-            </th>
-            <th>Image</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredItems.map((item) => (
-            <tr key={item.itemId}>
-              <td>{item.itemId}</td>
-              <td>{item.name}</td>
-              <td>{item.category}</td>
-              <td>{item.certificate || 'N/A'}</td>
-              <td>
-                {item.imageUrl ? (
-                  <img
-                    src={`${API_URL}${item.imageUrl}`}
-                    alt={item.name}
-                    style={{ width: '60px', height: '60px' }}
-                  />
-                ) : (
-                  'No Image'
-                )}
-              </td>
-              <td>
-                <Button variant="success" size="sm" onClick={() => navigate(`/update/${item.itemId}`)}>
-                  Update
-                </Button>
-                <Button variant="danger" size="sm" onClick={() => handleDelete(item.itemId)}>
-                  Delete
-                </Button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </Table>
+        {/* Certificate Field */}
+        <Form.Group className="mb-3">
+          <Form.Label>Certificate</Form.Label>
+          <Form.Control
+            type="text"
+            name="certificate"
+            value={formData?.certificate || ''}
+            onChange={handleChange}
+          />
+        </Form.Group>
+
+        {/* Image URL Field */}
+        <Form.Group className="mb-3">
+          <Form.Label>Image URL</Form.Label>
+          <Form.Control
+            type="text"
+            name="imageUrl"
+            value={formData?.imageUrl || ''}
+            onChange={handleChange}
+          />
+        </Form.Group>
+
+        {/* Numeric Fields */}
+        {['energy', 'carbohydrates', 'sugar', 'protein', 'fat', 'saturatedfat', 'unsaturatedfat', 'fibre', 'salt'].map((field) => (
+          <Form.Group className="mb-3" key={field}>
+            <Form.Label>{field.charAt(0).toUpperCase() + field.slice(1)}</Form.Label>
+            <Form.Control
+              type="number"
+              name={field}
+              value={formData?.[field as keyof Item] || ''}
+              onChange={handleChange}
+            />
+          </Form.Group>
+        ))}
+
+        {/* Country of Origin */}
+        <Form.Group className="mb-3">
+          <Form.Label>Country of Origin</Form.Label>
+          <Form.Control
+            type="text"
+            name="countryOfOrigin"
+            value={formData?.countryOfOrigin || ''}
+            onChange={handleChange}
+            isInvalid={!!errors.countryOfOrigin}
+          />
+          <Form.Control.Feedback type="invalid">{errors.countryOfOrigin}</Form.Control.Feedback>
+        </Form.Group>
+
+        {/* Country of Provenance */}
+        <Form.Group className="mb-3">
+          <Form.Label>Country of Provenance</Form.Label>
+          <Form.Control
+            type="text"
+            name="countryOfProvenance"
+            value={formData?.countryOfProvenance || ''}
+            onChange={handleChange}
+            isInvalid={!!errors.countryOfProvenance}
+          />
+          <Form.Control.Feedback type="invalid">{errors.countryOfProvenance}</Form.Control.Feedback>
+        </Form.Group>
+
+        {/* Submit Button */}
+        <Button variant="primary" type="submit">
+          Update Item
+        </Button>
+      </Form>
     </div>
   );
 };
 
-export default HomePage;
+export default UpdateItem;

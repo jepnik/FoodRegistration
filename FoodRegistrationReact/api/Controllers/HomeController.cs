@@ -1,112 +1,221 @@
 using Microsoft.AspNetCore.Mvc;
 using FoodRegistration.Models;
 using FoodRegistration.DAL;
-using FoodRegistration.DTOs;
+using FoodRegistration.ViewModels;
 
-namespace FoodRegistration.Controllers;
-
-[ApiController]
-[Route("api/[controller]")]
-public class ItemAPIController : Controller
+namespace FoodRegistration.Controllers
 {
-    private readonly IItemRepository _itemRepository;
-    private readonly ILogger<ItemAPIController> _logger;
-
-    public ItemAPIController(IItemRepository itemRepository, ILogger<ItemAPIController> logger)
+    public class HomeController : Controller
     {
-        _itemRepository = itemRepository ?? throw new ArgumentNullException(nameof(itemRepository));
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-    }
+        private readonly IItemRepository _itemRepository;
+        private readonly ILogger<HomeController> _logger;
 
-    // GET: api/ItemAPI/items
-    [HttpGet("items")]
-    public async Task<IActionResult> GetItems()
-    {
-        var items = await _itemRepository.GetAll();
-        if (items == null)
+        public HomeController(IItemRepository itemRepository, ILogger<HomeController> logger)
         {
-            _logger.LogError("[ItemAPIController] Item list not found while executing _itemRepository.GetAll()");
-            return NotFound("Items not found");
+            _itemRepository = itemRepository ?? throw new ArgumentNullException(nameof(itemRepository));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        // Konverter til DTO-er (hvis nødvendig)
-        var itemDtos = items.Select(item => new ItemDto
-        {
-            ItemId = item.ItemId,
-            Name = item.Name,
-            Category = item.Category,
-            Certificate = item.Certificate,
-            ImageUrl = item.ImageUrl,
-            CreatedDate = item.CreatedDate,
-            UpdatedDate = item.UpdatedDate
-        });
+        // ----- Existing MVC Functionality -----
 
-        return Ok(itemDtos);
-    }
-
-    // GET: api/ItemAPI/items/{id}
-    [HttpGet("items/{id}")]
-    public async Task<IActionResult> GetItemById(int id)
-    {
-        var item = await _itemRepository.GetItemById(id);
-        if (item == null)
+        public async Task<IActionResult> Index()
         {
-            _logger.LogError("[ItemAPIController] Item not found for the ItemId {ItemId:0000}", id);
-            return NotFound("Item not found");
-        }
-        return Ok(item);
-    }
+            var items = await _itemRepository.GetAll();
+            if (items == null)
+            {
+                _logger.LogError("Failed to fetch items for Index.");
+                return NotFound("Items not found.");
+            }
 
-    // POST: api/ItemAPI/items
-    [HttpPost("items")]
-    public async Task<IActionResult> CreateItem([FromBody] Item item)
-    {
-        if (!ModelState.IsValid)
-        {
-            return BadRequest(ModelState);
+            var viewModel = new ItemsViewModel(items, "Index");
+            return View(viewModel);
         }
 
-        item.CreatedDate = DateTime.Now;
-        await _itemRepository.Create(item);
-        return CreatedAtAction(nameof(GetItemById), new { id = item.ItemId }, item);
-    }
-
-    // PUT: api/ItemAPI/items/{id}
-    [HttpPut("items/{id}")]
-    public async Task<IActionResult> UpdateItem(int id, [FromBody] Item item)
-    {
-        if (!ModelState.IsValid)
+        public async Task<IActionResult> Details(int id)
         {
-            return BadRequest(ModelState);
+            var item = await _itemRepository.GetItemById(id);
+            if (item == null)
+            {
+                _logger.LogError("Item not found for ID {ItemId}", id);
+                return NotFound("Item not found.");
+            }
+
+            return View(item);
         }
 
-        var existingItem = await _itemRepository.GetItemById(id);
-        if (existingItem == null)
+        [HttpGet]
+        public IActionResult Create()
         {
-            return NotFound("Item not found");
+            return View();
         }
 
-        // Oppdater verdier
-        existingItem.Name = item.Name;
-        existingItem.Category = item.Category;
-        existingItem.Certificate = item.Certificate;
-        existingItem.ImageUrl = item.ImageUrl;
-        existingItem.UpdatedDate = DateTime.Now;
-
-        await _itemRepository.Update(existingItem);
-        return NoContent();
-    }
-
-    // DELETE: api/ItemAPI/items/{id}
-    [HttpDelete("items/{id}")]
-    public async Task<IActionResult> DeleteItem(int id)
-    {
-        var result = await _itemRepository.Delete(id);
-        if (!result)
+        [HttpPost]
+        public async Task<IActionResult> Create(Item item)
         {
-            return NotFound("Item not found");
+            if (!ModelState.IsValid)
+            {
+                foreach (var state in ModelState)
+                {
+                    foreach (var error in state.Value.Errors)
+                    {
+                        _logger.LogError("Validation error: {Error}", error.ErrorMessage);
+                    }
+                }
+                return View(item);
+            }
+
+            item.CreatedDate = DateTime.Now;
+            await _itemRepository.Create(item);
+            return RedirectToAction(nameof(Index));
         }
-        return NoContent();
+
+        [HttpGet]
+        public async Task<IActionResult> Update(int id)
+        {
+            var item = await _itemRepository.GetItemById(id);
+            if (item == null)
+            {
+                _logger.LogError("Item not found for update with ID {ItemId}", id);
+                return NotFound("Item not found.");
+            }
+
+            return View(item);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Update(Item item)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(item);
+            }
+
+            var existingItem = await _itemRepository.GetItemById(item.ItemId);
+            if (existingItem == null)
+            {
+                _logger.LogError("Item not found for update with ID {ItemId}", item.ItemId);
+                return NotFound("Item not found.");
+            }
+
+            existingItem.Name = item.Name;
+            existingItem.Category = item.Category;
+            existingItem.Certificate = item.Certificate;
+            existingItem.ImageUrl = item.ImageUrl;
+            existingItem.Energy = item.Energy;
+            existingItem.Carbohydrates = item.Carbohydrates;
+            existingItem.Sugar = item.Sugar;
+            existingItem.Protein = item.Protein;
+            existingItem.Fat = item.Fat;
+            existingItem.Saturatedfat = item.Saturatedfat;
+            existingItem.Unsaturatedfat = item.Unsaturatedfat;
+            existingItem.Fibre = item.Fibre;
+            existingItem.Salt = item.Salt;
+            existingItem.CountryOfOrigin = item.CountryOfOrigin;
+            existingItem.CountryOfProvenance = item.CountryOfProvenance;
+            existingItem.UpdatedDate = DateTime.Now;
+
+            await _itemRepository.Update(existingItem);
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var item = await _itemRepository.GetItemById(id);
+            if (item == null)
+            {
+                _logger.LogError("Item not found for delete with ID {ItemId}", id);
+                return NotFound("Item not found.");
+            }
+
+            return View(item);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var success = await _itemRepository.Delete(id);
+            if (!success)
+            {
+                _logger.LogError("Failed to delete item with ID {ItemId}", id);
+                return BadRequest("Failed to delete item.");
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        // ----- API Functionality for React Frontend -----
+
+        [HttpGet("api/items")]
+        public async Task<IActionResult> GetAllItems()
+        {
+            var items = await _itemRepository.GetAll();
+            return Ok(items);
+        }
+
+        [HttpGet("api/items/{id}")]
+        public async Task<IActionResult> GetItemById(int id)
+        {
+            var item = await _itemRepository.GetItemById(id);
+            if (item == null)
+            {
+                return NotFound("Item not found.");
+            }
+            return Ok(item);
+        }
+
+        [HttpPost("api/items")]
+        public async Task<IActionResult> CreateItem([FromBody] Item item)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            item.CreatedDate = DateTime.Now;
+            await _itemRepository.Create(item);
+            return CreatedAtAction(nameof(GetItemById), new { id = item.ItemId }, item);
+        }
+
+        [HttpPut("api/items/{id}")]
+        public async Task<IActionResult> UpdateItem(int id, [FromBody] Item updatedItem)
+        {
+            var existingItem = await _itemRepository.GetItemById(id);
+            if (existingItem == null)
+            {
+                return NotFound("Item not found.");
+            }
+
+            existingItem.Name = updatedItem.Name;
+            existingItem.Category = updatedItem.Category;
+            existingItem.Certificate = updatedItem.Certificate;
+            existingItem.ImageUrl = updatedItem.ImageUrl;
+            existingItem.Energy = updatedItem.Energy;
+            existingItem.Carbohydrates = updatedItem.Carbohydrates;
+            existingItem.Sugar = updatedItem.Sugar;
+            existingItem.Protein = updatedItem.Protein;
+            existingItem.Fat = updatedItem.Fat;
+            existingItem.Saturatedfat = updatedItem.Saturatedfat;
+            existingItem.Unsaturatedfat = updatedItem.Unsaturatedfat;
+            existingItem.Fibre = updatedItem.Fibre;
+            existingItem.Salt = updatedItem.Salt;
+            existingItem.CountryOfOrigin = updatedItem.CountryOfOrigin;
+            existingItem.CountryOfProvenance = updatedItem.CountryOfProvenance;
+            existingItem.UpdatedDate = DateTime.Now;
+
+            await _itemRepository.Update(existingItem);
+            return NoContent();
+        }
+
+        [HttpDelete("api/items/{id}")]
+        public async Task<IActionResult> DeleteItem(int id)
+        {
+            var success = await _itemRepository.Delete(id);
+            if (!success)
+            {
+                return NotFound("Item not found.");
+            }
+            return NoContent();
+        }
     }
 }
-
