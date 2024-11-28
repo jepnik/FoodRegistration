@@ -164,38 +164,38 @@ public async Task<IActionResult> Register([FromBody] RegisterUserViewModel model
 
         [HttpGet("profile")]
         public async Task<IActionResult> GetProfile()
+{
+    var token = Request.Cookies["jwt"];
+    if (string.IsNullOrEmpty(token))
+        return Unauthorized(new { error = "Unauthorized access." });
+
+    var handler = new JwtSecurityTokenHandler();
+    var key = Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]);
+
+    try
+    {
+        var claims = handler.ValidateToken(token, new TokenValidationParameters
         {
-            var token = Request.Cookies["jwt"];
-            if (string.IsNullOrEmpty(token))
-                return Unauthorized(new { error = "Unauthorized access." });
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidIssuer = _configuration["Jwt:Issuer"],
+            ValidAudience = _configuration["Jwt:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(key)
+        }, out _);
 
-            var handler = new JwtSecurityTokenHandler();
-            var key = Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]);
+        var userId = int.Parse(claims.FindFirst("UserID")!.Value);
+        var user = await _context.Users.FindAsync(userId);
+        if (user == null)
+            return NotFound(new { error = "User not found." });
 
-            try
-            {
-                var claims = handler.ValidateToken(token, new TokenValidationParameters
-                {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidIssuer = _configuration["Jwt:Issuer"],
-                    ValidAudience = _configuration["Jwt:Audience"],
-                    IssuerSigningKey = new SymmetricSecurityKey(key)
-                }, out _);
+        return Ok(new { userId = user.UserId, email = user.Email });
+    }
+    catch
+    {
+        return Unauthorized(new { error = "Invalid token." });
+    }
+}
 
-                var userId = int.Parse(claims.FindFirst("UserID")!.Value);
-                var user = await _context.Users.FindAsync(userId);
-                if (user == null)
-                    return NotFound(new { error = "User not found." });
-
-                return Ok(new { userId = user.UserId, email = user.Email });
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Invalid token.");
-                return Unauthorized(new { error = "Invalid token." });
-            }
-        }
 
         [HttpPost("logout")]
         public IActionResult Logout()

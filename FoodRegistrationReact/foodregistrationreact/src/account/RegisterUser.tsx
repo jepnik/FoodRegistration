@@ -30,9 +30,10 @@ const RegisterUser: React.FC = () => {
       });
 
       if (response.ok) {
-        setSuccess('Registration successful. You can now log in.');
-        // Optionally navigate to login page
-        // navigate('/login');
+        setSuccess('Registration successful. Redirecting to login page...');
+        setTimeout(() => {
+          navigate('/login');
+        }, 2000); // Redirect after 2 seconds
       } else {
         const data = await response.json();
         setError(data.error || 'Registration failed');
@@ -40,6 +41,10 @@ const RegisterUser: React.FC = () => {
     } catch (err) {
       setError('An error occurred');
     }
+  };
+
+  const handleCancel = () => {
+    navigate('/login');
   };
 
   return (
@@ -76,11 +81,13 @@ const RegisterUser: React.FC = () => {
           />
         </div>
         <button type="submit" className="btn btn-primary">Register</button>
+        <button type="button" className="btn btn-secondary" onClick={handleCancel}>Cancel</button>
       </form>
     </div>
   );
 };
 
 export default RegisterUser;
+
 
 

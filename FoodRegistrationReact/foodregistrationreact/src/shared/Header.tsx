@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate for navigation
+import { Link, useNavigate } from 'react-router-dom';
 import '../styles/Header.css';
 
 const API_URL = "http://localhost:5244";
@@ -17,10 +17,10 @@ const Header: React.FC<HeaderProps> = ({ userEmail }) => {
   return (
     <header className="navbar navbar-expand-lg navbar-dark shadow" style={{ backgroundColor: '#83B271' }}>
       {/* Brand Logo and Name */}
-      <a className="navbar-brand d-flex align-items-center" href="/">
+      <Link className="navbar-brand d-flex align-items-center" to="/">
         <img src={logo} alt="Logo" className="logo me-2" />
         FOODTRACE
-      </a>
+      </Link>
 
       {/* Hamburger Toggle Button */}
       <button
@@ -39,10 +39,9 @@ const Header: React.FC<HeaderProps> = ({ userEmail }) => {
       <div className="collapse navbar-collapse" id="navbarNav">
         <ul className="navbar-nav ml-auto">
           <li className="nav-item">
-            <a className="nav-link" href="/">Home</a>
+            <Link className="nav-link" to="/">Home</Link>
           </li>
           <li className="nav-item">
-            {/* Replace href with a dynamic navigation handler */}
             <button
               className="btn btn-link nav-link text-white"
               style={{ textDecoration: 'none' }}
@@ -56,10 +55,16 @@ const Header: React.FC<HeaderProps> = ({ userEmail }) => {
           {userEmail && (
             <>
               <li className="nav-item d-lg-none">
-                <a className="nav-link" href="/account/profile">Account</a>
+                <Link className="nav-link" to="/profile">Account</Link>
               </li>
               <li className="nav-item d-lg-none">
-                <a className="nav-link" href="/account/logout">Log out</a>
+                <button
+                  className="btn btn-link nav-link text-white"
+                  style={{ textDecoration: 'none' }}
+                  onClick={() => navigate('/logout')} // Navigate to Log out
+                >
+                  Log out
+                </button>
               </li>
             </>
           )}
@@ -82,8 +87,8 @@ const Header: React.FC<HeaderProps> = ({ userEmail }) => {
               />
             </button>
             <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="userMenuIcon">
-              <li><a className="dropdown-item" href="/account/profile">Account</a></li>
-              <li><a className="dropdown-item" href="/account/logout">Log out</a></li>
+              <li><Link className="dropdown-item" to="/profile">Account</Link></li>
+              <li><button className="dropdown-item" onClick={() => navigate('/logout')}>Log out</button></li>
             </ul>
           </div>
         )}
@@ -93,3 +98,4 @@ const Header: React.FC<HeaderProps> = ({ userEmail }) => {
 };
 
 export default Header;
+

@@ -1,10 +1,10 @@
-import React, { createContext, useState, useContext, ReactNode } from 'react';
+import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
 
 interface AuthContextType {
   isAuthenticated: boolean;
   login: (token: string) => void;
   logout: () => void;
-  token: string | null; // Store token
+  token: string | null;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -24,14 +24,21 @@ interface AuthProviderProps {
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [token, setToken] = useState<string | null>(null);
 
+  useEffect(() => {
+    const storedToken = sessionStorage.getItem('authToken');
+    if (storedToken) {
+      setToken(storedToken);
+    }
+  }, []);
+
   const login = (token: string) => {
     setToken(token);
-    sessionStorage.setItem('authToken', token); // Store token in sessionStorage
+    sessionStorage.setItem('authToken', token);
   };
 
   const logout = () => {
     setToken(null);
-    sessionStorage.removeItem('authToken'); // Clear token from sessionStorage
+    sessionStorage.removeItem('authToken');
   };
 
   return (
@@ -40,4 +47,5 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     </AuthContext.Provider>
   );
 };
+
 
