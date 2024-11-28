@@ -1,23 +1,41 @@
 .login-container {
-    max-width: 300px;
-    margin: 0 auto;
-    position: relative;
-    top: -50px;
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     text-align: center;
-}
-
-.login-container img {
-    height: auto;
-    width: 75%;
-}
-
-.form-group {
+  }
+  
+  .login-logo {
+    width: 150px;
+    margin-bottom: 20px;
+  }
+  
+  .login-form .form-group {
+    margin-bottom: 15px;
     text-align: left;
-}
-
-.buttons-button {
+  }
+  
+  .form-label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  
+  .form-control {
     width: 100%;
-    color: white;
-    border: none;
-    outline: none;
-}
+    padding: 8px;
+    font-size: 14px;
+  }
+  
+  .buttons-button {
+    width: 100%;
+  }
+  
+  .alert {
+    color: red;
+    font-weight: bold;
+  }
