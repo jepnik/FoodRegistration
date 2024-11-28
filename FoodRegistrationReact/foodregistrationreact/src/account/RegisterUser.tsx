@@ -1,18 +1,21 @@
-import React, { useState } from "react";
-import { RegisterUserType } from "../types/user";
+import React, { useState } from 'react';
 import API_URL from '../apiConfig';
-import "../styles/registerAndPassword.css"; // CSS file equivalent to the link in the .NET view
 import { useNavigate } from 'react-router-dom';
+import '../styles/registerAndPassword.css';
 
 const RegisterUser: React.FC = () => {
-  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+
+  const navigate = useNavigate();
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError('');
+    setSuccess('');
 
     if (password !== confirmPassword) {
       setError('Passwords do not match');
@@ -20,29 +23,33 @@ const RegisterUser: React.FC = () => {
     }
 
     try {
-      const response = await fetch('/api/account/register', {
+      const response = await fetch(`${API_URL}/api/account/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password, confirmPassword }),
       });
 
-      if (!response.ok) {
-        throw new Error('Registration failed');
+      if (response.ok) {
+        setSuccess('Registration successful. You can now log in.');
+        // Optionally navigate to login page
+        // navigate('/login');
+      } else {
+        const data = await response.json();
+        setError(data.error || 'Registration failed');
       }
-
-      navigate('/login');
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err) {
+      setError('An error occurred');
     }
   };
 
   return (
-    <div className="register-form">
+    <div className="register-container">
       <h2>Register</h2>
       {error && <p className="error">{error}</p>}
+      {success && <p className="success">{success}</p>}
       <form onSubmit={handleRegister}>
-        <div>
-          <label>Email:</label>
+        <div className="form-group">
+          <label>Email</label>
           <input
             type="email"
             value={email}
@@ -50,8 +57,8 @@ const RegisterUser: React.FC = () => {
             required
           />
         </div>
-        <div>
-          <label>Password:</label>
+        <div className="form-group">
+          <label>Password</label>
           <input
             type="password"
             value={password}
@@ -59,8 +66,8 @@ const RegisterUser: React.FC = () => {
             required
           />
         </div>
-        <div>
-          <label>Confirm Password:</label>
+        <div className="form-group">
+          <label>Confirm Password</label>
           <input
             type="password"
             value={confirmPassword}
@@ -69,11 +76,11 @@ const RegisterUser: React.FC = () => {
           />
         </div>
         <button type="submit" className="btn btn-primary">Register</button>
-        <button type="button" onClick={() => navigate('/login')} className="btn btn-danger">Cancel</button>
       </form>
     </div>
   );
 };
 
 export default RegisterUser;
+
 

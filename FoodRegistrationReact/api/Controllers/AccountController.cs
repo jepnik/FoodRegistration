@@ -75,6 +75,45 @@ namespace FoodRegistration.Controllers
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
+        [HttpPost("register")]
+public async Task<IActionResult> Register([FromBody] RegisterUserViewModel model)
+{
+    if (model == null || !ModelState.IsValid)
+    {
+        _logger.LogError("Invalid registration model.");
+        return BadRequest(ModelState);
+    }
+
+    if (model.Password != model.ConfirmPassword)
+    {
+        return BadRequest(new { error = "Password and Confirm Password do not match." });
+    }
+
+    var existingUser = await _context.Users
+        .FirstOrDefaultAsync(u => u.Email == model.Email);
+
+    if (existingUser != null)
+    {
+        _logger.LogWarning("Email {Email} is already registered.", model.Email);
+        return Conflict(new { error = "Email is already registered." });
+    }
+
+    var user = new User
+    {
+        Email = model.Email,
+        Password = HashPassword(model.Password),
+        // Add other necessary fields
+    };
+
+    await _context.Users.AddAsync(user);
+    await _context.SaveChangesAsync();
+
+    _logger.LogInformation("User {Email} registered successfully.", user.Email);
+
+    return Ok(new { message = "Registration successful." });
+}
+
+
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginViewModel model)
         {
