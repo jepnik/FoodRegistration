@@ -1,30 +1,49 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
-import { AuthProvider } from "./components/AuthContext";
-import PrivateRoute from "./components/PrivateRoute";
+import { BrowserRouter as Router, Route, Routes, Navigate, Outlet } from 'react-router-dom';
+import { AuthProvider, useAuth } from './components/AuthContext';
 import Layout from './shared/Layout';
+import PrivateRoute from './components/PrivateRoute'; // Import PrivateRoute
 import HomePage from './home/HomePage';
-import CreateItem from './pages/CreateItem'; 
+import CreateItem from './pages/CreateItem';
 import UpdateItem from './pages/UpdateItem';
 import Login from './account/Login';
+import RegisterUser from './account/RegisterUser';
+import Profile from './account/Profile';
+import ChangePassword from './account/ChangePassword';
 import './App.css';
 
 const App: React.FC = () => {
-  const userEmail = 'user@foodcompany.com'; // Example, replace with session data
-
   return (
-    <Router>
-      <Layout userEmail={userEmail}>
+    <AuthProvider>
+      <Router>
         <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/create" element={<CreateItem />} /> {/* New Route */}
-          <Route path="/update/:id" element={<UpdateItem />} /> {/* New Route */}
+          {/* Public routes */}
           <Route path="/login" element={<Login />} />
-          <Route path="*" element={<Navigate to="/" replace />} />
+          <Route path="/register-user" element={<RegisterUser />} />
+
+          {/* Protected routes */}
+          <Route
+            element={
+              <Layout>
+                <PrivateRoute />
+              </Layout>
+            }
+          >
+            <Route path="/" element={<HomePage />} />
+            <Route path="/create" element={<CreateItem />} />
+            <Route path="/update/:id" element={<UpdateItem />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/change-password" element={<ChangePassword />} />
+          </Route>
+
+          {/* Redirect unknown routes to login */}
+          <Route path="*" element={<Navigate to="/login" />} />
         </Routes>
-      </Layout>
-    </Router>
+      </Router>
+    </AuthProvider>
   );
-}
+};
 
 export default App;
+
+

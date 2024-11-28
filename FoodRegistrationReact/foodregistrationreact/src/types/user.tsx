@@ -4,18 +4,18 @@ export interface User {
     password: string;
 }
 
-export interface Login {
+export interface LoginType {
     email: string;
     password: string;
 }
 
-export interface RegisterUser {
+export interface RegisterUserType {
     email: string;
     password: string;
     confirmPassword: string;
 }
 
-export interface ChangePassword {
+export interface ChangePasswordType {
     oldPassword: string;
     newPassword: string;
     confirmPassword: string;

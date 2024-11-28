@@ -3,10 +3,176 @@ using FoodRegistration.Models;
 using FoodRegistration.DAL;
 using FoodRegistration.ViewModels;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System.Security.Cryptography;
 using System.Text;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
-namespace FoodRegistration.Controllers;
+namespace FoodRegistration.Controllers
+{
+    [ApiController]
+    [Route("api/account")]
+    public class AccountApiController : ControllerBase
+    {
+        private readonly ItemDbContext _context;
+        private readonly IConfiguration _configuration;
+        private readonly ILogger<AccountApiController> _logger;
+
+        public AccountApiController(ItemDbContext context, IConfiguration configuration, ILogger<AccountApiController> logger)
+        {
+            _context = context;
+            _configuration = configuration;
+            _logger = logger;
+        }
+
+        private string HashPassword(string password)
+        {
+            if (string.IsNullOrEmpty(password))
+            {
+                throw new ArgumentNullException(nameof(password), "Password cannot be null or empty");
+            }
+
+            using (var sha256 = SHA256.Create())
+            {
+                var hashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
+                return BitConverter.ToString(hashedBytes).Replace("-", "").ToLower();
+            }
+        }
+
+        private string GenerateJwtToken(int userId, string email)
+        {
+            if (string.IsNullOrEmpty(email))
+            {
+                throw new ArgumentNullException(nameof(email), "Email cannot be null or empty");
+            }
+
+            var key = _configuration["Jwt:Key"];
+            if (string.IsNullOrEmpty(key))
+            {
+                throw new ArgumentNullException(nameof(key), "Jwt:Key is not configured correctly.");
+            }
+
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
+            var creds = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+            var expires = DateTime.Now.AddHours(2);
+
+            var claims = new[]
+            {
+                new Claim(JwtRegisteredClaimNames.Sub, email),
+                new Claim("UserID", userId.ToString()),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+            };
+
+            var token = new JwtSecurityToken(
+                _configuration["Jwt:Issuer"],
+                _configuration["Jwt:Audience"],
+                claims,
+                expires: expires,
+                signingCredentials: creds);
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] LoginViewModel model)
+        {
+            if (model == null || !ModelState.IsValid)
+            {
+                _logger.LogError("Invalid login model.");
+                return BadRequest(ModelState);
+            }
+
+            _logger.LogInformation("Attempting login for email: {Email}", model.Email);
+
+            var user = await _context.Users
+                .FirstOrDefaultAsync(u => u.Email == model.Email);
+
+            if (user == null || user.Password != HashPassword(model.Password))
+            {
+                _logger.LogWarning("Invalid email or password for email: {Email}", model.Email);
+                return Unauthorized(new { error = "Invalid email or password." });
+            }
+
+            _logger.LogInformation("Retrieved user: {UserId}, {Email}", user.UserId, user.Email);
+
+            try
+            {
+                if (string.IsNullOrEmpty(user.Email))
+                {
+                    _logger.LogError("Email for user with ID {UserId} is null or empty.", user.UserId);
+                    return StatusCode(500, "Internal server error.");
+                }
+
+                var token = GenerateJwtToken(user.UserId, user.Email);
+
+                Response.Cookies.Append("jwt", token, new CookieOptions
+                {
+                    HttpOnly = true,
+                    Secure = true,
+                    SameSite = SameSiteMode.Strict
+                });
+
+                return Ok(new { message = "Login successful.", token });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while generating JWT token.");
+                return StatusCode(500, "Internal server error.");
+            }
+        }
+
+        [HttpGet("profile")]
+        public async Task<IActionResult> GetProfile()
+        {
+            var token = Request.Cookies["jwt"];
+            if (string.IsNullOrEmpty(token))
+                return Unauthorized(new { error = "Unauthorized access." });
+
+            var handler = new JwtSecurityTokenHandler();
+            var key = Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]);
+
+            try
+            {
+                var claims = handler.ValidateToken(token, new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidIssuer = _configuration["Jwt:Issuer"],
+                    ValidAudience = _configuration["Jwt:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(key)
+                }, out _);
+
+                var userId = int.Parse(claims.FindFirst("UserID")!.Value);
+                var user = await _context.Users.FindAsync(userId);
+                if (user == null)
+                    return NotFound(new { error = "User not found." });
+
+                return Ok(new { userId = user.UserId, email = user.Email });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Invalid token.");
+                return Unauthorized(new { error = "Invalid token." });
+            }
+        }
+
+        [HttpPost("logout")]
+        public IActionResult Logout()
+        {
+            Response.Cookies.Delete("jwt");
+            return Ok(new { message = "Logged out successfully." });
+        }
+    }
+}
+
+
+
+
+// --------------------MVC controller----------------------------
+
+
 
 public class AccountController : Controller
 {

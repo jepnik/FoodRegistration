@@ -1,31 +1,43 @@
-// AuthContext.tsx
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import React, { createContext, useState, useContext, ReactNode } from 'react';
 
 interface AuthContextType {
-    isAuthenticated: boolean;
-    login: () => void;
-    logout: () => void;
+  isAuthenticated: boolean;
+  login: (token: string) => void;
+  logout: () => void;
+  token: string | null; // Store token
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-    const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-
-    const login = () => setIsAuthenticated(true);
-    const logout = () => setIsAuthenticated(false);
-
-    return (
-        <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
-            {children}
-        </AuthContext.Provider>
-    );
-};
-
 export const useAuth = (): AuthContextType => {
-    const context = useContext(AuthContext);
-    if (!context) {
-        throw new Error("useAuth must be used within an AuthProvider");
-    }
-    return context;
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
 };
+
+interface AuthProviderProps {
+  children: ReactNode;
+}
+
+export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
+  const [token, setToken] = useState<string | null>(null);
+
+  const login = (token: string) => {
+    setToken(token);
+    sessionStorage.setItem('authToken', token); // Store token in sessionStorage
+  };
+
+  const logout = () => {
+    setToken(null);
+    sessionStorage.removeItem('authToken'); // Clear token from sessionStorage
+  };
+
+  return (
+    <AuthContext.Provider value={{ isAuthenticated: !!token, login, logout, token }}>
+      {children}
+    </AuthContext.Provider>
+  );
+};
+

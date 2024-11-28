@@ -1,21 +1,11 @@
-// PrivateRoute.tsx
-import React from "react";
-import { Route, Navigate } from "react-router-dom";
-import { useAuth } from "./AuthContext";
+import React from 'react';
+import { Navigate, Outlet } from 'react-router-dom';
+import { useAuth } from './AuthContext';
 
-interface PrivateRouteProps {
-    element: React.ReactElement;
-    path: string;
-}
+const PrivateRoute: React.FC = () => {
+  const { isAuthenticated } = useAuth();
 
-const PrivateRoute: React.FC<PrivateRouteProps> = ({ element, path }) => {
-    const { isAuthenticated } = useAuth();
-
-    return isAuthenticated ? (
-        <Route path={path} element={element} />
-    ) : (
-        <Navigate to="/login" replace />
-    );
+  return isAuthenticated ? <Outlet /> : <Navigate to="/login" />;
 };
 
 export default PrivateRoute;
