@@ -26,17 +26,20 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   useEffect(() => {
     const storedToken = sessionStorage.getItem('authToken');
+    console.log("Stored Token:", storedToken); // Debug log to check stored token
     if (storedToken) {
       setToken(storedToken);
     }
   }, []);
 
   const login = (token: string) => {
+    console.log("Setting Token:", token); // Debug log when setting token
     setToken(token);
     sessionStorage.setItem('authToken', token);
   };
 
   const logout = () => {
+    console.log("Removing Token"); // Debug log when removing token
     setToken(null);
     sessionStorage.removeItem('authToken');
   };
@@ -47,5 +50,3 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     </AuthContext.Provider>
   );
 };
-
-

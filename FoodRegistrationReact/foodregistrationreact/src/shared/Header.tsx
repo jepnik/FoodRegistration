@@ -98,4 +98,3 @@ const Header: React.FC<HeaderProps> = ({ userEmail }) => {
 };
 
 export default Header;
-
