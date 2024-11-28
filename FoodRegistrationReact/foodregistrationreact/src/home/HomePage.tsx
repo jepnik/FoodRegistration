@@ -102,9 +102,15 @@ const HomePage: React.FC = () => {
       <Table striped bordered hover>
         <thead>
           <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Category</th>
+            <th onClick={() => handleSort('itemId')} style={{ cursor: 'pointer' }}>
+              ID {sortColumn === 'itemId' ? (sortDirection === 'asc' ? '↑' : '↓') : ''}
+            </th>
+            <th onClick={() => handleSort('name')} style={{ cursor: 'pointer' }}>
+              Name {sortColumn === 'name' ? (sortDirection === 'asc' ? '↑' : '↓') : ''}
+            </th>
+            <th onClick={() => handleSort('category')} style={{ cursor: 'pointer' }}>
+              Category {sortColumn === 'category' ? (sortDirection === 'asc' ? '↑' : '↓') : ''}
+            </th>
             <th>Certificate</th>
             <th>Image</th>
             <th>Actions</th>
@@ -112,7 +118,11 @@ const HomePage: React.FC = () => {
         </thead>
         <tbody>
           {filteredItems.map((item) => (
-            <tr key={item.itemId}>
+            <tr
+              key={item.itemId}
+              onClick={() => handleRowClick(item.itemId)}
+              style={{ cursor: 'pointer' }}
+            >
               <td>{item.itemId}</td>
               <td>{item.name}</td>
               <td>{item.category}</td>
@@ -120,7 +130,7 @@ const HomePage: React.FC = () => {
               <td>
                 {item.imageUrl ? (
                   <img
-                    src={`${API_URL}${item.imageUrl}`} // Ensure the full URL is used
+                    src={`${API_URL}${item.imageUrl}`}
                     alt={item.name}
                     style={{ width: '60px', height: '60px', objectFit: 'cover' }}
                   />
@@ -132,14 +142,20 @@ const HomePage: React.FC = () => {
                 <Button
                   variant="success"
                   size="sm"
-                  onClick={() => navigate(`/update/${item.itemId}`)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    navigate(`/update/${item.itemId}`);
+                  }}
                 >
                   Update
                 </Button>
                 <Button
                   variant="danger"
                   size="sm"
-                  onClick={() => handleDelete(item.itemId)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleDelete(item.itemId);
+                  }}
                 >
                   Delete
                 </Button>

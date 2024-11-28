@@ -1,8 +1,7 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '../styles/Header.css';
-
-const API_URL = "http://localhost:5244";
+import API_URL from '../apiConfig'; // Ensure this is correctly imported
 
 // Define the props type
 interface HeaderProps {
@@ -12,7 +11,22 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({ userEmail }) => {
   const navigate = useNavigate(); // Hook for dynamic navigation
   const logo = `${API_URL}/images/logoHvit.ico`; // Dynamic logo from API
-  const userIcon = `${API_URL}/images/userLogo.png`; // Dynamic user icon from API
+  const userIcon = `${API_URL}/images/UserLogo.png`; // Dynamic user icon from API
+  const companyLogo = `${API_URL}/images/UserLogo.png`; // Dynamic company logo for the right corner
+
+  // Logout function
+  const handleLogout = () => {
+    localStorage.removeItem('userToken'); // Example of clearing a token
+    navigate('/login'); // Redirect to login page
+  };
+
+  const handleCompanyLogoClick = () => {
+    if (userEmail) {
+      navigate('/profile'); // Navigate to profile page if authenticated
+    } else {
+      navigate('/'); // Navigate to home page if not authenticated
+    }
+  };
 
   return (
     <header className="navbar navbar-expand-lg navbar-dark shadow" style={{ backgroundColor: '#83B271' }}>
@@ -38,9 +52,12 @@ const Header: React.FC<HeaderProps> = ({ userEmail }) => {
       {/* Navbar Links and User Icon */}
       <div className="collapse navbar-collapse" id="navbarNav">
         <ul className="navbar-nav ml-auto">
+          {/* Home Link */}
           <li className="nav-item">
             <Link className="nav-link" to="/">Home</Link>
           </li>
+
+          {/* Create Item Button */}
           <li className="nav-item">
             <button
               className="btn btn-link nav-link text-white"
@@ -51,8 +68,8 @@ const Header: React.FC<HeaderProps> = ({ userEmail }) => {
             </button>
           </li>
 
-          {/* Account and Log out for Hamburger Menu */}
-          {userEmail && (
+          {/* Hamburger Menu Account and Logout */}
+          {userEmail ? (
             <>
               <li className="nav-item d-lg-none">
                 <Link className="nav-link" to="/profile">Account</Link>
@@ -61,17 +78,17 @@ const Header: React.FC<HeaderProps> = ({ userEmail }) => {
                 <button
                   className="btn btn-link nav-link text-white"
                   style={{ textDecoration: 'none' }}
-                  onClick={() => navigate('/logout')} // Navigate to Log out
+                  onClick={handleLogout} // Call the logout function
                 >
                   Log out
                 </button>
               </li>
             </>
-          )}
+          ) : null}
         </ul>
 
         {/* User Icon Dropdown for Large Screens */}
-        {userEmail && (
+        {userEmail ? (
           <div className="dropdown ms-auto d-none d-lg-block">
             <button
               className="btn dropdown-toggle user-icon-btn"
@@ -87,11 +104,26 @@ const Header: React.FC<HeaderProps> = ({ userEmail }) => {
               />
             </button>
             <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="userMenuIcon">
-              <li><Link className="dropdown-item" to="/profile">Account</Link></li>
-              <li><button className="dropdown-item" onClick={() => navigate('/logout')}>Log out</button></li>
+              <li>
+                <Link className="dropdown-item" to="/profile">Account</Link>
+              </li>
+              <li>
+                <button className="dropdown-item" onClick={handleLogout}>Log out</button>
+              </li>
             </ul>
           </div>
-        )}
+        ) : null}
+      </div>
+
+      {/* Company Logo in the Right Corner */}
+      <div className="ms-auto">
+        <img
+          src={companyLogo}
+          alt="Company Logo"
+          className="company-logo d-none d-lg-block"
+          style={{ width: '50px', height: '50px', objectFit: 'contain', cursor: 'pointer' }}
+          onClick={handleCompanyLogoClick} // Navigate to profile or home
+        />
       </div>
     </header>
   );
