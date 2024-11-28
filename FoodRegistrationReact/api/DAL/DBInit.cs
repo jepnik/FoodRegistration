@@ -46,6 +46,32 @@ public static class DBInit
                     UpdatedDate = DateTime.Now
                     
                    
+                }, 
+                 new Item {
+
+                     Name = "Potato",
+                    Category = "Fruit",
+                    Certificate = "Organic",
+                    ImageUrl = "/images/potet.jpg",
+                    
+                    // Ernæringsfakta (nutritional information)
+                    Energy = 52,
+                    Carbohydrates = 14,
+                    Sugar = 10,
+                    Protein = 0.3,
+                    Fat = 0.2,
+                    Saturatedfat = 0,
+                    Unsaturatedfat = 0.1,
+                    Fibre = 2.4,
+                    Salt = 0,
+
+                    // Produktinfo                    
+                    CountryOfOrigin = "Norway",    // Opprinnelsesland
+                    CountryOfProvenance = "Norway", // Opphavsland
+                    CreatedDate = DateTime.Now,
+                    UpdatedDate = DateTime.Now
+                    
+                   
                 },
                 new Item
                 {

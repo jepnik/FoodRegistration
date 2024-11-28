@@ -63,41 +63,6 @@ const ItemForm: React.FC<ItemFormProps> = ({
     }
   };
 
-  // Field configurations for dynamic rendering
-  const fieldConfigurations = [
-    { label: "Name", name: "name", type: "text", required: true },
-    { label: "Category", name: "category", type: "text", required: true },
-    { label: "Certificate", name: "certificate", type: "text" },
-    { label: "Image URL", name: "imageUrl", type: "text" },
-    ...[
-      "energy",
-      "carbohydrates",
-      "sugar",
-      "protein",
-      "fat",
-      "saturatedfat",
-      "unsaturatedfat",
-      "fibre",
-      "salt",
-    ].map((field) => ({
-      label: field.charAt(0).toUpperCase() + field.slice(1),
-      name: field,
-      type: "number",
-    })),
-    {
-      label: "Country of Origin",
-      name: "countryOfOrigin",
-      type: "text",
-      required: true,
-    },
-    {
-      label: "Country of Provenance",
-      name: "countryOfProvenance",
-      type: "text",
-      required: true,
-    },
-  ];
-
   return (
     <Form id="item-form" onSubmit={handleSubmit}>
       {Object.keys(errors).length > 0 && (
@@ -110,14 +75,45 @@ const ItemForm: React.FC<ItemFormProps> = ({
         </Alert>
       )}
 
-      {/* Render Fields Dynamically */}
-      {fieldConfigurations.map(({ label, name, type, required }) => (
+      {[ // Dynamically render fields
+        { label: "Name", name: "name", type: "text", required: true },
+        { label: "Category", name: "category", type: "text", required: true },
+        { label: "Certificate", name: "certificate", type: "text" },
+        { label: "Image URL", name: "imageUrl", type: "text" },
+        ...[
+          "energy",
+          "carbohydrates",
+          "sugar",
+          "protein",
+          "fat",
+          "saturatedfat",
+          "unsaturatedfat",
+          "fibre",
+          "salt",
+        ].map((field) => ({
+          label: field.charAt(0).toUpperCase() + field.slice(1),
+          name: field,
+          type: "number",
+        })),
+        {
+          label: "Country of Origin",
+          name: "countryOfOrigin",
+          type: "text",
+          required: true,
+        },
+        {
+          label: "Country of Provenance",
+          name: "countryOfProvenance",
+          type: "text",
+          required: true,
+        },
+      ].map(({ label, name, type, required }) => (
         <Form.Group key={name} className="mb-3">
           <Form.Label>{label}</Form.Label>
           <Form.Control
             type={type}
             name={name}
-            value={formData[name as keyof Item] ?? ""} // Handle undefined values
+            value={formData[name as keyof Item] || ""}
             onChange={handleChange}
             isInvalid={required && !!errors[name]}
             required={required} // Enables HTML5 validation

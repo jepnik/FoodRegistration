@@ -111,15 +111,6 @@ const HomePage: React.FC = () => {
         />
       </Form.Group>
 
-      {/* Button to Create Item */}
-      <Button
-        variant="primary"
-        onClick={() => navigate('/create')}
-        className="mb-3"
-      >
-        Create New Item
-      </Button>
-
       {/* Table View */}
       <Table striped bordered hover>
         <thead>
@@ -209,7 +200,15 @@ const HomePage: React.FC = () => {
           itemId={selectedItemId}
         />
       )}
-    </div>
+     
+        <Button
+          variant="primary"
+          onClick={() => navigate('/create')}
+          className="mb-3"
+        >
+          Create New Item
+        </Button>
+      </div>  
   );
 };
 
