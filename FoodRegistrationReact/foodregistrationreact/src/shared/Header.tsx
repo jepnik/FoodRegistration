@@ -11,7 +11,7 @@ const Header: React.FC<HeaderProps> = ({ userEmail }) => {
   const navigate = useNavigate();
   const logo = `${API_URL}/images/logoHvit.ico`;  // Dynamic logo
   const userIcon = `${API_URL}/images/UserLogo.png`;  // User Icon for the dropdown
-  const companyLogo = `${API_URL}/images/UserLogo.png`; // Company logo for the right corner
+  
 
   // Dropdown state for toggling visibility
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -23,8 +23,8 @@ const Header: React.FC<HeaderProps> = ({ userEmail }) => {
     setDropdownOpen(false); // Close dropdown on logout
   };
 
-  // Toggle the dropdown when the company logo is clicked
-  const handleCompanyLogoClick = () => {
+  // Toggle the dropdown when the user logo is clicked
+  const handleUserLogoClick = () => {
     setDropdownOpen(!dropdownOpen);
   };
 
@@ -89,12 +89,12 @@ const Header: React.FC<HeaderProps> = ({ userEmail }) => {
         )}
       </div>
 
-      {/* Company Logo in the Right Corner */}
+      {/* User Logo in the Right Corner */}
       <div className="ms-auto">
         <img
-          src={companyLogo}
-          alt="Company Logo"
-          className="company-logo d-none d-lg-block"
+          src={userIcon}
+          alt="User Logo"
+          className="user-logo d-none d-lg-block"
           style={{
             width: '50px',
             height: '50px',
@@ -102,9 +102,9 @@ const Header: React.FC<HeaderProps> = ({ userEmail }) => {
             cursor: 'pointer',
             transition: 'transform 0.3s ease', // Smooth transformation on hover
           }}
-          onClick={handleCompanyLogoClick} // Toggle the dropdown menu
+          onClick={handleUserLogoClick} // Toggle the dropdown menu
         />
-        {/* Dropdown Menu for Company Logo */}
+        {/* Dropdown Menu for User Logo */}
         {dropdownOpen && (
           <div className="dropdown-menu dropdown-menu-end show custom-dropdown">
             {/* Profile Link or Log Out based on authentication */}
@@ -114,7 +114,7 @@ const Header: React.FC<HeaderProps> = ({ userEmail }) => {
                 <button className="dropdown-item" onClick={handleLogout}>Log Out</button>
               </>
             ) : (
-              <Link className="dropdown-item" to="/login">Log In</Link>
+              <Link className="dropdown-item" to="/login">Log Ut</Link>
             )}
           </div>
         )}
