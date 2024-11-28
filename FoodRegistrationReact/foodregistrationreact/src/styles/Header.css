@@ -1,42 +1,28 @@
-/* Header.css */
+/* General Navbar Styles */
 .navbar {
   position: fixed;
   top: 0;
   width: 100%;
   background-color: #83B271;
   color: #ffffff !important;
-  font-size: 1.2rem;
-  z-index: 1000; /* Ensure this keeps the navbar on top */
+  z-index: 1000; /* Ensure navbar stays on top */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional shadow for better visibility */
 }
 
-.navbar .btn-link {
-  padding: 10px;
-  font-size: 1.2rem;
-  color: #ffffff;
-  text-decoration: none;
-  transition: background-color 0.3s ease;
-}
-
-.navbar .btn-link:hover {
-  background-color: #395b2c;
-  border-radius: 4px;
-}
-
-.navbar-brand {
-  font-size: 1.4rem;
-}
-
+/* Brand Logo */
 .navbar-brand .logo {
   width: 30px;
   height: 30px;
   margin-right: 20px;
 }
 
+/* Navigation Links */
 .nav-link {
   color: #ffffff !important;
   padding: 10px;
   transition: background-color 0.3s ease;
   font-size: 1.2rem;
+  text-decoration: none; /* Ensure no underline */
 }
 
 .nav-link:hover {
@@ -44,54 +30,124 @@
   border-radius: 4px;
 }
 
-/* User Icon */
-.UserLogo {
+/* General User Logo Styling (Applies to all user logos) */
+.user-logo, .user-icon {
   width: 40px;
   height: 40px;
-  border-radius: 50%;
   cursor: pointer;
-  border-radius: 50%;
+  border-radius: 50%; /* Makes the logo rounded */
+  object-fit: cover; /* Ensure the image fits the circle */
+  transition: transform 0.2s ease; /* Smooth hover effects */
+  border: 1px transparent; /* Border for hover effects */
+  margin-right: 20px; /* Add margin to the right */
 }
 
-/* Custom dropdown styles */
+.user-logo:hover, .user-icon:hover {
+  transform: scale(1.1); /* Slight enlargement on hover */
+  border-color: #ffffff; /* Highlight border on hover */
+}
+
+/* Dropdown Menu */
 .custom-dropdown {
-  display: block;
   position: absolute;
-  top: 60px; /* Adjust based on the header's height */
-  right: 0;
-  background-color: white;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  top: 60px; /* Adjust to align with the User Icon */
+  right: 20px; /* Align the dropdown with the User Logo */
+  background-color: #ffffff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Slight shadow for visibility */
   border-radius: 5px;
   z-index: 9999;
   width: 180px;
   padding: 10px 0;
-  min-width: 150px;
+  animation: fadeIn 0.3s ease; /* Optional dropdown fade-in animation */
 }
 
-/* Dropdown item styling */
+/* Dropdown Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .custom-dropdown .dropdown-item {
   padding: 8px 16px;
   font-size: 14px;
   color: #333;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  text-decoration: none; /* Ensure no underline */
+  display: block; /* Ensure full clickable area */
 }
 
-/* Highlight effect on hover */
 .custom-dropdown .dropdown-item:hover {
   background-color: #f0f0f0;
+  color: #007bff;
   cursor: pointer;
 }
 
-/* Add transition effect to the company logo */
-.company-logo:hover {
-  transform: scale(1.1); /* Slightly increase the logo size on hover */
+/* Mobile View (Hamburger Menu) */
+.navbar-toggler {
+  border: none;
+  outline: none;
 }
-.company-logo {
-  width: 50px;
-  height: 50px;
-  object-fit: contain;
-  cursor: pointer;
-  border-radius: 50%; /* This makes the logo round */
-  transition: transform 0.3s ease; /* Smooth transition on hover */
-  margin-right: 20px;
+
+.navbar-toggler-icon {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23ffffff' viewBox='0 0 30 30'%3E%3Cpath d='M4 7h22v2H4zm0 7h22v2H4zm0 7h22v2H4z'/%3E%3C/svg%3E");
+  background-size: 20px 20px; /* Adjust size */
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .navbar {
+    display: flex;
+    justify-content: space-between; /* Space out items (Brand Logo, Hamburger, User Logo) */
+    align-items: center;
+    padding: 0 10px; /* Add padding for spacing */
+  }
+
+  .navbar-brand .logo {
+    width: 30px;
+    height: 30px;
+  }
+
+  .navbar-nav {
+    text-align: center;
+    display: none; /* Hide navigation by default (to be toggled by the hamburger) */
+  }
+
+  .navbar-toggler {
+    display: inline-block;
+  }
+
+  .custom-dropdown {
+    top: 50px; /* Adjust for smaller screen alignment */
+    right: 10px;
+    width: 100%; /* Full width on small screens */
+  }
+
+  .custom-dropdown .dropdown-item {
+    padding: 12px 20px;
+    font-size: 16px; /* Slightly larger for touch devices */
+  }
+
+  /* User Icon in Mobile View */
+  .user-icon {
+    position: absolute; /* Position fixed to the right in mobile */
+    right: 10px; /* Align with the screen's right edge */
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid transparent;
+    transition: transform 0.2s ease, border-color 0.2s ease;
+  }
+
+  .user-icon:hover {
+    transform: scale(1.1);
+    border-color: #ffffff;
+  }
 }
