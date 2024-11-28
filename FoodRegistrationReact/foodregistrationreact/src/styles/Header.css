@@ -3,11 +3,12 @@
   position: fixed;
   top: 0;
   width: 100%;
-  z-index: 1000; /* trengs denne?*/
   background-color: #83B271;
   color: #ffffff !important;
   font-size: 1.2rem;
+  z-index: 1000; /* Ensure this keeps the navbar on top */
 }
+
 .navbar .btn-link {
   padding: 10px;
   font-size: 1.2rem;
@@ -43,9 +44,54 @@
   border-radius: 4px;
 }
 
+/* User Icon */
 .UserLogo {
   width: 40px;
   height: 40px;
   border-radius: 50%;
   cursor: pointer;
+  border-radius: 50%;
+}
+
+/* Custom dropdown styles */
+.custom-dropdown {
+  display: block;
+  position: absolute;
+  top: 60px; /* Adjust based on the header's height */
+  right: 0;
+  background-color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  z-index: 9999;
+  width: 180px;
+  padding: 10px 0;
+  min-width: 150px;
+}
+
+/* Dropdown item styling */
+.custom-dropdown .dropdown-item {
+  padding: 8px 16px;
+  font-size: 14px;
+  color: #333;
+  transition: background-color 0.3s ease;
+}
+
+/* Highlight effect on hover */
+.custom-dropdown .dropdown-item:hover {
+  background-color: #f0f0f0;
+  cursor: pointer;
+}
+
+/* Add transition effect to the company logo */
+.company-logo:hover {
+  transform: scale(1.1); /* Slightly increase the logo size on hover */
+}
+.company-logo {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+  cursor: pointer;
+  border-radius: 50%; /* This makes the logo round */
+  transition: transform 0.3s ease; /* Smooth transition on hover */
+  margin-right: 20px;
 }
