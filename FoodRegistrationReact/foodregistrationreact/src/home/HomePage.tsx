@@ -17,18 +17,24 @@ const HomePage: React.FC = () => {
   const [showDetails, setShowDetails] = useState<boolean>(false);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchItems = async () => {
-      setLoading(true);
-      try {
-        const data = await getItems();
-        setItems(data);
-      } catch (err: any) {
-        setError(err.message || 'Failed to fetch items.');
+  const fetchItems = async () => {
+    setLoading(true);
+    setError(null); // Clear any previous errors
+
+    try {
+      const data = await getItems();
+      setItems(data);
+      console.log(data);
+    } catch (error) {
+      console.error(
+        `There was a problem with the fetch operation: ${error.message}`);
+      setError("Failed to fetch items.");
       } finally {
-        setLoading(false);
-      }
-    };
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
     fetchItems();
   }, []);
 
