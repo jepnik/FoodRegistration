@@ -18,10 +18,11 @@ const HomePage: React.FC = () => {
   const [showDetails, setShowDetails] = useState<boolean>(false);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchItems = async () => {
-      setLoading(true);
-      try {
+  const fetchItems = async () => {
+    setLoading(true);
+    setError(null); // Clear any previous errors
+
+    try {
         const response = await fetch(`${API_URL}/api/items`, {
           headers: {
             'Authorization': `Bearer ${token}`
@@ -29,17 +30,22 @@ const HomePage: React.FC = () => {
         });
 
         if (response.ok) {
-          const data = await response.json();
-          setItems(data);
+        const data = await response.json();
+        setItems(data);
         } else {
           throw new Error('Failed to fetch items.');
         }
-      } catch (err: any) {
-        setError(err.message || 'Failed to fetch items.');
+      console.log(data);
+    } catch (error) {
+      console.error(
+        `There was a problem with the fetch operation: ${error.message}`);
+      setError("Failed to fetch items.");
       } finally {
-        setLoading(false);
-      }
-    };
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
     fetchItems();
   }, [token]);
 
@@ -123,17 +129,27 @@ const HomePage: React.FC = () => {
       <Table striped bordered hover>
         <thead>
           <tr>
-            <th onClick={() => handleSort('itemId')}>ID</th>
-            <th onClick={() => handleSort('name')}>Name</th>
-            <th onClick={() => handleSort('category')}>Category</th>
-            <th onClick={() => handleSort('certificate')}>Certificate</th>
+            <th onClick={() => handleSort('itemId')} style={{ cursor: 'pointer' }}>
+              ID {sortColumn === 'itemId' ? (sortDirection === 'asc' ? '↑' : '↓') : ''}
+            </th>
+            <th onClick={() => handleSort('name')} style={{ cursor: 'pointer' }}>
+              Name {sortColumn === 'name' ? (sortDirection === 'asc' ? '↑' : '↓') : ''}
+            </th>
+            <th onClick={() => handleSort('category')} style={{ cursor: 'pointer' }}>
+              Category {sortColumn === 'category' ? (sortDirection === 'asc' ? '↑' : '↓') : ''}
+            </th>
+            <th>Certificate</th>
             <th>Image</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
           {filteredItems.map((item) => (
-            <tr key={item.itemId} onClick={() => handleRowClick(item.itemId)}>
+            <tr
+              key={item.itemId}
+              onClick={() => handleRowClick(item.itemId)}
+              style={{ cursor: 'pointer' }}
+            >
               <td>{item.itemId}</td>
               <td>{item.name}</td>
               <td>{item.category}</td>
@@ -141,7 +157,7 @@ const HomePage: React.FC = () => {
               <td>
                 {item.imageUrl ? (
                   <img
-                    src={`${API_URL}${item.imageUrl}`} // Ensure the full URL is used
+                    src={`${API_URL}${item.imageUrl}`}
                     alt={item.name}
                     style={{ width: '60px', height: '60px', objectFit: 'cover' }}
                   />
@@ -153,14 +169,20 @@ const HomePage: React.FC = () => {
                 <Button
                   variant="success"
                   size="sm"
-                  onClick={() => navigate(`/update/${item.itemId}`)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    navigate(`/update/${item.itemId}`);
+                  }}
                 >
                   Update
                 </Button>
                 <Button
                   variant="danger"
                   size="sm"
-                  onClick={(e) => { e.stopPropagation(); handleDelete(item.itemId); }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleDelete(item.itemId);
+                  }}
                 >
                   Delete
                 </Button>
