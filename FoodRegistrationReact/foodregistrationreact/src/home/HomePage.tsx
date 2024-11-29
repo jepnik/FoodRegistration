@@ -2,11 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { Button, Form, Table, Alert } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { Item } from '../types/item';
-import { getItems, deleteItem } from '../api/apiService';
-import API_URL from '../apiConfig'; // Ensure this is correctly imported
+import API_URL from '../apiConfig';
 import ItemDetails from '../components/ItemDetails';
+import { useAuth } from '../components/AuthContext';
 
 const HomePage: React.FC = () => {
+  const { token } = useAuth();
   const [items, setItems] = useState<Item[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -21,8 +22,18 @@ const HomePage: React.FC = () => {
     const fetchItems = async () => {
       setLoading(true);
       try {
-        const data = await getItems();
-        setItems(data);
+        const response = await fetch(`${API_URL}/api/items`, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setItems(data);
+        } else {
+          throw new Error('Failed to fetch items.');
+        }
       } catch (err: any) {
         setError(err.message || 'Failed to fetch items.');
       } finally {
@@ -30,14 +41,24 @@ const HomePage: React.FC = () => {
       }
     };
     fetchItems();
-  }, []);
+  }, [token]);
 
   const handleDelete = async (id: number) => {
     if (!window.confirm('Are you sure you want to delete this item?')) return;
 
     try {
-      await deleteItem(id);
-      setItems((prevItems) => prevItems.filter((item) => item.itemId !== id));
+      const response = await fetch(`${API_URL}/api/items/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (response.ok) {
+        setItems((prevItems) => prevItems.filter((item) => item.itemId !== id));
+      } else {
+        throw new Error('Failed to delete item.');
+      }
     } catch (err: any) {
       alert(err.message || 'Failed to delete item.');
     }
@@ -102,17 +123,17 @@ const HomePage: React.FC = () => {
       <Table striped bordered hover>
         <thead>
           <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Category</th>
-            <th>Certificate</th>
+            <th onClick={() => handleSort('itemId')}>ID</th>
+            <th onClick={() => handleSort('name')}>Name</th>
+            <th onClick={() => handleSort('category')}>Category</th>
+            <th onClick={() => handleSort('certificate')}>Certificate</th>
             <th>Image</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
           {filteredItems.map((item) => (
-            <tr key={item.itemId}>
+            <tr key={item.itemId} onClick={() => handleRowClick(item.itemId)}>
               <td>{item.itemId}</td>
               <td>{item.name}</td>
               <td>{item.category}</td>
@@ -139,7 +160,7 @@ const HomePage: React.FC = () => {
                 <Button
                   variant="danger"
                   size="sm"
-                  onClick={() => handleDelete(item.itemId)}
+                  onClick={(e) => { e.stopPropagation(); handleDelete(item.itemId); }}
                 >
                   Delete
                 </Button>
