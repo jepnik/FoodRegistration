@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '../styles/Header.css'; // Ensure the CSS is properly linked
 import API_URL from '../apiConfig';
+import { right } from '@popperjs/core';
 
 interface HeaderProps {
   userEmail?: string; // User's email to check authentication
@@ -100,6 +101,7 @@ const Header: React.FC<HeaderProps> = ({ userEmail }) => {
             height: '50px',
             objectFit: 'contain',
             cursor: 'pointer',
+            marginRight: '10px',
             transition: 'transform 0.3s ease', // Smooth transformation on hover
           }}
           onClick={handleUserLogoClick} // Toggle the dropdown menu

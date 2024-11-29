@@ -1,15 +1,24 @@
-/* General Navbar Styles */
+/* Navbar Styles */
 .navbar {
   position: fixed;
   top: 0;
   width: 100%;
   background-color: #83B271;
-  color: #ffffff !important;
-  z-index: 1000; /* Ensure navbar stays on top */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional shadow for better visibility */
+  color: #ffffff;
+  z-index: 1000;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 10px 15px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 /* Brand Logo */
+.navbar-brand {
+  display: flex;
+  align-items: center;
+}
+
 .navbar-brand .logo {
   width: 30px;
   height: 30px;
@@ -18,11 +27,12 @@
 
 /* Navigation Links */
 .nav-link {
-  color: #ffffff !important;
-  padding: 10px;
+  color: #ffffff;
+  padding: 10px 15px;
+  font-size: 1rem;
+  text-decoration: none;
+  margin: 0 10px;
   transition: background-color 0.3s ease;
-  font-size: 1.2rem;
-  text-decoration: none; /* Ensure no underline */
 }
 
 .nav-link:hover {
@@ -30,38 +40,51 @@
   border-radius: 4px;
 }
 
-/* General User Logo Styling (Applies to all user logos) */
+/* User Logo and Icon */
 .user-logo, .user-icon {
   width: 40px;
   height: 40px;
   cursor: pointer;
-  border-radius: 50%; /* Makes the logo rounded */
-  object-fit: cover; /* Ensure the image fits the circle */
-  transition: transform 0.2s ease; /* Smooth hover effects */
-  border: 1px transparent; /* Border for hover effects */
-  margin-right: 20px; /* Add margin to the right */
+  border-radius: 50%;
+  object-fit: cover;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+  border: 2px solid transparent;
 }
 
 .user-logo:hover, .user-icon:hover {
-  transform: scale(1.1); /* Slight enlargement on hover */
-  border-color: #ffffff; /* Highlight border on hover */
+  transform: scale(1.1);
+  border-color: #ffffff;
+}
+
+/* User Icon Wrapper */
+.user-icon-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* Dropdown Menu */
 .custom-dropdown {
   position: absolute;
-  top: 60px; /* Adjust to align with the User Icon */
-  right: 20px; /* Align the dropdown with the User Logo */
+  top: calc(100% + 5px);
+  right: 0;
   background-color: #ffffff;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Slight shadow for visibility */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   border-radius: 5px;
   z-index: 9999;
-  width: 180px;
+  width: 200px;
   padding: 10px 0;
-  animation: fadeIn 0.3s ease; /* Optional dropdown fade-in animation */
+  display: none;
+  flex-direction: column;
+  animation: fadeIn 0.3s ease;
 }
 
-/* Dropdown Animation */
+.user-icon-wrapper:hover .custom-dropdown,
+.navbar-toggler:focus + .custom-dropdown {
+  display: flex;
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -77,9 +100,9 @@
   padding: 8px 16px;
   font-size: 14px;
   color: #333;
+  text-decoration: none;
+  width: 100%;
   transition: background-color 0.3s ease, color 0.3s ease;
-  text-decoration: none; /* Ensure no underline */
-  display: block; /* Ensure full clickable area */
 }
 
 .custom-dropdown .dropdown-item:hover {
@@ -88,66 +111,42 @@
   cursor: pointer;
 }
 
-/* Mobile View (Hamburger Menu) */
+/* Hamburger Menu */
 .navbar-toggler {
   border: none;
-  outline: none;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .navbar-toggler-icon {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23ffffff' viewBox='0 0 30 30'%3E%3Cpath d='M4 7h22v2H4zm0 7h22v2H4zm0 7h22v2H4z'/%3E%3C/svg%3E");
-  background-size: 20px 20px; /* Adjust size */
+  width: 24px;
+  height: 24px;
+  background-size: cover;
 }
 
 /* Responsive Adjustments */
 @media (max-width: 768px) {
   .navbar {
-    display: flex;
-    justify-content: space-between; /* Space out items (Brand Logo, Hamburger, User Logo) */
-    align-items: center;
-    padding: 0 10px; /* Add padding for spacing */
-  }
-
-  .navbar-brand .logo {
-    width: 30px;
-    height: 30px;
-  }
-
-  .navbar-nav {
-    text-align: center;
-    display: none; /* Hide navigation by default (to be toggled by the hamburger) */
-  }
-
-  .navbar-toggler {
-    display: inline-block;
+    flex-direction: column;
+    align-items: flex-start;
   }
 
   .custom-dropdown {
-    top: 50px; /* Adjust for smaller screen alignment */
-    right: 10px;
-    width: 100%; /* Full width on small screens */
+    width: 90%;
+    margin: 0 auto;
+    text-align: center;
   }
 
   .custom-dropdown .dropdown-item {
     padding: 12px 20px;
-    font-size: 16px; /* Slightly larger for touch devices */
+    font-size: 16px;
   }
 
-  /* User Icon in Mobile View */
-  .user-icon {
-    position: absolute; /* Position fixed to the right in mobile */
-    right: 10px; /* Align with the screen's right edge */
-    width: 40px;
-    height: 40px;
-    cursor: pointer;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 2px solid transparent;
-    transition: transform 0.2s ease, border-color 0.2s ease;
-  }
-
-  .user-icon:hover {
-    transform: scale(1.1);
-    border-color: #ffffff;
+  .nav-link {
+    padding: 12px 0;
   }
 }

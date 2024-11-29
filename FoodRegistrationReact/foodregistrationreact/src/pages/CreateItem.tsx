@@ -1,17 +1,18 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Form, Button, Alert, Spinner } from 'react-bootstrap';
-import { Item } from '../types/item';
-import API_URL from '../apiConfig';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Form, Button, Alert, Spinner } from "react-bootstrap";
+import { Item } from "../types/item";
+import API_URL from "../apiConfig";
+import "styles/site.css";
 
 const CreateItem: React.FC = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState<Item>({
     itemId: 0, // This will be ignored on the backend
-    name: '',
-    category: '',
-    certificate: '',
-    imageUrl: '',
+    name: "",
+    category: "",
+    certificate: "",
+    imageUrl: "",
     energy: undefined,
     carbohydrates: undefined,
     sugar: undefined,
@@ -21,8 +22,8 @@ const CreateItem: React.FC = () => {
     unsaturatedfat: undefined,
     fibre: undefined,
     salt: undefined,
-    countryOfOrigin: '',
-    countryOfProvenance: '',
+    countryOfOrigin: "",
+    countryOfProvenance: "",
   });
 
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
@@ -34,19 +35,19 @@ const CreateItem: React.FC = () => {
     const { name, value, type } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: type === 'number' ? parseFloat(value) || undefined : value,
+      [name]: type === "number" ? parseFloat(value) || undefined : value,
     }));
   };
 
   // Validate the form data
   const validateForm = () => {
     const newErrors: { [key: string]: string } = {};
-    if (!formData.name) newErrors.name = 'Name is required.';
-    if (!formData.category) newErrors.category = 'Category is required.';
+    if (!formData.name) newErrors.name = "Name is required.";
+    if (!formData.category) newErrors.category = "Category is required.";
     if (!formData.countryOfOrigin)
-      newErrors.countryOfOrigin = 'Country of origin is required.';
+      newErrors.countryOfOrigin = "Country of origin is required.";
     if (!formData.countryOfProvenance)
-      newErrors.countryOfProvenance = 'Country of provenance is required.';
+      newErrors.countryOfProvenance = "Country of provenance is required.";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -61,17 +62,19 @@ const CreateItem: React.FC = () => {
     setIsSubmitting(true); // Start submission loading state
     try {
       const response = await fetch(`${API_URL}/api/items`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
 
       if (!response.ok) {
-        throw new Error(`Failed to create the item. Status: ${response.status}`);
+        throw new Error(
+          `Failed to create the item. Status: ${response.status}`
+        );
       }
 
-      alert('Item created successfully!');
-      navigate('/');
+      alert("Item created successfully!");
+      navigate("/");
     } catch (error: any) {
       setSubmissionError(`Failed to create the item: ${error.message}`);
       console.error(error);
@@ -83,9 +86,9 @@ const CreateItem: React.FC = () => {
   return (
     <div
       className="d-flex justify-content-center align-items-center"
-      style={{ minHeight: '100vh', backgroundColor: '#f8f9fa' }}
+      style={{ minHeight: "100vh", backgroundColor: "#f8f9fa" }}
     >
-      <div className="card p-4 shadow" style={{ width: '600px' }}>
+      <div className="card p-4 shadow" style={{ width: "600px" }}>
         <h1 className="text-center mb-4">Create New Item</h1>
         {submissionError && <Alert variant="danger">{submissionError}</Alert>}
         <Form onSubmit={handleSubmit}>
@@ -98,7 +101,9 @@ const CreateItem: React.FC = () => {
               onChange={handleChange}
               isInvalid={!!errors.name}
             />
-            <Form.Control.Feedback type="invalid">{errors.name}</Form.Control.Feedback>
+            <Form.Control.Feedback type="invalid">
+              {errors.name}
+            </Form.Control.Feedback>
           </Form.Group>
 
           <Form.Group className="mb-3">
@@ -110,7 +115,9 @@ const CreateItem: React.FC = () => {
               onChange={handleChange}
               isInvalid={!!errors.category}
             />
-            <Form.Control.Feedback type="invalid">{errors.category}</Form.Control.Feedback>
+            <Form.Control.Feedback type="invalid">
+              {errors.category}
+            </Form.Control.Feedback>
           </Form.Group>
 
           <Form.Group className="mb-3">
@@ -118,7 +125,7 @@ const CreateItem: React.FC = () => {
             <Form.Control
               type="text"
               name="certificate"
-              value={formData.certificate || ''}
+              value={formData.certificate || ""}
               onChange={handleChange}
             />
           </Form.Group>
@@ -128,28 +135,30 @@ const CreateItem: React.FC = () => {
             <Form.Control
               type="text"
               name="imageUrl"
-              value={formData.imageUrl || ''}
+              value={formData.imageUrl || ""}
               onChange={handleChange}
             />
           </Form.Group>
 
           {[
-            'energy',
-            'carbohydrates',
-            'sugar',
-            'protein',
-            'fat',
-            'saturatedfat',
-            'unsaturatedfat',
-            'fibre',
-            'salt',
+            "energy",
+            "carbohydrates",
+            "sugar",
+            "protein",
+            "fat",
+            "saturatedfat",
+            "unsaturatedfat",
+            "fibre",
+            "salt",
           ].map((field) => (
             <Form.Group className="mb-3" key={field}>
-              <Form.Label>{field.charAt(0).toUpperCase() + field.slice(1)}</Form.Label>
+              <Form.Label>
+                {field.charAt(0).toUpperCase() + field.slice(1)}
+              </Form.Label>
               <Form.Control
                 type="number"
                 name={field}
-                value={formData[field as keyof Item] || ''}
+                value={formData[field as keyof Item] || ""}
                 onChange={handleChange}
               />
             </Form.Group>
@@ -164,7 +173,9 @@ const CreateItem: React.FC = () => {
               onChange={handleChange}
               isInvalid={!!errors.countryOfOrigin}
             />
-            <Form.Control.Feedback type="invalid">{errors.countryOfOrigin}</Form.Control.Feedback>
+            <Form.Control.Feedback type="invalid">
+              {errors.countryOfOrigin}
+            </Form.Control.Feedback>
           </Form.Group>
 
           <Form.Group className="mb-3">
@@ -181,15 +192,31 @@ const CreateItem: React.FC = () => {
             </Form.Control.Feedback>
           </Form.Group>
 
-          <div className="d-flex justify-content-between">
+          <div className="d-flex justify-content-between align-items-center">
             <Button
               variant="primary"
               type="submit"
               disabled={isSubmitting}
+              className="create-button"
+              style={{
+                width: "100px",
+                height: "40px",
+              }} /* Consistent dimensions */
             >
-              {isSubmitting ? <Spinner as="span" animation="border" size="sm" /> : 'Create Item'}
+              {isSubmitting ? (
+                <Spinner as="span" animation="border" size="sm" />
+              ) : (
+                "Create Item"
+              )}
             </Button>
-            <Button variant="secondary" onClick={() => navigate('/')}>
+            <Button
+              variant="secondary"
+              onClick={() => navigate("/")}
+              style={{
+                width: "100px",
+                height: "40px",
+              }} /* Consistent dimensions */
+            >
               Cancel
             </Button>
           </div>
