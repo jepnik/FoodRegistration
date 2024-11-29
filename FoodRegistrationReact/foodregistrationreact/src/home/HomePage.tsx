@@ -23,24 +23,23 @@ const HomePage: React.FC = () => {
     setError(null); // Clear any previous errors
 
     try {
-        const response = await fetch(`${API_URL}/api/items`, {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
-        });
-
-        if (response.ok) {
-        const data = await response.json();
-        setItems(data);
-        } else {
-          throw new Error('Failed to fetch items.');
+      const response = await fetch(`${API_URL}/api/items`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
         }
-      console.log(data);
-    } catch (error) {
-      console.error(
-        `There was a problem with the fetch operation: ${error.message}`);
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data); // Logging data here
+        setItems(data);
+      } else {
+        throw new Error('Failed to fetch items.');
+      }
+    } catch (error: any) {
+      console.error(`There was a problem with the fetch operation: ${error.message}`);
       setError("Failed to fetch items.");
-      } finally {
+    } finally {
       setLoading(false);
     }
   };
@@ -210,3 +209,4 @@ const HomePage: React.FC = () => {
 };
 
 export default HomePage;
+
