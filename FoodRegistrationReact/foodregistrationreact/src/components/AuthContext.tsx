@@ -23,30 +23,47 @@ interface AuthProviderProps {
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [token, setToken] = useState<string | null>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
   useEffect(() => {
     const storedToken = sessionStorage.getItem('authToken');
-    console.log("Stored Token:", storedToken); // Debug log to check stored token
     if (storedToken) {
       setToken(storedToken);
+      // Validate token by making a call to a protected endpoint
+      fetch('/api/account/profile', {
+        headers: {
+          'Authorization': `Bearer ${storedToken}`,
+        },
+      })
+        .then(response => {
+          if (response.ok) {
+            setIsAuthenticated(true);
+          } else {
+            setIsAuthenticated(false);
+          }
+        })
+        .catch(() => {
+          setIsAuthenticated(false);
+        });
     }
   }, []);
 
   const login = (token: string) => {
-    console.log("Setting Token:", token); // Debug log when setting token
     setToken(token);
     sessionStorage.setItem('authToken', token);
+    setIsAuthenticated(true);
   };
 
   const logout = () => {
-    console.log("Removing Token"); // Debug log when removing token
     setToken(null);
     sessionStorage.removeItem('authToken');
+    setIsAuthenticated(false);
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated: !!token, login, logout, token }}>
+    <AuthContext.Provider value={{ isAuthenticated, login, logout, token }}>
       {children}
     </AuthContext.Provider>
   );
 };
+

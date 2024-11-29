@@ -1,13 +1,14 @@
-import React, { useState, useEffect } from "react";
-import { Button, Form, Table, Alert } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
-import { Item } from "../types/item";
-import { getItems, deleteItem } from "../api/apiService";
-import API_URL from "../apiConfig"; // Ensure this is correctly imported
-import ItemDetails from "../components/ItemDetails";
-import "../styles/site.css";
+import React, { useState, useEffect } from 'react';
+import { Button, Form, Table, Alert } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
+import { Item } from '../types/item';
+import { getItems, deleteItem } from '../api/apiService';
+import API_URL from '../apiConfig'; // Ensure this is correctly imported
+import ItemDetails from '../components/ItemDetails';
+import { useAuth } from '../components/AuthContext';
 
 const HomePage: React.FC = () => {
+  const { token } = useAuth();
   const [items, setItems] = useState<Item[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -23,13 +24,21 @@ const HomePage: React.FC = () => {
     setError(null); // Clear any previous errors
 
     try {
-      const data = await getItems();
-      setItems(data);
-      console.log(data);
-    } catch (error) {
-      console.error(
-        `There was a problem with the fetch operation: ${error.message}`
-      );
+      const response = await fetch(`${API_URL}/api/items`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data); // Logging data here
+        setItems(data);
+      } else {
+        throw new Error('Failed to fetch items.');
+      }
+    } catch (error: any) {
+      console.error(`There was a problem with the fetch operation: ${error.message}`);
       setError("Failed to fetch items.");
     } finally {
       setLoading(false);
@@ -38,14 +47,24 @@ const HomePage: React.FC = () => {
 
   useEffect(() => {
     fetchItems();
-  }, []);
+  }, [token]);
 
   const handleDelete = async (id: number) => {
     if (!window.confirm("Are you sure you want to delete this item?")) return;
 
     try {
-      await deleteItem(id);
-      setItems((prevItems) => prevItems.filter((item) => item.itemId !== id));
+      const response = await fetch(`${API_URL}/api/items/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (response.ok) {
+        setItems((prevItems) => prevItems.filter((item) => item.itemId !== id));
+      } else {
+        throw new Error('Failed to delete item.');
+      }
     } catch (err: any) {
       alert(err.message || "Failed to delete item.");
     }
@@ -237,3 +256,4 @@ const HomePage: React.FC = () => {
 };
 
 export default HomePage;
+
