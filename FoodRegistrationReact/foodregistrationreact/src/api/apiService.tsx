@@ -1,4 +1,6 @@
 import API_URL  from '../apiConfig';
+import { useAuth } from '../components/AuthContext';
+import { useCallback } from 'react';
 
 const fetchApi = async (endpoint: string, options: RequestInit = {}) => {
   try {
@@ -25,8 +27,16 @@ const fetchApi = async (endpoint: string, options: RequestInit = {}) => {
   }
 };
 
+// Custom hook to get items
 // Item APIs
-export const getItems = () => fetchApi('/api/items');
+export const useGetItems = () => {
+  const { token } = useAuth();
+  const getItems = useCallback(
+    () => fetchApi('/api/items', { headers: { 'Authorization': `Bearer ${token}` } }),
+    [token]
+  );
+  return { getItems };
+};
 
 export const deleteItem = (id: number) => fetchApi(`/api/items/${id}`, { method: 'DELETE' });
 

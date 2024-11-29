@@ -2,13 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { Button, Form, Table, Alert } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { Item } from '../types/item';
-import { getItems, deleteItem } from '../api/apiService';
+import { useGetItems, deleteItem } from '../api/apiService';
 import API_URL from '../apiConfig'; // Ensure this is correctly imported
 import ItemDetails from '../components/ItemDetails';
 import { useAuth } from '../components/AuthContext';
 
 const HomePage: React.FC = () => {
   const { token } = useAuth();
+  const { getItems } = useGetItems(); // Extract getItems from the custom hook
   const [items, setItems] = useState<Item[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -19,35 +20,24 @@ const HomePage: React.FC = () => {
   const [showDetails, setShowDetails] = useState<boolean>(false);
   const navigate = useNavigate();
 
-  const fetchItems = async () => {
-    setLoading(true);
-    setError(null); // Clear any previous errors
-
-    try {
-      const response = await fetch(`${API_URL}/api/items`, {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        console.log(data); // Logging data here
-        setItems(data);
-      } else {
-        throw new Error('Failed to fetch items.');
-      }
-    } catch (error: any) {
-      console.error(`There was a problem with the fetch operation: ${error.message}`);
-      setError("Failed to fetch items.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
+    const fetchItems = async () => {
+      setLoading(true);
+      setError(null); // Clear any previous errors
+  
+      try {
+        const data = await getItems();
+        setItems(data);
+        console.log(data); // Logging data here
+      } catch (error: any) {
+        console.error(`There was a problem with the fetch operation: ${error.message}`);
+        setError("Failed to fetch items.");
+      } finally {
+        setLoading(false);
+      }
+    };
     fetchItems();
-  }, [token]);
+  }, [getItems]);
 
   const handleDelete = async (id: number) => {
     if (!window.confirm("Are you sure you want to delete this item?")) return;
