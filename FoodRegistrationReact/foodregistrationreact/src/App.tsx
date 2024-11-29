@@ -8,7 +8,7 @@ import CreateItem from './pages/CreateItem';
 import UpdateItem from './pages/UpdateItem';
 import Login from './account/Login';
 import RegisterUser from './account/RegisterUser';
-import Profile from './pages/ProfileView';
+import Profile from './account/Profile';
 import ChangePassword from './account/ChangePassword';
 import './App.css';
 
