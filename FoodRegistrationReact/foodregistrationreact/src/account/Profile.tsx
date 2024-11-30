@@ -1,4 +1,6 @@
-import React, { useEffect, useState } from 'react';
+// File: src/account/Profile.tsx
+
+import React, { useEffect, useState } from 'react'; 
 import { useNavigate } from 'react-router-dom';
 import { Alert, Button, Spinner } from 'react-bootstrap';
 import { getProfile, logoutUser } from '../api/apiService';
@@ -18,7 +20,7 @@ const Profile: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const userIcon = `${API_URL}/images/UserLogo.png`;
-  
+
 
   useEffect(() => {
     const fetchProfileData = async () => {
@@ -115,15 +117,16 @@ const Profile: React.FC = () => {
               >
                 Change Password
               </Button>
+              {/* Replace "Edit Profile" button with "Delete Account" button */}
               <Button
                 className="mb-3"
-                variant="success"
-                onClick={() => navigate('/edit-profile')}
+                variant="danger"
+                onClick={() => navigate('/delete-user')}
                 style={{ color: 'white', fontSize: '1rem' }}
               >
-                Edit Profile
+                Delete Account
               </Button>
-              <Button variant="danger" onClick={handleLogout}>
+              <Button variant="secondary" onClick={handleLogout}>
                 Log Out
               </Button>
             </div>

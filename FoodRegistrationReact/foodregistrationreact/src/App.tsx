@@ -1,3 +1,5 @@
+// File: src/App.tsx
+
 import React, { useEffect } from 'react';
 import {
   BrowserRouter as Router,
@@ -15,6 +17,7 @@ import Login from './account/Login';
 import RegisterUser from './account/RegisterUser';
 import Profile from './account/Profile';
 import ChangePassword from './account/ChangePassword';
+import DeleteUser from './account/DeleteUser'; // Import the DeleteUser component
 import './App.css';
 
 const App: React.FC = () => (
@@ -48,6 +51,7 @@ const AppRoutes: React.FC = () => {
           <Route path="/update/:id" element={<UpdateItem />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/change-password" element={<ChangePassword />} />
+          <Route path="/delete-user" element={<DeleteUser />} /> {/* Add this line */}
           {/* Redirect unknown routes to home */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>

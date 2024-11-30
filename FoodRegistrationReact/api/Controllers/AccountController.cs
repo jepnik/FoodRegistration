@@ -251,6 +251,69 @@ namespace FoodRegistration.Controllers
 
             return Ok(new { message = "Password changed successfully." });
         }
+         [Authorize]
+        [HttpPost("delete-user")]
+        public async Task<IActionResult> DeleteUser([FromBody] DeleteUserRequest request)
+        {
+            // Validate request payload
+            if (request == null || !request.ConfirmDeletion)
+            {
+                _logger.LogError("Invalid DeleteUserRequest payload or deletion not confirmed.");
+                return BadRequest(new { error = "Deletion must be confirmed." });
+            }
+
+            if (string.IsNullOrEmpty(request.Password))
+            {
+                _logger.LogError("Password is required for account deletion.");
+                return BadRequest(new { error = "Password is required to confirm deletion." });
+            }
+
+            // Retrieve user ID from JWT claims
+            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "UserID");
+            if (userIdClaim == null)
+            {
+                _logger.LogWarning("UserID claim not found.");
+                return Unauthorized(new { error = "Unauthorized access." });
+            }
+
+            if (!int.TryParse(userIdClaim.Value, out int userId))
+            {
+                _logger.LogWarning("Invalid UserID claim value: {UserID}", userIdClaim.Value);
+                return Unauthorized(new { error = "Unauthorized access." });
+            }
+
+            // Fetch user from the database
+            var user = await _context.Users.FindAsync(userId);
+            if (user == null)
+            {
+                _logger.LogWarning("User not found for userId {UserId}.", userId);
+                return NotFound(new { error = "User not found." });
+            }
+
+            // Verify the password
+            var hashedPassword = HashPassword(request.Password);
+            if (user.Password != hashedPassword)
+            {
+                _logger.LogWarning("Incorrect password for userId {UserId}.", userId);
+                return Unauthorized(new { error = "Password is incorrect." });
+            }
+
+            try
+            {
+                // Remove the user from the database
+                _context.Users.Remove(user);
+                await _context.SaveChangesAsync();
+
+                _logger.LogInformation("User {UserId} deleted successfully.", userId);
+
+                return Ok(new { message = "User account deleted successfully." });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while deleting user {UserId}.", userId);
+                return StatusCode(500, new { error = "An error occurred while deleting the account." });
+            }
+        }
         
 
         [HttpPost("logout")]
