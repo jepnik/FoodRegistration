@@ -115,7 +115,6 @@ const Profile: React.FC = () => {
               <Button
                 className="mb-3"
                 variant="success"
-                variant="success"
                 onClick={() => navigate('/change-password')}
               >
                 Change Password
