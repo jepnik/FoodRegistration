@@ -41,50 +41,50 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="login-container">
-      <img src={`${API_URL}/images/FoodTrace.png`} alt="Logo" className="login-logo" /> 
-      <h2>Login</h2>
-      {error && <p className="alert">{error}</p>}
-      <form onSubmit={handleLogin} className="login-form">
-        <div className="form-group">
-          <label className="form-label" htmlFor="email">
-            Email
-          </label>
-          <input
-            id="email"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            className="form-control"
-            placeholder="Enter your email"
-          />
-        </div>
-        <div className="form-group">
-          <label className="form-label" htmlFor="password">
-            Password
-          </label>
-          <input
-            id="password"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            className="form-control"
-            placeholder="Enter your password"
-          />
-        </div>
-        <button type="submit" className="btn btn-success mt-4 mb-2 buttons-button">
-          Login
-        </button>
-      </form>
-      <a href="/register-user" className="btn btn-primary mt-2 buttons-button">
-        Register User
-      </a>
-
-      <Footer/>
-    </div>
-    
+    <>
+      <div className="login-container">
+        <img src={`${API_URL}/images/FoodTrace.png`} alt="Logo" className="login-logo" /> 
+        <h2>Login</h2>
+        {error && <p className="alert">{error}</p>}
+        <form onSubmit={handleLogin} className="login-form">
+          <div className="form-group">
+            <label className="form-label" htmlFor="email">
+              Email
+            </label>
+            <input
+              id="email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              className="form-control"
+              placeholder="Enter your email"
+            />
+          </div>
+          <div className="form-group">
+            <label className="form-label" htmlFor="password">
+              Password
+            </label>
+            <input
+              id="password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              className="form-control"
+              placeholder="Enter your password"
+            />
+          </div>
+          <button type="submit" className="btn btn-success mt-4 mb-2 buttons-button">
+            Login
+          </button>
+        </form>
+        <a href="/register-user" className="btn btn-primary mt-2 buttons-button">
+          Register User
+        </a>
+      </div>
+      <Footer />
+    </>
   );
 };
 
