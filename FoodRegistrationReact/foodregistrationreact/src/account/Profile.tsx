@@ -97,8 +97,9 @@ const Profile: React.FC = () => {
               <p>
                 This application allows you to register, track, and manage food items along with their nutritional
                 content. 
-                <br/>
-                From here, you can: 
+            </p>
+            <p>
+              You can perform the following actions:
             </p>
             <ul>
                 <li>
@@ -114,8 +115,8 @@ const Profile: React.FC = () => {
               <Button
                 className="mb-3"
                 variant="success"
+                variant="success"
                 onClick={() => navigate('/change-password')}
-                style={{ color: 'white', fontSize: '1rem' }}
               >
                 Change Password
               </Button>
@@ -131,7 +132,6 @@ const Profile: React.FC = () => {
                 className="mb-3"
                 variant="danger"
                 onClick={() => navigate('/delete-user')}
-                style={{ color: 'white', fontSize: '1rem' }}
               >
                 Delete Account
               </Button>

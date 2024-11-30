@@ -217,7 +217,7 @@ const HomePage: React.FC = () => {
                   }}
                 >
                   Update
-                </Button>{' '}
+                </Button>{' '} {/* Hva er dette for noe? */}
                 <Button
                   variant="danger"
                   size="sm"

@@ -48,35 +48,39 @@ h2 {
 
 .buttons-button {
   width: 100%;
-  padding: 10px;
+  color: white;
+  border: none;
+  outline: none;
+  /* padding: 10px;
   font-size: 1rem;
   font-weight: bold;
   border: none;
   border-radius: 5px;
   background-color: #007bff;
   color: #fff;
-  cursor: pointer;
+  cursor: pointer; */
 }
 
-.buttons-button:hover {
+/* .buttons-button:hover {
   background-color: #0056b3;
-}
+} */
 
-.btn-primary {
+/* .btn-primary {
   text-decoration: none;
   display: inline-block;
   margin-top: 10px;
   font-size: 0.9rem;
   color: #007bff;
-}
+} */
 
-.btn-primary:hover {
+/* .btn-primary:hover {
   text-decoration: underline;
   color: #0056b3;
-}
+} */
 
-.alert {
+/* .alert {
   color: red;
   font-weight: bold;
   margin-bottom: 15px;
 }
+ */
