@@ -50,7 +50,7 @@ public static class DBInit
                     Name = "Banana",
                     Category = "Fruit",
                     Certificate = "Fair Trade",
-                    ImageUrl = "/images/banana.png",
+                    ImageUrl = "/images/banana.jpg",
                     
                     // Ernæringsfakta
                     Energy = 89,
