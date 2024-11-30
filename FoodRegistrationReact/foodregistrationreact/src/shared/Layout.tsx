@@ -3,23 +3,16 @@ import { Outlet } from 'react-router-dom';
 import Header from './Header';
 import Footer from './Footer';
 
-// Define props for Layout
-interface LayoutProps {
-  children?: React.ReactNode; // The content to display
-  userEmail?: string; // Optional userEmail
-}
-
-const Layout: React.FC<LayoutProps> = ({ children, userEmail }) => {
+const Layout: React.FC = () => {
   return (
     <div className="App">
-      <Header userEmail={userEmail} />
-      <div className="content">
-        {children || <Outlet />} {/* main content, use Outlet for nested routes */}
-      </div>
+      <Header />
+      <main className="content">
+        <Outlet /> {/* Main content, use Outlet for nested routes */}
+      </main>
       <Footer />
     </div>
   );
 };
 
 export default Layout;
-

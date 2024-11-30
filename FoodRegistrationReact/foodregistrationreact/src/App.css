@@ -1,15 +1,20 @@
-.table-container {
-  max-width: 80%; /* Begrens tabellens bredde */
-  margin: 0 auto; /* Sentrer tabellen horisontalt */
+/* App.css */
+
+/* Reset default margins and paddings */
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
 }
 
+/* Ensure the App fills the viewport height and uses flexbox */
 .App {
   display: flex;
   flex-direction: column;
-  min-height: 100vh; /* Fyll hele høyden av skjermen */  
+  min-height: 100vh; /* Fyll hele høyden av skjermen */
 }
 
-/* Innholdet på siden */
+/* Content area fills the available space */
 .content {
   flex: 1; /* Lar innholdet ta opp all tilgjengelig plass over footer */
   padding-top: 100px; /* Litt padding på topp og bunn */
@@ -17,25 +22,54 @@
   overflow-y: auto; /* Tillater scrolling */
 }
 
+/* Table container styling */
+.table-container {
+  max-width: 80%; /* Begrens tabellens bredde */
+  margin: 0 auto; /* Sentrer tabellen horisontalt */
+}
+
+/* Create button container styling */
 .create-button-container {
   display: flex;
-  justify-content: left; /* Midtsentrerer knappen */
+  justify-content: left; /* Justerer knappen til venstre */
   margin-top: 20px; /* Gir avstand fra tabellen */
 }
 
 .create-button-container button {
   font-size: 1.1rem; /* Gjør knappen større */
 }
+
+/* Sort arrow styling */
 .sort-arrow {
-  font-size: 2.5em;  /* You can adjust the size */
+  font-size: 2.5em;  /* Juster størrelsen om nødvendig */
   font-weight: bold;
+}
+
+/* Custom hover effect for table rows */
+.custom-hover-table tbody tr {
+  transition: background-color 0.3s ease; /* Smooth transition for the row */
 }
 
 .custom-hover-table tbody tr:hover {
   background-color: #e9ecef !important; /* Light gray hover effect */
-  transition: background-color 0.3s ease; /* Smooth transition */
 }
 
-.custom-hover-table tbody tr {
-  transition: background-color 0.3s ease; /* Smooth transition for the row */
+/* Footer styling */
+.footer {
+  background-color: #83B271;
+  color: #ffffff;
+  text-align: center;
+  padding: 10px 0;
+  /* Ensure footer stays at the bottom */
+  /* No position: fixed or absolute; let flexbox handle the positioning */
+}
+
+/* Adjustments if header is fixed */
+.header + .content {
+  margin-top: 70px; /* Juster denne verdien til høyden på headeren din */
+}
+
+/* Additional global styles if needed */
+body {
+  font-family: Arial, sans-serif;
 }
