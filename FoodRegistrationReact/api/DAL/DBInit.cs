@@ -26,7 +26,7 @@ public static class DBInit
                     Name = "Apple",
                     Category = "Fruit",
                     Certificate = "Organic",
-                    ImageUrl = "/images/eple.png",
+                    ImageUrl = "/images/apple.jpg",
                     
                     // Ernæringsfakta (nutritional information)
                     Energy = 52,
@@ -50,7 +50,7 @@ public static class DBInit
                     Name = "Potato",
                     Category = "Fruit",
                     Certificate = "Organic",
-                    ImageUrl = "/images/potet.jpg",
+                    ImageUrl = "/images/potato.jpg",
                     
                     // Ernæringsfakta (nutritional information)
                     Energy = 52,
@@ -74,7 +74,7 @@ public static class DBInit
                     Name = "Beef",
                     Category = "Meat",
                     Certificate = "Fair Trade",
-                    ImageUrl = "/images/biff.jpg",
+                    ImageUrl = "/images/beef.jpg",
                     
                     // Ernæringsfakta
                     Energy = 89,
