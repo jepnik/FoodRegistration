@@ -44,8 +44,6 @@ public static class DBInit
                     CountryOfProvenance = "Norway", // Opphavsland
                     CreatedDate = DateTime.Now,
                     UpdatedDate = DateTime.Now
-                    
-                   
                 },
                 new Item
                 {
@@ -74,7 +72,7 @@ public static class DBInit
             };
 
             // Add the items to the Items table
-            context.AddRange(items);   
+            context.AddRange(items);
             context.SaveChanges();
         }
 
