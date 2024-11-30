@@ -50,6 +50,15 @@ const CreateItem: React.FC = () => {
       newErrors.countryOfOrigin = 'Country of origin is required.';
     if (!formData.countryOfProvenance)
       newErrors.countryOfProvenance = 'Country of provenance is required.';
+    const nutritionalFields = [
+      'energy', 'carbohydrates', 'sugar', 'protein', 'fat', 
+      'saturated fat', 'unsaturated fat', 'fibre', 'salt'
+    ];
+    nutritionalFields.forEach((field) => {
+      if (formData[field as keyof Item] === undefined || formData[field as keyof Item] === '') {
+        newErrors[field] = `${field.charAt(0).toUpperCase() + field.slice(1)} must have a value.`;
+      }
+    });
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -151,6 +160,7 @@ const CreateItem: React.FC = () => {
               onChange={handleChange}
             />
           </Form.Group>
+          <h2 className="text-center">Nutritional Information pr 100g</h2>
 
           {/* Nutritional Fields */}
           {[
@@ -159,8 +169,8 @@ const CreateItem: React.FC = () => {
             'sugar',
             'protein',
             'fat',
-            'saturatedfat',
-            'unsaturatedfat',
+            'saturated fat',
+            'unsaturated fat',
             'fibre',
             'salt',
           ].map((field) => (
@@ -173,8 +183,12 @@ const CreateItem: React.FC = () => {
                 name={field}
                 value={formData[field as keyof Item] ?? ''}
                 onChange={handleChange}
+                isInvalid={!!errors[field]} // Add isInvalid prop to show validation error
               />
-            </Form.Group>
+             <Form.Control.Feedback type="invalid">
+             {errors[field]}
+            </Form.Control.Feedback>
+          </Form.Group>
           ))}
 
           {/* Country of Origin Field */}

@@ -188,6 +188,8 @@ const UpdateItem: React.FC = () => {
             />
           </Form.Group>
 
+          <h2 className="text-center">Nutritional Information pr 100g</h2>
+
           {/* Nutritional Fields */}
           {[
             'energy',

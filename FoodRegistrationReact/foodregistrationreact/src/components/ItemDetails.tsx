@@ -97,10 +97,10 @@ const ItemDetails: React.FC<ItemDetailsProps> = ({ show, onHide, itemId }) => {
               </Col>
             </Row>
             <hr />
-            <h5 className="text-center">Nutritional Information</h5>
+            <h5 className="text-center">Nutritional Information pr 100g</h5>
             <Row className="mb-3">
               <Col xs={6} md={4}>
-                <p><strong>Energy:</strong> {item.energy || 'N/A'}</p>
+                <p><strong>Energy (kcal):</strong> {item.energy || 'N/A'}</p>
               </Col>
               <Col xs={6} md={4}>
                 <p><strong>Carbohydrates:</strong> {item.carbohydrates || 'N/A'}</p>
