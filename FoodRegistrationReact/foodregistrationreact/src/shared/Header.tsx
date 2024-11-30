@@ -3,21 +3,41 @@ import { Link, useNavigate } from 'react-router-dom';
 import '../styles/Header.css'; // Ensure the CSS is properly linked
 import API_URL from '../apiConfig';
 import { useAuth } from '../components/AuthContext'; // Import useAuth
+import { getProfile } from '../api/apiService'; // Import profile API
 
 const Header: React.FC = () => {
   const navigate = useNavigate();
-  const { isAuthenticated, logout } = useAuth(); // Get authentication state and logout function
+  const { isAuthenticated, logout, token } = useAuth(); // Get authentication state, logout function, and token
   const logo = `${API_URL}/images/logoHvit.ico`;
-  const userIcon = `${API_URL}/images/UserLogo.png`;
 
-  // Dropdown state for toggling visibility
+  // State for dropdown and user profile
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [profile, setProfile] = useState<{ email: string } | null>(null);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 
-  // Toggle the dropdown when the user icon is clicked
-  const handleUserIconClick = () => {
-    setDropdownOpen(!dropdownOpen);
+  // Function to get user icon based on email domain
+  const getUserIcon = (email: string): string => {
+    if (!email) return `${API_URL}/images/FoodTrace.png`; // Default icon
+    const domain = email.split('@')[1];
+    return domain === 'foodcompany.com'
+      ? `${API_URL}/images/UserLogo.png`
+      : `${API_URL}/images/AlternativeUserLogo.png`;
   };
+
+  // Fetch user profile on load if authenticated
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      if (isAuthenticated && token) {
+        try {
+          const userProfile = await getProfile(token); // Fetch profile from API
+          setProfile(userProfile);
+        } catch (error) {
+          console.error('Error fetching profile:', error);
+        }
+      }
+    };
+    fetchUserProfile();
+  }, [isAuthenticated, token]);
 
   // Close dropdown when clicking outside
   const handleClickOutside = (event: MouseEvent) => {
@@ -29,7 +49,7 @@ const Header: React.FC = () => {
     }
   };
 
-  // Add event listener for clicks outside the dropdown
+  // Add event listener for outside clicks
   useEffect(() => {
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
@@ -76,15 +96,16 @@ const Header: React.FC = () => {
         <div className="flex-grow-1"></div>
 
         {/* User Icon and Dropdown */}
-        {isAuthenticated && (
+        {isAuthenticated && profile && (
           <div className="d-flex align-items-center" ref={dropdownRef}>
             {/* User Icon */}
             <div className="user-icon-wrapper">
               <img
-                src={userIcon}
+                src={getUserIcon(profile.email)}
                 alt="User Icon"
                 className="user-icon"
-                onClick={handleUserIconClick}
+                onClick={() => setDropdownOpen(!dropdownOpen)}
+                style={{ cursor: 'pointer' }}
               />
               {dropdownOpen && (
                 <div
@@ -174,3 +195,4 @@ const Header: React.FC = () => {
 };
 
 export default Header;
+
