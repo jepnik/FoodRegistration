@@ -1,8 +1,11 @@
+// File: src/account/ChangePassword.tsx
+
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Alert, Spinner, Button } from "react-bootstrap";
+import { Alert, Spinner, Button, Form, Container, Row, Col } from "react-bootstrap";
 import { changePassword } from "../api/apiService";
 import { useAuth } from "../components/AuthContext";
+import PasswordStrengthMeter from "../components/passwordStrengthMeter"; // Import the component
 import "../styles/registerAndPassword.css";
 
 const ChangePassword: React.FC = () => {
@@ -46,67 +49,86 @@ const ChangePassword: React.FC = () => {
     }
   };
 
+  const handleCancel = () => {
+    navigate('/profile');
+  };
+
   return (
-    <div className="register-form">
-      <h2>Change Password</h2>
-      {errors.length > 0 && (
-        <Alert variant="danger">
-          <ul>
-            {errors.map((err, idx) => (
-              <li key={idx}>{err}</li>
-            ))}
-          </ul>
-        </Alert>
-      )}
-      {successMessage && <Alert variant="success">{successMessage}</Alert>}
+    <Container className="d-flex justify-content-center align-items-center min-vh-100">
+      <Row className="w-100">
+        <Col xs={12} sm={8} md={6} lg={5} className="mx-auto">
+          <h2 className="text-center mb-4">Change Password</h2>
+          {errors.length > 0 && (
+            <Alert variant="danger" className="text-center">
+              <ul>
+                {errors.map((err, idx) => (
+                  <li key={idx}>{err}</li>
+                ))}
+              </ul>
+            </Alert>
+          )}
+          {successMessage && <Alert variant="success" className="text-center">{successMessage}</Alert>}
 
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="oldPassword">Old Password</label>
-          <input
-            id="oldPassword"
-            name="oldPassword"
-            type="password"
-            value={oldPassword}
-            onChange={(e) => setOldPassword(e.target.value)}
-            required
-          />
-        </div>
+          <Form onSubmit={handleSubmit}>
+            <Form.Group controlId="oldPassword" className="mb-3">
+              <Form.Label>Old Password</Form.Label>
+              <Form.Control
+                type="password"
+                placeholder="Enter your current password"
+                value={oldPassword}
+                onChange={(e) => setOldPassword(e.target.value)}
+                required
+                className="w-100"
+              />
+            </Form.Group>
 
-        <div>
-          <label htmlFor="newPassword">New Password</label>
-          <input
-            id="newPassword"
-            name="newPassword"
-            type="password"
-            value={newPassword}
-            onChange={(e) => setNewPassword(e.target.value)}
-            required
-          />
-        </div>
+            <Form.Group controlId="newPassword" className="mb-3">
+               {/* Password Strength Meter */}
+               <PasswordStrengthMeter password={newPassword} />
+               
+              <Form.Label>New Password</Form.Label>
+              <Form.Control
+                type="password"
+                placeholder="Enter new password"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                required
+                className="w-100"
+              />
+             
+            </Form.Group>
 
-        <div>
-          <label htmlFor="confirmNewPassword">Confirm New Password</label>
-          <input
-            id="confirmNewPassword"
-            name="confirmNewPassword"
-            type="password"
-            value={confirmNewPassword}
-            onChange={(e) => setConfirmNewPassword(e.target.value)}
-            required
-          />
-        </div>
+            <Form.Group controlId="confirmNewPassword" className="mb-4">
+              <Form.Label>Confirm New Password</Form.Label>
+              <Form.Control
+                type="password"
+                placeholder="Confirm new password"
+                value={confirmNewPassword}
+                onChange={(e) => setConfirmNewPassword(e.target.value)}
+                required
+                className="w-100"
+              />
+            </Form.Group>
 
-        <div className="d-flex justify-content-between mt-3">
-          <Button type="submit" variant="primary" disabled={loading}>
-            {loading ? <Spinner animation="border" size="sm" /> : 'Submit'}
-          </Button>
-          <Button type="button" variant="secondary" onClick={() => navigate('/profile')}>
-            Cancel
-          </Button>
-        </div>
-      </form>
-    </div>
+            <div className="d-grid gap-2">
+              <Button variant="primary" type="submit" disabled={loading}>
+                {loading ? (
+                  <>
+                    <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" />
+                    {' Changing...'}
+                  </>
+                ) : (
+                  'Change Password'
+                )}
+              </Button>
+              <Button variant="secondary" onClick={handleCancel}>
+                Cancel
+              </Button>
+            </div>
+          </Form>
+        </Col>
+      </Row>
+    </Container>
   );
 };
 

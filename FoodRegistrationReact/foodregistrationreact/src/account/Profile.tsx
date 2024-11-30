@@ -96,7 +96,10 @@ const Profile: React.FC = () => {
             </p>
               <p>
                 This application allows you to register, track, and manage food items along with their nutritional
-                content. From here, you can:
+                content. 
+            </p>
+            <p>
+              You can perform the following actions:
             </p>
             <ul>
                 <li>
