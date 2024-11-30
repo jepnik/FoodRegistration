@@ -19,7 +19,20 @@ const Profile: React.FC = () => {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const userIcon = `${API_URL}/images/UserLogo.png`;
+
+  // Function to get user icon based on email domain
+  const getUserIcon = (email: string): string => {
+    // If no email, return default icon
+    if (!email) return `${API_URL}/images/FoodTrace.png`;
+
+    // Extract domain from email
+    const domain = email.split('@')[1];
+
+    // Return icon based on domain
+    return domain === 'foodcompany.com'
+      ? `${API_URL}/images/UserLogo.png`
+      : `${API_URL}/images/AlternativeUserLogo.png`;
+  };
 
 
   useEffect(() => {
@@ -85,7 +98,7 @@ const Profile: React.FC = () => {
             {/* Display the user icon as a circular image */}
             <div className="text-center mb-4">
               <img
-                src={userIcon}
+                src={getUserIcon(profile.email)}
                 alt="User Icon"
                 className="rounded-circle"
                 style={{ width: '100px', height: '100px' }}
