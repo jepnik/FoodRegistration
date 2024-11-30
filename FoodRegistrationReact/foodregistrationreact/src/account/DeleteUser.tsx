@@ -2,14 +2,14 @@
 
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Alert, Spinner, Button, Form } from 'react-bootstrap';
+import { Alert, Spinner, Button, Form, Container, Row, Col, Card } from 'react-bootstrap';
 import { deleteUser } from '../api/apiService';
 import { useAuth } from '../components/AuthContext';
 import '../styles/deleteUser.css';
 
 const DeleteUser: React.FC = () => {
-  const [password, setPassword] = useState('');
-  const [confirmDeletion, setConfirmDeletion] = useState(false);
+  const [password, setPassword] = useState<string>('');
+  const [confirmDeletion, setConfirmDeletion] = useState<boolean>(false);
   const [errors, setErrors] = useState<string[]>([]);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
@@ -49,54 +49,80 @@ const DeleteUser: React.FC = () => {
     }
   };
 
+  const handleCancel = () => {
+    navigate('/profile');
+  };
+
   return (
-    <div className="delete-user-form">
-      <h2>Delete Account</h2>
-      {errors.length > 0 && (
-        <Alert variant="danger">
-          <ul>
-            {errors.map((err, idx) => (
-              <li key={idx}>{err}</li>
-            ))}
-          </ul>
-        </Alert>
-      )}
-      {successMessage && <Alert variant="success">{successMessage}</Alert>}
+    <Container className="d-flex justify-content-center align-items min-vh-100">
+      <Row className="w-100">
+        <Col xs={12} sm={10} md={8} lg={6} xl={5} className="mx-auto">
+          <Card className="delete-user-card p-4 shadow">
+            <Card.Body>
+              <h2 className="text-center mb-4">Delete Account</h2>
+              {errors.length > 0 && (
+                <Alert variant="danger" className="text-center">
+                  <ul className="mb-0">
+                    {errors.map((err, idx) => (
+                      <li key={idx}>{err}</li>
+                    ))}
+                  </ul>
+                </Alert>
+              )}
+              {successMessage && <Alert variant="success" className="text-center">{successMessage}</Alert>}
 
-      <Form onSubmit={handleDelete}>
-        <Form.Group controlId="password">
-          <Form.Label>Confirm Your Password</Form.Label>
-          <Form.Control
-            type="password"
-            placeholder="Enter your current password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </Form.Group>
+              <Form onSubmit={handleDelete}>
+                <Form.Group controlId="password" className="mb-3">
+                  <Form.Label>Confirm Your Password</Form.Label>
+                  <Form.Control
+                    type="password"
+                    placeholder="Enter your current password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                    className="rounded-pill"
+                  />
+                </Form.Group>
 
-        <Form.Group controlId="confirmDeletion" className="mt-3">
-          <Form.Check
-            type="checkbox"
-            label="I understand that deleting my account is irreversible."
-            checked={confirmDeletion}
-            onChange={(e) => setConfirmDeletion(e.target.checked)}
-            required
-          />
-        </Form.Group>
+                <Form.Group controlId="confirmDeletion" className="mb-4">
+                  <Form.Check
+                    type="checkbox"
+                    label="I understand that deleting my account is irreversible."
+                    checked={confirmDeletion}
+                    onChange={(e) => setConfirmDeletion(e.target.checked)}
+                    required
+                  />
+                </Form.Group>
 
-        <div className="d-flex justify-content-between mt-3">
-          <Button variant="danger" type="submit" disabled={loading}>
-            {loading ? <Spinner animation="border" size="sm" /> : 'Delete Account'}
-          </Button>
-          <Button variant="secondary" onClick={() => navigate('/profile')}>
-            Cancel
-          </Button>
-        </div>
-      </Form>
-    </div>
+                <div className="d-flex justify-content-between">
+                  <Button variant="danger" type="submit" disabled={loading} className="flex-grow-1 me-2">
+                    {loading ? (
+                      <>
+                        <Spinner
+                          as="span"
+                          animation="border"
+                          size="sm"
+                          role="status"
+                          aria-hidden="true"
+                          className="me-2"
+                        />
+                        Deleting...
+                      </>
+                    ) : (
+                      'Delete '
+                    )}
+                  </Button>
+                  <Button variant="secondary" onClick={handleCancel} className="flex-grow-1 ms-2">
+                    Cancel
+                  </Button>
+                </div>
+              </Form>
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
+    </Container>
   );
 };
 
 export default DeleteUser;
-
