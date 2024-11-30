@@ -1,14 +1,19 @@
-using Microsoft.AspNetCore.Mvc;
+ using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
+using System.IdentityModel.Tokens.Jwt;
+using System.Text;
+using System.Threading.Tasks;
+using System;
+using System.Linq;
+using System.Security.Cryptography;
+using Microsoft.EntityFrameworkCore;
 using FoodRegistration.Models;
 using FoodRegistration.DAL;
 using FoodRegistration.ViewModels;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using System.Security.Cryptography;
-using System.Text;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
 
 namespace FoodRegistration.Controllers
 {
@@ -56,7 +61,7 @@ namespace FoodRegistration.Controllers
 
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
             var creds = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-            var expires = DateTime.Now.AddHours(2);
+            var expires = DateTime.UtcNow.AddHours(2);
 
             var claims = new[]
             {
@@ -66,9 +71,9 @@ namespace FoodRegistration.Controllers
             };
 
             var token = new JwtSecurityToken(
-                _configuration["Jwt:Issuer"],
-                _configuration["Jwt:Audience"],
-                claims,
+                issuer: _configuration["Jwt:Issuer"],
+                audience: _configuration["Jwt:Audience"],
+                claims: claims,
                 expires: expires,
                 signingCredentials: creds);
 
@@ -76,43 +81,42 @@ namespace FoodRegistration.Controllers
         }
 
         [HttpPost("register")]
-public async Task<IActionResult> Register([FromBody] RegisterUserViewModel model)
-{
-    if (model == null || !ModelState.IsValid)
-    {
-        _logger.LogError("Invalid registration model.");
-        return BadRequest(ModelState);
-    }
+        public async Task<IActionResult> Register([FromBody] RegisterUserViewModel model)
+        {
+            if (model == null || !ModelState.IsValid)
+            {
+                _logger.LogError("Invalid registration model.");
+                return BadRequest(ModelState);
+            }
 
-    if (model.Password != model.ConfirmPassword)
-    {
-        return BadRequest(new { error = "Password and Confirm Password do not match." });
-    }
+            if (model.Password != model.ConfirmPassword)
+            {
+                return BadRequest(new { error = "Password and Confirm Password do not match." });
+            }
 
-    var existingUser = await _context.Users
-        .FirstOrDefaultAsync(u => u.Email == model.Email);
+            var existingUser = await _context.Users
+                .FirstOrDefaultAsync(u => u.Email == model.Email);
 
-    if (existingUser != null)
-    {
-        _logger.LogWarning("Email {Email} is already registered.", model.Email);
-        return Conflict(new { error = "Email is already registered." });
-    }
+            if (existingUser != null)
+            {
+                _logger.LogWarning("Email {Email} is already registered.", model.Email);
+                return Conflict(new { error = "Email is already registered." });
+            }
 
-    var user = new User
-    {
-        Email = model.Email,
-        Password = HashPassword(model.Password),
-        // Add other necessary fields
-    };
+            var user = new User
+            {
+                Email = model.Email,
+                Password = HashPassword(model.Password),
+                // Add other necessary fields
+            };
 
-    await _context.Users.AddAsync(user);
-    await _context.SaveChangesAsync();
+            await _context.Users.AddAsync(user);
+            await _context.SaveChangesAsync();
 
-    _logger.LogInformation("User {Email} registered successfully.", user.Email);
+            _logger.LogInformation("User {Email} registered successfully.", user.Email);
 
-    return Ok(new { message = "Registration successful." });
-}
-
+            return Ok(new { message = "Registration successful." });
+        }
 
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginViewModel model)
@@ -146,13 +150,7 @@ public async Task<IActionResult> Register([FromBody] RegisterUserViewModel model
 
                 var token = GenerateJwtToken(user.UserId, user.Email);
 
-                Response.Cookies.Append("jwt", token, new CookieOptions
-                {
-                    HttpOnly = true,
-                    Secure = true,
-                    SameSite = SameSiteMode.Strict
-                });
-
+                // Return the token in the response
                 return Ok(new { message = "Login successful.", token });
             }
             catch (Exception ex)
@@ -162,49 +160,47 @@ public async Task<IActionResult> Register([FromBody] RegisterUserViewModel model
             }
         }
 
+        [Authorize]
         [HttpGet("profile")]
         public async Task<IActionResult> GetProfile()
-{
-    var token = Request.Cookies["jwt"];
-    if (string.IsNullOrEmpty(token))
-        return Unauthorized(new { error = "Unauthorized access." });
-
-    var handler = new JwtSecurityTokenHandler();
-    var key = Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]);
-
-    try
-    {
-        var claims = handler.ValidateToken(token, new TokenValidationParameters
         {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidIssuer = _configuration["Jwt:Issuer"],
-            ValidAudience = _configuration["Jwt:Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(key)
-        }, out _);
+            try
+            {
+                // Get the UserID claim from the authenticated user
+                var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "UserID");
+                if (userIdClaim == null)
+                {
+                    _logger.LogWarning("UserID claim not found.");
+                    return Unauthorized(new { error = "Unauthorized access." });
+                }
 
-        var userId = int.Parse(claims.FindFirst("UserID")!.Value);
-        var user = await _context.Users.FindAsync(userId);
-        if (user == null)
-            return NotFound(new { error = "User not found." });
+                var userId = int.Parse(userIdClaim.Value);
 
-        return Ok(new { userId = user.UserId, email = user.Email });
-    }
-    catch
-    {
-        return Unauthorized(new { error = "Invalid token." });
-    }
-}
+                var user = await _context.Users.FindAsync(userId);
+                if (user == null)
+                {
+                    _logger.LogWarning("User not found for userId {UserId}.", userId);
+                    return NotFound(new { error = "User not found." });
+                }
 
+                return Ok(new { userId = user.UserId, email = user.Email });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while retrieving the user profile.");
+                return StatusCode(500, "Internal server error.");
+            }
+        }
 
         [HttpPost("logout")]
         public IActionResult Logout()
         {
-            Response.Cookies.Delete("jwt");
+            // Since we are not storing tokens server-side, the client can simply discard the token to log out
             return Ok(new { message = "Logged out successfully." });
         }
     }
 }
+
 
 
 
@@ -218,11 +214,11 @@ public class AccountController : Controller
 
     private readonly ItemDbContext _context;
 
-        public AccountController(ItemDbContext context)
-        {
-            _context = context;
-        }
-    
+    public AccountController(ItemDbContext context)
+    {
+        _context = context;
+    }
+
     /*Sets a variable to retrieve the users ID from the session, this is used in many methods*/
     private int? CurrentUserId => HttpContext.Session.GetInt32("UserID");
 
@@ -240,13 +236,13 @@ public class AccountController : Controller
     {
         return View();
     }
-    
+
     [HttpPost]
     public async Task<IActionResult> RegisterUser(RegisterUserViewModel model)
     {
         if (ModelState.IsValid)
         {
-                // Check if the email already exists
+            // Check if the email already exists
             if (await _context.Users.AnyAsync(u => u.Email == model.Email))
             {
                 ModelState.AddModelError("Email", "Email is already registered.");
@@ -277,7 +273,7 @@ public class AccountController : Controller
     }
 
     [HttpPost]
-        public async Task<IActionResult> Login(LoginViewModel model)
+    public async Task<IActionResult> Login(LoginViewModel model)
     {
         if (ModelState.IsValid)
         {

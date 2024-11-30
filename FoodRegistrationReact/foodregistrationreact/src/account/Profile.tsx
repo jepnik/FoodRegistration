@@ -1,89 +1,124 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import "../styles/profile.css";
-import API_URL from "../apiConfig";
+// src/account/Profile.tsx
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Alert, Button, Spinner } from 'react-bootstrap';
+import { getProfile, logoutUser } from '../api/apiService';
+import { useAuth } from '../components/AuthContext';
 
 interface UserProfile {
-  email: string;
   userId: number;
+  email: string;
 }
 
 const Profile: React.FC = () => {
-  const [profile, setProfile] = useState<UserProfile | null>(null);
   const navigate = useNavigate();
+  const { token, logout } = useAuth();
+  const [profile, setProfile] = useState<UserProfile | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchProfile = async () => {
+    const fetchProfileData = async () => {
+      // Check if the token exists
+      if (!token) {
+        setError('User is not authenticated. Please log in.');
+        setLoading(false);
+        return;
+      }
+
       try {
-        const response = await fetch(`${API_URL}/account/profile`, {
-          credentials: "include", // Ensures session cookies are sent
-        });
-        if (response.ok) {
-          const data = await response.json();
-          setProfile(data);
+        console.log('Fetching profile with token:', token); // Debugging statement
+        const data = await getProfile(token); // Pass the token
+        console.log('Profile data received:', data); // Debugging statement
+        setProfile(data);
+      } catch (err: any) {
+        console.error('Fetch error:', err);
+
+        if (
+          err.message === 'Unauthorized' ||
+          err.message === 'Invalid token.' ||
+          err.message === 'jwt expired' ||
+          err.message === 'User is not authenticated. Please log in.'
+        ) {
+          // Token might be invalid or expired
+          logout(); // Clear authentication state
+          navigate('/login'); // Redirect to login page
         } else {
-          navigate("/login"); // Redirect if unauthorized
+          setError(err.message || 'An error occurred while fetching the profile.');
         }
-      } catch (error) {
-        console.error("Failed to fetch profile:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
-    fetchProfile();
-  }, [navigate]);
+    fetchProfileData();
+  }, [token, logout, navigate]);
 
-  const handleDeleteAccount = async () => {
-    if (!window.confirm("Are you sure you want to delete this account? This action cannot be reversed.")) return;
-
+  const handleLogout = async () => {
     try {
-      const response = await fetch(`${API_URL}/account/delete`, {
-        method: "DELETE",
-        credentials: "include",
-      });
-      if (response.ok) {
-        alert("Account deleted successfully.");
-        navigate("/login");
-      } else {
-        console.error("Failed to delete account.");
+      if (token) {
+        await logoutUser(token); // Pass the token
       }
-    } catch (error) {
-      console.error("Error:", error);
+      logout();
+      navigate('/login');
+    } catch (err: any) {
+      setError(err.message || 'An error occurred during logout.');
     }
   };
 
-  if (!profile) return <p>Loading...</p>;
+  if (loading) {
+    return (
+      <div className="text-center" style={{ marginTop: '50px' }}>
+        <Spinner animation="border" />
+        <p>Loading profile...</p>
+      </div>
+    );
+  }
 
-  const domain = profile.email.split("@")[1];
-  const logo = domain === "anotherfoodcompany.com" ? "AlternativeUserLogo.png" : "UserLogo.png";
+  if (error) {
+    return (
+      <Alert variant="danger" className="text-center">
+        {error}
+      </Alert>
+    );
+  }
 
   return (
-    <div className="profile-container">
-      <div className="profile-form">
-        <h2>Profile: {profile.email}</h2>
-        <div className="form-group">
-          <p>
-            This application allows you to register, track, and manage food items along with their nutritional content. From here, you can:
-          </p>
-          <ul>
-            <li>
-              <strong>Change Password:</strong> Update your password to ensure your account remains secure.
-            </li>
-            <li>
-              <strong>Delete Account:</strong> Permanently remove your account and all associated data from the system.
-            </li>
-          </ul>
-        </div>
-        <div>
-          <button className="btn btn-success" onClick={() => navigate("/change-password")}>
-            Change Password
-          </button>
-          <button className="btn btn-danger mt-2 mb-5" onClick={handleDeleteAccount}>
-            Delete Account
-          </button>
-        </div>
-      </div>
-      <div className="profile-logo">
-        <img src={`${process.env.PUBLIC_URL}/images/${logo}`} alt="Logo" />
+    <div
+      className="d-flex justify-content-center align-items-center"
+      style={{ minHeight: '100vh', backgroundColor: '#f8f9fa' }}
+    >
+      <div className="card p-4 shadow" style={{ width: '400px' }}>
+        <h1 className="text-center mb-4">Profile</h1>
+        {profile && (
+          <>
+            <p>
+              <strong>Email:</strong> {profile.email}
+            </p>
+            <p>
+              <strong>User ID:</strong> {profile.userId}
+            </p>
+            <div className="d-flex flex-column">
+              <Button
+                className="mb-3"
+                variant="primary"
+                onClick={() => navigate('/change-password')}
+              >
+                Change Password
+              </Button>
+              <Button
+                className="mb-3"
+                variant="success"
+                onClick={() => navigate('/edit-profile')}
+              >
+                Edit Profile
+              </Button>
+              <Button variant="danger" onClick={handleLogout}>
+                Log Out
+              </Button>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

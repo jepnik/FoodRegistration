@@ -1,12 +1,14 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { Form, Button, Alert, Spinner } from "react-bootstrap";
-import { Item } from "../types/item";
-import API_URL from "../apiConfig";
+import React, { useState, useEffect } from 'react'; 
+import { useNavigate, useParams } from 'react-router-dom';
+import { Form, Button, Alert, Spinner } from 'react-bootstrap';
+import { Item } from '../types/item';
+import { getItemById, updateItem } from '../api/apiService';
+import { useAuth } from '../components/AuthContext';
 
 const UpdateItem: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const { token, logout } = useAuth(); // Include token
   const [formData, setFormData] = useState<Item | null>(null);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [submissionError, setSubmissionError] = useState<string | null>(null);
@@ -16,24 +18,36 @@ const UpdateItem: React.FC = () => {
   // Fetch the item details when the component mounts
   useEffect(() => {
     const fetchItem = async () => {
-      try {
-        const response = await fetch(`${API_URL}/api/items/${id}`);
-        if (!response.ok) {
-          throw new Error(`Failed to fetch item with ID ${id}.`);
-        }
+      if (!token) {
+        setSubmissionError('User is not authenticated. Please log in.');
+        setLoading(false);
+        return;
+      }
 
-        const data: Item = await response.json();
+      try {
+        const data: Item = await getItemById(Number(id), token); // Pass the token
         setFormData(data);
       } catch (error: any) {
-        setSubmissionError(`Failed to fetch the item: ${error.message}`);
-        console.error(error);
+        console.error('Fetch error:', error);
+        if (
+          error.message === 'Unauthorized' ||
+          error.message === 'Invalid token.' ||
+          error.message === 'jwt expired' ||
+          error.message === 'User is not authenticated. Please log in.'
+        ) {
+          // Token might be invalid or expired
+          logout(); // Clear authentication state
+          navigate('/login'); // Redirect to login page
+        } else {
+          setSubmissionError(`Failed to fetch the item: ${error.message}`);
+        }
       } finally {
         setLoading(false);
       }
     };
 
     fetchItem();
-  }, [id]);
+  }, [id, token, logout, navigate]);
 
   // Handle input changes
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -43,7 +57,7 @@ const UpdateItem: React.FC = () => {
       prev
         ? {
             ...prev,
-            [name]: type === "number" ? parseFloat(value) || undefined : value,
+            [name]: type === 'number' ? parseFloat(value) || undefined : value,
           }
         : null
     );
@@ -52,12 +66,12 @@ const UpdateItem: React.FC = () => {
   // Validate the form data
   const validateForm = () => {
     const newErrors: { [key: string]: string } = {};
-    if (!formData?.name) newErrors.name = "Name is required.";
-    if (!formData?.category) newErrors.category = "Category is required.";
+    if (!formData?.name) newErrors.name = 'Name is required.';
+    if (!formData?.category) newErrors.category = 'Category is required.';
     if (!formData?.countryOfOrigin)
-      newErrors.countryOfOrigin = "Country of origin is required.";
+      newErrors.countryOfOrigin = 'Country of origin is required.';
     if (!formData?.countryOfProvenance)
-      newErrors.countryOfProvenance = "Country of provenance is required.";
+      newErrors.countryOfProvenance = 'Country of provenance is required.';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -69,23 +83,31 @@ const UpdateItem: React.FC = () => {
 
     if (!validateForm() || !formData) return;
 
+    if (!token) {
+      setSubmissionError('User is not authenticated. Please log in.');
+      return;
+    }
+
     setIsSubmitting(true); // Start submission loading state
     try {
-      const response = await fetch(`${API_URL}/api/items/${id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
+      await updateItem(Number(id), formData, token); // Pass the token
 
-      if (!response.ok) {
-        throw new Error(`Failed to update item with ID ${id}.`);
-      }
-
-      alert("Item updated successfully!");
-      navigate("/");
+      alert('Item updated successfully!');
+      navigate('/'); // Redirect to home page
     } catch (error: any) {
-      setSubmissionError(`Failed to update the item: ${error.message}`);
-      console.error(error);
+      console.error('Update error:', error);
+      if (
+        error.message === 'Unauthorized' ||
+        error.message === 'Invalid token.' ||
+        error.message === 'jwt expired' ||
+        error.message === 'User is not authenticated. Please log in.'
+      ) {
+        // Token might be invalid or expired
+        logout(); // Clear authentication state
+        navigate('/login'); // Redirect to login page
+      } else {
+        setSubmissionError(`Failed to update the item: ${error.message}`);
+      }
     } finally {
       setIsSubmitting(false); // End submission loading state
     }
@@ -93,7 +115,7 @@ const UpdateItem: React.FC = () => {
 
   if (loading)
     return (
-      <div className="text-center" style={{ marginTop: "50px" }}>
+      <div className="text-center" style={{ marginTop: '50px' }}>
         <Spinner animation="border" />
         <p>Loading item details...</p>
       </div>
@@ -109,17 +131,18 @@ const UpdateItem: React.FC = () => {
   return (
     <div
       className="d-flex justify-content-center align-items-center"
-      style={{ minHeight: "100vh", backgroundColor: "#f8f9fa" }}
+      style={{ minHeight: '100vh', backgroundColor: '#f8f9fa' }}
     >
-      <div className="card p-4 shadow" style={{ width: "600px" }}>
+      <div className="card p-4 shadow" style={{ width: '600px' }}>
         <h1 className="text-center mb-4">Update Item</h1>
         <Form onSubmit={handleSubmit}>
+          {/* Name Field */}
           <Form.Group className="mb-3">
             <Form.Label>Name</Form.Label>
             <Form.Control
               type="text"
               name="name"
-              value={formData?.name || ""}
+              value={formData?.name || ''}
               onChange={handleChange}
               isInvalid={!!errors.name}
             />
@@ -128,12 +151,13 @@ const UpdateItem: React.FC = () => {
             </Form.Control.Feedback>
           </Form.Group>
 
+          {/* Category Field */}
           <Form.Group className="mb-3">
             <Form.Label>Category</Form.Label>
             <Form.Control
               type="text"
               name="category"
-              value={formData?.category || ""}
+              value={formData?.category || ''}
               onChange={handleChange}
               isInvalid={!!errors.category}
             />
@@ -142,56 +166,60 @@ const UpdateItem: React.FC = () => {
             </Form.Control.Feedback>
           </Form.Group>
 
+          {/* Certificate Field */}
           <Form.Group className="mb-3">
             <Form.Label>Certificate</Form.Label>
             <Form.Control
               type="text"
               name="certificate"
-              value={formData?.certificate || ""}
+              value={formData?.certificate || ''}
               onChange={handleChange}
             />
           </Form.Group>
 
+          {/* Image URL Field */}
           <Form.Group className="mb-3">
             <Form.Label>Image URL</Form.Label>
             <Form.Control
               type="text"
               name="imageUrl"
-              value={formData?.imageUrl || ""}
+              value={formData?.imageUrl || ''}
               onChange={handleChange}
             />
           </Form.Group>
 
+          {/* Nutritional Fields */}
           {[
-            "energy",
-            "carbohydrates",
-            "sugar",
-            "protein",
-            "fat",
-            "saturatedfat",
-            "unsaturatedfat",
-            "fibre",
-            "salt",
+            'energy',
+            'carbohydrates',
+            'sugar',
+            'protein',
+            'fat',
+            'saturatedfat',
+            'unsaturatedfat',
+            'fibre',
+            'salt',
           ].map((field) => (
             <Form.Group className="mb-3" key={field}>
               <Form.Label>
                 {field.charAt(0).toUpperCase() + field.slice(1)}
               </Form.Label>
               <Form.Control
-                type="number"
+                type="text"
                 name={field}
-                value={formData?.[field as keyof Item] || ""}
+                value={formData ? (formData[field as keyof Item] ?? '') : ''}
                 onChange={handleChange}
               />
             </Form.Group>
           ))}
 
+          {/* Country of Origin Field */}
           <Form.Group className="mb-3">
             <Form.Label>Country of Origin</Form.Label>
             <Form.Control
               type="text"
               name="countryOfOrigin"
-              value={formData?.countryOfOrigin || ""}
+              value={formData?.countryOfOrigin || ''}
               onChange={handleChange}
               isInvalid={!!errors.countryOfOrigin}
             />
@@ -200,12 +228,13 @@ const UpdateItem: React.FC = () => {
             </Form.Control.Feedback>
           </Form.Group>
 
+          {/* Country of Provenance Field */}
           <Form.Group className="mb-3">
             <Form.Label>Country of Provenance</Form.Label>
             <Form.Control
               type="text"
               name="countryOfProvenance"
-              value={formData?.countryOfProvenance || ""}
+              value={formData?.countryOfProvenance || ''}
               onChange={handleChange}
               isInvalid={!!errors.countryOfProvenance}
             />
@@ -214,15 +243,12 @@ const UpdateItem: React.FC = () => {
             </Form.Control.Feedback>
           </Form.Group>
 
+          {/* Submit and Cancel Buttons */}
           <div className="d-flex justify-content-between">
-            <Button
-              variant="success" /* Use Bootstrap's success variant */
-              type="submit"
-              disabled={isSubmitting}
-            >
-              {isSubmitting ? "Updating..." : "Update Item"}
+            <Button variant="success" type="submit" disabled={isSubmitting}>
+              {isSubmitting ? 'Updating...' : 'Update Item'}
             </Button>
-            <Button variant="secondary" onClick={() => navigate("/")}>
+            <Button variant="secondary" onClick={() => navigate('/')}>
               Cancel
             </Button>
           </div>

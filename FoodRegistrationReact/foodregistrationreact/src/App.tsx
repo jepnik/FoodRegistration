@@ -1,8 +1,13 @@
 import React, { useEffect } from 'react';
-import { BrowserRouter as Router, Route, Routes, useLocation, useNavigate, Navigate } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+  useLocation,
+} from 'react-router-dom';
 import { AuthProvider, useAuth } from './components/AuthContext';
 import Layout from './shared/Layout';
-import PrivateRoute from './components/PrivateRoute';
 import HomePage from './home/HomePage';
 import CreateItem from './pages/CreateItem';
 import UpdateItem from './pages/UpdateItem';
@@ -12,68 +17,46 @@ import Profile from './account/Profile';
 import ChangePassword from './account/ChangePassword';
 import './App.css';
 
-const PathListener: React.FC = () => {
+const App: React.FC = () => (
+  <AuthProvider>
+    <Router>
+      <AppRoutes />
+    </Router>
+  </AuthProvider>
+);
+
+const AppRoutes: React.FC = () => {
+  const { isAuthenticated } = useAuth();
   const location = useLocation();
 
+  // Store the current path in session storage
   useEffect(() => {
     sessionStorage.setItem('currentPath', location.pathname);
   }, [location]);
 
-  return null;
-};
-
-const AppContent: React.FC = () => {
-  const { isAuthenticated } = useAuth();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (isAuthenticated) {
-      const redirectPath = sessionStorage.getItem('redirectPath');
-      if (redirectPath && redirectPath !== '/login') {
-        navigate(redirectPath);
-        sessionStorage.removeItem('redirectPath'); // Clear the stored path after navigation
-      }
-    } else {
-      navigate('/login');
-    }
-  }, [isAuthenticated, navigate]);
-
   return (
-    <>
-      <PathListener />
-      <Routes>
-        {/* Public routes */}
-        <Route path="/login" element={<Login />} />
-        <Route path="/register-user" element={<RegisterUser />} />
+    <Routes>
+      {/* Public routes */}
+      <Route path="/login" element={<Login />} />
+      <Route path="/register-user" element={<RegisterUser />} />
 
-        {/* Protected routes */}
-        <Route
-          element={
-            <Layout>
-              <PrivateRoute />
-            </Layout>
-          }
-        >
+      {/* Protected routes */}
+      {isAuthenticated ? (
+        <Route element={<Layout />}>
           <Route path="/" element={<HomePage />} />
           <Route path="/create" element={<CreateItem />} />
           <Route path="/update/:id" element={<UpdateItem />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/change-password" element={<ChangePassword />} />
+          {/* Redirect unknown routes to home */}
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
-
-        {/* Redirect unknown routes to login */}
-        <Route path="*" element={<Navigate to="/login" />} />
-      </Routes>
-    </>
+      ) : (
+        // Redirect unauthenticated users to login
+        <Route path="*" element={<Navigate to="/login" replace />} />
+      )}
+    </Routes>
   );
 };
-
-const App: React.FC = () => (
-  <AuthProvider>
-    <Router>
-      <AppContent />
-    </Router>
-  </AuthProvider>
-);
 
 export default App;
