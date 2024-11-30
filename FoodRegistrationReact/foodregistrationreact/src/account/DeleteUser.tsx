@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Alert, Spinner, Button, Form, Container, Row, Col, Card } from 'react-bootstrap';
+import { Alert, Spinner, Button, Form, Container, Row, Col, Card, Modal } from 'react-bootstrap';
 import { deleteUser } from '../api/apiService';
 import { useAuth } from '../components/AuthContext';
 import '../styles/deleteUser.css';
@@ -16,8 +16,15 @@ const DeleteUser: React.FC = () => {
   const navigate = useNavigate();
   const { token, logout } = useAuth();
 
-  const handleDelete = async (e: React.FormEvent) => {
+  const [showModal, setShowModal] = useState<boolean>(false);
+
+  const handleDelete = (e: React.FormEvent) => {
     e.preventDefault();
+    setShowModal(true);
+  };
+
+  const confirmDelete = async () => {
+    setShowModal(false);
     setErrors([]);
     setSuccessMessage(null);
 
@@ -42,8 +49,12 @@ const DeleteUser: React.FC = () => {
         logout(); // Clear auth context and tokens
         navigate('/register'); // Redirect to registration or home page
       }, 2000); // Redirect after 2 seconds
-    } catch (error: any) {
-      setErrors([error.message || 'Failed to delete account.']);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        setErrors([error.message || 'Failed to delete account.']);
+      } else {
+        setErrors(['An unexpected error occurred.']);
+      }
     } finally {
       setLoading(false);
     }
@@ -109,7 +120,7 @@ const DeleteUser: React.FC = () => {
                         Deleting...
                       </>
                     ) : (
-                      'Delete '
+                      'Delete'
                     )}
                   </Button>
                   <Button variant="secondary" onClick={handleCancel} className="flex-grow-1 ms-2">
@@ -121,6 +132,38 @@ const DeleteUser: React.FC = () => {
           </Card>
         </Col>
       </Row>
+
+      {/* Confirmation Modal */}
+      <Modal show={showModal} onHide={() => setShowModal(false)} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Confirm Account Deletion</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>Are you sure you want to delete your account? This action is irreversible.</p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowModal(false)}>
+            Cancel
+          </Button>
+          <Button variant="danger" onClick={confirmDelete} disabled={loading}>
+            {loading ? (
+              <>
+                <Spinner
+                  as="span"
+                  animation="border"
+                  size="sm"
+                  role="status"
+                  aria-hidden="true"
+                  className="me-2"
+                />
+                Deleting...
+              </>
+            ) : (
+              'Delete Account'
+            )}
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </Container>
   );
 };
