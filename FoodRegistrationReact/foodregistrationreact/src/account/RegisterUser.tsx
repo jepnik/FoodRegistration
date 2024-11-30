@@ -23,28 +23,41 @@ const RegisterUser: React.FC = () => {
     e.preventDefault();
     setError('');
     setSuccess('');
-
-    // Client-side validation
+  
     if (password !== confirmPassword) {
       setError('Passwords do not match');
       return;
     }
-
+  
     try {
       setLoading(true);
-      // Use the registerUser function from apiService
-      const response = await registerUser(email, password); // Exclude confirmPassword
-
-      setSuccess('Registration successful. Redirecting to login page...');
+      const response = await registerUser(email, password, confirmPassword);
+      console.log(response); // Log the server response
+  
+      // Use the response if needed, for example, display a message from the response
+      if (response.message) {
+        setSuccess(response.message);
+      } else {
+        setSuccess('Registration successful. Redirecting to login page...');
+      }
+  
       setTimeout(() => {
         navigate('/login');
-      }, 2000); // Redirect after 2 seconds
+      }, 2000);
     } catch (err: any) {
-      setError(err.message || 'Registration failed');
+      console.error(err); // Log the error
+  
+      // Handle 409 Conflict error
+      if (err.message.includes('Email is already registered')) {
+        setError('This email is already registered. Please use a different email.');
+      } else {
+        setError(err.message || 'Registration failed');
+      }
     } finally {
       setLoading(false);
     }
   };
+  
 
   const handleCancel = () => {
     navigate('/login');
