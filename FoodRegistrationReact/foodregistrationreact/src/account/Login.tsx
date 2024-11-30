@@ -72,11 +72,11 @@ const Login: React.FC = () => {
             placeholder="Enter your password"
           />
         </div>
-        <button type="submit" className="buttons-button">
+        <button type="submit" className="btn btn-success mt-4 mb-2 buttons-button">
           Login
         </button>
       </form>
-      <a href="/register-user" className="btn-primary">
+      <a href="/register-user" className="btn btn-primary mt-2 buttons-button">
         Register User
       </a>
     </div>

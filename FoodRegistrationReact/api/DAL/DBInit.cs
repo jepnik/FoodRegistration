@@ -49,7 +49,7 @@ public static class DBInit
                 }, 
                  new Item {
 
-                     Name = "Potato",
+                    Name = "Potato",
                     Category = "Fruit",
                     Certificate = "Organic",
                     ImageUrl = "/images/potet.jpg",
