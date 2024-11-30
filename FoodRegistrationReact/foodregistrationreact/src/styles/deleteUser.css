@@ -1,23 +1,52 @@
 /* File: src/styles/deleteUser.css */
 
-.delete-user-component {
-    /* Add your desired styles here */
+/* Style the delete-user-card for better appearance */
+.delete-user-card {
+    border: none;
+    border-radius: 15px;
+    background-color: #ffffff; /* White background */
   }
   
-  .delete-user-component form {
-    display: flex;
-    flex-direction: column;
+  /* Style the form labels for better readability */
+  .form-label {
+    font-weight: 600;
   }
   
-  .delete-user-component label {
-    margin-bottom: 0.5rem;
+  /* Style the password strength meter labels */
+  .form-text {
+    font-size: 0.9rem;
   }
   
-  .delete-user-component input[type="password"] {
-    padding: 0.5rem;
-    margin-bottom: 1rem;
+  /* Customize the spinner within buttons */
+  button.btn .spinner-border {
+    margin-right: 0.5rem;
   }
   
-  .delete-user-component .mt-3 {
-    margin-top: 1rem;
-}
+  /* Enhance the delete-user-form container */
+  .delete-user-form {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 2rem;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Ensure the password strength meter has consistent spacing */
+  .password-strength-meter {
+    margin-top: 0.5rem;
+  }
+  
+  /* Hover effects for buttons */
+  button.btn:hover {
+    opacity: 0.9;
+    transition: opacity 0.3s ease;
+  }
+  
+  /* Responsive adjustments for smaller screens */
+  @media (max-width: 576px) {
+    .delete-user-card {
+      padding: 1.5rem;
+    }
+  }
+  

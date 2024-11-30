@@ -119,6 +119,13 @@ const Profile: React.FC = () => {
               >
                 Change Password
               </Button>
+              <Button 
+              className="mb-3"
+              variant="secondary" onClick={handleLogout}
+              style={{ color: 'white', fontSize: '1rem' }}>
+
+                Log Out
+              </Button>
               {/* Replace "Edit Profile" button with "Delete Account" button */}
               <Button
                 className="mb-3"
@@ -127,9 +134,7 @@ const Profile: React.FC = () => {
               >
                 Delete Account
               </Button>
-              <Button variant="secondary" onClick={handleLogout}>
-                Log Out
-              </Button>
+              
             </div>
           </>
         )}

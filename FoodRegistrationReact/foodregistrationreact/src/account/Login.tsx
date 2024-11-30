@@ -3,6 +3,7 @@ import API_URL from "../apiConfig";
 import { useAuth } from "../components/AuthContext";
 import "../styles/login.css"; // Ensure your CSS includes styles for login-container, form-group, etc.
 import { useNavigate } from "react-router-dom";
+import Footer from "../shared/Footer";
 
 const Login: React.FC = () => {
   const { login } = useAuth();
@@ -79,7 +80,10 @@ const Login: React.FC = () => {
       <a href="/register-user" className="btn btn-primary mt-2 buttons-button">
         Register User
       </a>
+
+      <Footer />
     </div>
+    
   );
 };
 
