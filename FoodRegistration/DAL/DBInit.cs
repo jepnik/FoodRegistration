@@ -83,7 +83,7 @@ public static class DBInit
                     Protein = 22,
                     Fat = 17,
                     Saturatedfat = 7,
-                    Unsaturatedfat = 17,
+                    Unsaturatedfat = 10,
                     Fibre = 0,
                     Salt = 0,
 
