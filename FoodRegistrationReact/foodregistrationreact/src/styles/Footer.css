@@ -1,11 +1,12 @@
+/* Footer styles */
 .footer {
-  background-color: #83B271 !important; 
-  color: #ffffff; 
+  background-color: #83B271;
+  color: #ffff; 
   width: 100%;
+  padding: 20px;
   text-align: center;
   margin-top: 20px;
-  position: relative; 
+  position: absolute; 
   bottom: 0px;
   z-index: 100;
 }
-
