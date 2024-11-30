@@ -71,7 +71,7 @@ public static class DBInit
                 },
                 new Item
                 {
-                    Name = "Biff",
+                    Name = "Beef",
                     Category = "Meat",
                     Certificate = "Fair Trade",
                     ImageUrl = "/images/biff.jpg",
