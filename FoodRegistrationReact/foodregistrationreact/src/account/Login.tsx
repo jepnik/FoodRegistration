@@ -4,6 +4,7 @@ import { useAuth } from "../components/AuthContext";
 import "../styles/login.css"; // Ensure your CSS includes styles for login-container, form-group, etc.
 import { useNavigate } from "react-router-dom";
 import Footer from "../shared/Footer";
+import '../styles/Footer.css';
 
 const Login: React.FC = () => {
   const { login } = useAuth();
@@ -81,7 +82,7 @@ const Login: React.FC = () => {
         Register User
       </a>
 
-      <Footer />
+      <Footer/>
     </div>
     
   );
