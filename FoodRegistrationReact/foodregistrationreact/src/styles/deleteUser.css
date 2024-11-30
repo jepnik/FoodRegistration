@@ -1,0 +1,23 @@
+/* File: src/styles/deleteUser.css */
+
+.delete-user-component {
+    /* Add your desired styles here */
+  }
+  
+  .delete-user-component form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .delete-user-component label {
+    margin-bottom: 0.5rem;
+  }
+  
+  .delete-user-component input[type="password"] {
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .delete-user-component .mt-3 {
+    margin-top: 1rem;
+}

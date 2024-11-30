@@ -1,7 +1,7 @@
 // File: src/api/apiService.ts
 
-import API_URL from '../apiConfig';
-import { Item } from '../types/item';
+import API_URL from "../apiConfig";
+import { Item } from "../types/item";
 
 // Generalized fetch function that accepts a token parameter
 const fetchApi = async (
@@ -12,7 +12,7 @@ const fetchApi = async (
   try {
     // Merge headers, including the Authorization header if the token exists
     const headers = {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
       ...(options.headers || {}),
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
     };
@@ -24,8 +24,8 @@ const fetchApi = async (
 
     // Check if the response has a JSON body and parse it
     const isJsonResponse = response.headers
-      .get('Content-Type')
-      ?.includes('application/json');
+      .get("Content-Type")
+      ?.includes("application/json");
     const responseData = isJsonResponse ? await response.json() : null;
 
     if (!response.ok) {
@@ -48,21 +48,25 @@ const fetchApi = async (
 
 // Log in user
 export const loginUser = (email: string, password: string) =>
-  fetchApi('/api/account/login', {
-    method: 'POST',
+  fetchApi("/api/account/login", {
+    method: "POST",
     body: JSON.stringify({ email, password }),
   });
 
 // Log out user
 export const logoutUser = (token: string) =>
-  fetchApi('/api/account/logout', {
-    method: 'POST',
-  }, token);
+  fetchApi(
+    "/api/account/logout",
+    {
+      method: "POST",
+    },
+    token
+  );
 
 // Register user
 export const registerUser = (email: string, password: string) =>
-  fetchApi('/api/account/register', {
-    method: 'POST',
+  fetchApi("/api/account/register", {
+    method: "POST",
     body: JSON.stringify({ email, password }),
   });
 
@@ -70,7 +74,7 @@ export const registerUser = (email: string, password: string) =>
 
 // Get profile
 export const getProfile = (token: string) =>
-  fetchApi('/api/account/profile', {}, token);
+  fetchApi("/api/account/profile", {}, token);
 
 // Change Password API
 
@@ -81,9 +85,9 @@ export const changePassword = (
   token: string
 ) =>
   fetchApi(
-    '/api/account/change-password',
+    "/api/account/change-password",
     {
-      method: 'POST',
+      method: "POST",
       body: JSON.stringify({
         OldPassword: oldPassword,
         NewPassword: newPassword,
@@ -91,13 +95,28 @@ export const changePassword = (
     },
     token
   );
-
+// Delete User API
+export const deleteUser = (
+  password: string,
+  confirmDeletion: boolean,
+  token: string
+) =>
+  fetchApi(
+    "/api/account/delete-user",
+    {
+      method: "POST",
+      body: JSON.stringify({
+        Password: password,
+        ConfirmDeletion: confirmDeletion,
+      }),
+    },
+    token
+  );
 
 // Items API
 
 // Get items
-export const getItems = (token: string) =>
-  fetchApi('/api/items', {}, token);
+export const getItems = (token: string) => fetchApi("/api/items", {}, token);
 
 // Get item by ID
 export const getItemById = (id: number, token: string) =>
@@ -105,22 +124,34 @@ export const getItemById = (id: number, token: string) =>
 
 // Delete item
 export const deleteItem = (id: number, token: string) =>
-  fetchApi(`/api/items/${id}`, {
-    method: 'DELETE',
-  }, token);
+  fetchApi(
+    `/api/items/${id}`,
+    {
+      method: "DELETE",
+    },
+    token
+  );
 
 // Create item
 export const createItem = (item: Item, token: string) =>
-  fetchApi('/api/items', {
-    method: 'POST',
-    body: JSON.stringify(item),
-  }, token);
+  fetchApi(
+    "/api/items",
+    {
+      method: "POST",
+      body: JSON.stringify(item),
+    },
+    token
+  );
 
 // Update item
 export const updateItem = (id: number, item: Item, token: string) =>
-  fetchApi(`/api/items/${id}`, {
-    method: 'PUT',
-    body: JSON.stringify(item),
-  }, token);
+  fetchApi(
+    `/api/items/${id}`,
+    {
+      method: "PUT",
+      body: JSON.stringify(item),
+    },
+    token
+  );
 
 // Other API functions can be added similarly...
