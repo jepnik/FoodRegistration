@@ -214,7 +214,7 @@ const CreateItem: React.FC = () => {
               type="submit"
               disabled={isSubmitting}
               className="create-button"
-              style={{ width: '100px', height: '40px' }}
+              style={{ width: '130px', height: '40px' }}
             >
               {isSubmitting ? (
                 <Spinner as="span" animation="border" size="sm" />
@@ -225,7 +225,7 @@ const CreateItem: React.FC = () => {
             <Button
               variant="secondary"
               onClick={() => navigate('/')}
-              style={{ width: '100px', height: '40px' }}
+              style={{ width: '130px', height: '40px' }}
             >
               Cancel
             </Button>

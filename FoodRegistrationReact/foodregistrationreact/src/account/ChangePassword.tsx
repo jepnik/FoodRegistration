@@ -1,70 +1,46 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Alert, Spinner } from "react-bootstrap";
+import { Alert, Spinner, Button } from "react-bootstrap";
+import { changePassword } from "../api/apiService";
+import { useAuth } from "../components/AuthContext";
 import "../styles/registerAndPassword.css";
-import API_URL from "../apiConfig";
-
-interface ChangePasswordForm {
-  oldPassword: string;
-  newPassword: string;
-  confirmNewPassword: string;
-}
 
 const ChangePassword: React.FC = () => {
-  const [form, setForm] = useState<ChangePasswordForm>({
-    oldPassword: "",
-    newPassword: "",
-    confirmNewPassword: "",
-  });
+  const [oldPassword, setOldPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmNewPassword, setConfirmNewPassword] = useState("");
   const [errors, setErrors] = useState<string[]>([]);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
-  };
+  const { token } = useAuth(); // Access to token
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrors([]);
     setSuccessMessage(null);
 
-    if (form.newPassword !== form.confirmNewPassword) {
-      setErrors(["New passwords do not match."]);
+    // Client-side validation
+    if (newPassword !== confirmNewPassword) {
+      setErrors(['New passwords do not match.']);
       return;
     }
 
-    // Add basic password validation
-    if (form.newPassword.length < 8) {
-      setErrors(["Password must be at least 8 characters long."]);
+    if (newPassword.length < 6) {
+      setErrors(['New password must be at least 6 characters long.']);
       return;
     }
 
     try {
       setLoading(true);
-      const response = await fetch(`${API_URL}/account/change-password`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({
-          oldPassword: form.oldPassword,
-          newPassword: form.newPassword,
-        }),
-      });
-
-      if (response.ok) {
-        setSuccessMessage("Password changed successfully.");
-        setForm({ oldPassword: "", newPassword: "", confirmNewPassword: "" });
-        setTimeout(() => navigate("/profile"), 2000); // Redirect after 2 seconds
-      } else {
-        const data = await response.json();
-        setErrors([data.error || "Failed to change password."]);
-      }
-    } catch (error) {
-      setErrors(["An unexpected error occurred. Please try again."]);
-      console.error("Error:", error);
+      const data = await changePassword(oldPassword, newPassword, token!);
+      setSuccessMessage(data.message || 'Password changed successfully.');
+      setOldPassword('');
+      setNewPassword('');
+      setConfirmNewPassword('');
+      setTimeout(() => navigate('/profile'), 2000); // Redirect after 2 seconds
+    } catch (error: any) {
+      setErrors([error.message || 'Failed to change password.']);
     } finally {
       setLoading(false);
     }
@@ -91,8 +67,8 @@ const ChangePassword: React.FC = () => {
             id="oldPassword"
             name="oldPassword"
             type="password"
-            value={form.oldPassword}
-            onChange={handleChange}
+            value={oldPassword}
+            onChange={(e) => setOldPassword(e.target.value)}
             required
           />
         </div>
@@ -103,8 +79,8 @@ const ChangePassword: React.FC = () => {
             id="newPassword"
             name="newPassword"
             type="password"
-            value={form.newPassword}
-            onChange={handleChange}
+            value={newPassword}
+            onChange={(e) => setNewPassword(e.target.value)}
             required
           />
         </div>
@@ -115,27 +91,19 @@ const ChangePassword: React.FC = () => {
             id="confirmNewPassword"
             name="confirmNewPassword"
             type="password"
-            value={form.confirmNewPassword}
-            onChange={handleChange}
+            value={confirmNewPassword}
+            onChange={(e) => setConfirmNewPassword(e.target.value)}
             required
           />
         </div>
 
         <div className="d-flex justify-content-between mt-3">
-          <button
-            type="submit"
-            className="btn btn-primary"
-            disabled={loading}
-          >
-            {loading ? <Spinner animation="border" size="sm" /> : "Submit"}
-          </button>
-          <button
-            type="button"
-            className="btn btn-danger"
-            onClick={() => navigate("/profile")}
-          >
+          <Button type="submit" variant="primary" disabled={loading}>
+            {loading ? <Spinner animation="border" size="sm" /> : 'Submit'}
+          </Button>
+          <Button type="button" variant="secondary" onClick={() => navigate('/profile')}>
             Cancel
-          </button>
+          </Button>
         </div>
       </form>
     </div>
