@@ -191,6 +191,67 @@ namespace FoodRegistration.Controllers
                 return StatusCode(500, "Internal server error.");
             }
         }
+         [Authorize]
+        [HttpPost("change-password")]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequest request)
+        {
+            // Validate request payload
+            if (request == null || string.IsNullOrEmpty(request.OldPassword) || string.IsNullOrEmpty(request.NewPassword))
+            {
+                _logger.LogError("Invalid ChangePasswordRequest payload.");
+                return BadRequest(new { error = "OldPassword and NewPassword are required." });
+            }
+
+            // Enforce password policies (e.g., minimum length)
+            if (request.NewPassword.Length < 6)
+            {
+                _logger.LogWarning("New password does not meet minimum length requirements.");
+                return BadRequest(new { error = "New password must be at least 6 characters long." });
+            }
+
+            // Retrieve user ID from JWT claims
+            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "UserID");
+            if (userIdClaim == null)
+            {
+                _logger.LogWarning("UserID claim not found.");
+                return Unauthorized(new { error = "Unauthorized access." });
+            }
+
+            if (!int.TryParse(userIdClaim.Value, out int userId))
+            {
+                _logger.LogWarning("Invalid UserID claim value: {UserID}", userIdClaim.Value);
+                return Unauthorized(new { error = "Unauthorized access." });
+            }
+
+            // Fetch user from the database
+            var user = await _context.Users.FindAsync(userId);
+            if (user == null)
+            {
+                _logger.LogWarning("User not found for userId {UserId}.", userId);
+                return NotFound(new { error = "User not found." });
+            }
+
+            // Verify the old password
+            var hashedOldPassword = HashPassword(request.OldPassword);
+            if (user.Password != hashedOldPassword)
+            {
+                _logger.LogWarning("Incorrect old password for userId {UserId}.", userId);
+                return Unauthorized(new { error = "Current password is incorrect." });
+            }
+
+            // Hash the new password
+            var hashedNewPassword = HashPassword(request.NewPassword);
+
+            // Update the user's password
+            user.Password = hashedNewPassword;
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync();
+
+            _logger.LogInformation("Password changed successfully for userId {UserId}.", userId);
+
+            return Ok(new { message = "Password changed successfully." });
+        }
+        
 
         [HttpPost("logout")]
         public IActionResult Logout()
@@ -198,12 +259,9 @@ namespace FoodRegistration.Controllers
             // Since we are not storing tokens server-side, the client can simply discard the token to log out
             return Ok(new { message = "Logged out successfully." });
         }
+        
     }
 }
-
-
-
-
 
 // --------------------MVC controller----------------------------
 

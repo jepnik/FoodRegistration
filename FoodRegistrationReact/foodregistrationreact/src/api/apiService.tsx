@@ -1,3 +1,5 @@
+// File: src/api/apiService.ts
+
 import API_URL from '../apiConfig';
 import { Item } from '../types/item';
 
@@ -42,7 +44,56 @@ const fetchApi = async (
   }
 };
 
-// Exported API functions that accept the token as a parameter
+// Authentication APIs
+
+// Log in user
+export const loginUser = (email: string, password: string) =>
+  fetchApi('/api/account/login', {
+    method: 'POST',
+    body: JSON.stringify({ email, password }),
+  });
+
+// Log out user
+export const logoutUser = (token: string) =>
+  fetchApi('/api/account/logout', {
+    method: 'POST',
+  }, token);
+
+// Register user
+export const registerUser = (email: string, password: string) =>
+  fetchApi('/api/account/register', {
+    method: 'POST',
+    body: JSON.stringify({ email, password }),
+  });
+
+// Profile API
+
+// Get profile
+export const getProfile = (token: string) =>
+  fetchApi('/api/account/profile', {}, token);
+
+// Change Password API
+
+// Change Password API
+export const changePassword = (
+  oldPassword: string,
+  newPassword: string,
+  token: string
+) =>
+  fetchApi(
+    '/api/account/change-password',
+    {
+      method: 'POST',
+      body: JSON.stringify({
+        OldPassword: oldPassword,
+        NewPassword: newPassword,
+      }),
+    },
+    token
+  );
+
+
+// Items API
 
 // Get items
 export const getItems = (token: string) =>
@@ -71,33 +122,5 @@ export const updateItem = (id: number, item: Item, token: string) =>
     method: 'PUT',
     body: JSON.stringify(item),
   }, token);
-
-// Authentication APIs
-
-// Log in user
-export const loginUser = (email: string, password: string) =>
-  fetchApi('/api/account/login', {
-    method: 'POST',
-    body: JSON.stringify({ email, password }),
-  });
-
-// Log out user
-export const logoutUser = (token: string) =>
-  fetchApi('/api/account/logout', {
-    method: 'POST',
-  }, token);
-
-// Register user
-export const registerUser = (email: string, password: string) =>
-  fetchApi('/api/account/register', {
-    method: 'POST',
-    body: JSON.stringify({ email, password }),
-  });
-
-// Profile API
-
-// Get profile
-export const getProfile = (token: string) =>
-  fetchApi('/api/account/profile', {}, token);
 
 // Other API functions can be added similarly...
