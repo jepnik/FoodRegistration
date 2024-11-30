@@ -68,8 +68,33 @@ public static class DBInit
                     CountryOfProvenance = "Ecuador",
                     CreatedDate = DateTime.Now,
                     UpdatedDate = DateTime.Now
+                },
+                 new Item
+                {
+                    Name = "Beef",
+                    Category = "Meat",
+                    Certificate = "Best trade",
+                    ImageUrl = "/images/beef.jpg",
+                    
+                    // Ernæringsfakta
+                    Energy = 129,
+                    Carbohydrates = 23,
+                    Sugar = 0,
+                    Protein = 22,
+                    Fat = 17,
+                    Saturatedfat = 7,
+                    Unsaturatedfat = 17,
+                    Fibre = 0,
+                    Salt = 0,
+
+                    // Produktinfo
+                    CountryOfOrigin = "Ecuador",
+                    CountryOfProvenance = "Ecuador",
+                    CreatedDate = DateTime.Now,
+                    UpdatedDate = DateTime.Now
                 }
             };
+            
 
             // Add the items to the Items table
             context.AddRange(items);
