@@ -96,7 +96,6 @@ public static class DBInit
                     CountryOfProvenance = "Ecuador",
                     CreatedDate = DateTime.Now,
                     UpdatedDate = DateTime.Now
-                   
                 }
             };
 
