@@ -17,7 +17,7 @@ public static class DBInit
 
         // Decide whether to keep or remove the following code for seeding initial items in the database.
         // This part is optional and only necessary if you want specific items to appear when the app starts.
-         if (!context.Items.Any())   // Sjekker om det allerede er data
+        if (!context.Items.Any())   // Sjekker om det allerede er data
         {
             var items = new List<Item>
             {
@@ -44,11 +44,9 @@ public static class DBInit
                     CountryOfProvenance = "Norway", // Opphavsland
                     CreatedDate = DateTime.Now,
                     UpdatedDate = DateTime.Now
-                    
-                   
-                }, 
-                 new Item {
-
+                },
+                 new Item
+                 {
                     Name = "Potato",
                     Category = "Fruit",
                     Certificate = "Organic",
@@ -70,8 +68,6 @@ public static class DBInit
                     CountryOfProvenance = "Norway", // Opphavsland
                     CreatedDate = DateTime.Now,
                     UpdatedDate = DateTime.Now
-                    
-                   
                 },
                 new Item
                 {
@@ -100,9 +96,9 @@ public static class DBInit
             };
 
             // Add the items to the Items table
-            context.AddRange(items);   
+            context.AddRange(items);
             context.SaveChanges();
-        } 
+        }
 
         //Check if any user data exist; if not, add a default user for testing
         if (!context.Users.Any())
@@ -111,7 +107,6 @@ public static class DBInit
             {
                 new User { Email = "test@foodcompany.com", Password = HashPassword("password")},
                 new User { Email = "test@anotherfoodcompany.com", Password = HashPassword("password")},
-
             };
             context.AddRange(users);
             context.SaveChanges();
