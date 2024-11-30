@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Alert, Button, Spinner } from 'react-bootstrap';
 import { getProfile, logoutUser } from '../api/apiService';
 import { useAuth } from '../components/AuthContext';
+import '../styles/site.css';
 
 interface UserProfile {
   userId: number;
@@ -103,13 +104,15 @@ const Profile: React.FC = () => {
                 className="mb-3"
                 variant="primary"
                 onClick={() => navigate('/change-password')}
+                style={{ color: 'white', fontSize: '1rem' }}
               >
-                Change Password
+              Change Password
               </Button>
               <Button
                 className="mb-3"
                 variant="success"
                 onClick={() => navigate('/edit-profile')}
+                style={{ color: 'white', fontSize: '1rem' }}
               >
                 Edit Profile
               </Button>
