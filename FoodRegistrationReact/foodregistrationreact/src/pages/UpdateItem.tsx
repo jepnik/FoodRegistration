@@ -245,7 +245,7 @@ const UpdateItem: React.FC = () => {
 
           {/* Submit and Cancel Buttons */}
           <div className="d-flex justify-content-between">
-            <Button variant="success" type="submit" disabled={isSubmitting}>
+            <Button variant="primary" type="submit" disabled={isSubmitting}>
               {isSubmitting ? 'Updating...' : 'Update Item'}
             </Button>
             <Button variant="secondary" onClick={() => navigate('/')}>
