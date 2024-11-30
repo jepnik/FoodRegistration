@@ -6,6 +6,8 @@ import { Form, Button, Alert, Spinner, Container, Row, Col } from 'react-bootstr
 import PasswordStrengthMeter from '../components/passwordStrengthMeter'; // Ensure correct casing
 import { registerUser } from '../api/apiService'; // Import the function
 import '../styles/registerAndPassword.css';
+import Footer from "../shared/Footer";
+import '../styles/Footer.css';
 
 const RegisterUser: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -49,6 +51,7 @@ const RegisterUser: React.FC = () => {
   };
 
   return (
+    <>
     <Container className="d-flex justify-content-center align-items-center min-vh-100">
       <Row className="w-100">
         <Col xs={12} sm={8} md={6} lg={5} className="mx-auto">
@@ -115,6 +118,8 @@ const RegisterUser: React.FC = () => {
         </Col>
       </Row>
     </Container>
+    <Footer position="absolute" /> 
+    </>
   );
 };
 

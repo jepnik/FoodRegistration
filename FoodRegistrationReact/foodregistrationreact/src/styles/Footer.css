@@ -1,12 +1,22 @@
-/* Footer styles */
-.footer {
-  background-color: #83B271;
-  color: #ffff; 
+/* Base style for footer */
+.footer-base {
+  background-color: #83B271 !important;
+  color: #ffffff;
   width: 100%;
-  padding: 20px;
   text-align: center;
   margin-top: 20px;
-  position: absolute; 
-  bottom: 0px;
+  padding: 20px;
   z-index: 100;
+}
+
+/* Footer moves it based on elemenmts on page */
+.footer-relative {
+  position: relative;
+  bottom: 0px;
+}
+
+/* Footer fixed to the bottom on the screen/page */
+.footer-absolute {
+  position: absolute;
+  bottom: 0px;
 }

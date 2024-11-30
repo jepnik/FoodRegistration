@@ -1,4 +1,3 @@
-
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
@@ -6,18 +5,28 @@ using Xunit;
 using FoodRegistration.Controllers;
 using FoodRegistration.Models;
 using FoodRegistration.ViewModels;
+using FoodRegistration.DAL;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace FoodRegistration.Tests
 {
     public class AccountControllerTests
     {
+        private readonly Mock<ItemDbContext> _mockContext;
         private readonly AccountController _controller;
+        private readonly Mock<DbSet<User>> _mockUserSet;
 
         public AccountControllerTests()
         {
-            _controller = new AccountController
+            _mockContext = new Mock<ItemDbContext>();
+            _mockUserSet = new Mock<DbSet<User>>();
+
+            _mockContext.Setup(m => m.Users).Returns(_mockUserSet.Object);
+
+            _controller = new AccountController(_mockContext.Object)
             {
                 ControllerContext = new ControllerContext
                 {
@@ -38,14 +47,21 @@ namespace FoodRegistration.Tests
         }
 
         [Fact]
-        public void Login_Post_ReturnsRedirectToActionResult_WhenCredentialsAreValid()
+        public async Task Login_Post_ReturnsRedirectToActionResult_WhenCredentialsAreValid()
         {
             // Arrange
-            var email = "email";
-            var password = "password";
+            var user = new User { UserId = 1, Email = "email", Password = "hashedpassword" };
+            _mockUserSet.Setup(m => m.FirstOrDefaultAsync(It.IsAny<System.Linq.Expressions.Expression<System.Func<User, bool>>>(), default))
+                        .ReturnsAsync(user);
+
+            var model = new LoginViewModel
+            {
+                Email = "email",
+                Password = "password"
+            };
 
             // Act
-            var result = _controller.Login(email, password);
+            var result = await _controller.Login(model);
 
             // Assert
             var redirectToActionResult = Assert.IsType<RedirectToActionResult>(result);
@@ -54,18 +70,24 @@ namespace FoodRegistration.Tests
         }
 
         [Fact]
-        public void Login_Post_ReturnsViewResult_WhenCredentialsAreInvalid()
+        public async Task Login_Post_ReturnsViewResult_WhenCredentialsAreInvalid()
         {
             // Arrange
-            var email = "invalidEmail";
-            var password = "invalidPassword";
+            _mockUserSet.Setup(m => m.FirstOrDefaultAsync(It.IsAny<System.Linq.Expressions.Expression<System.Func<User, bool>>>(), default))
+                        .ReturnsAsync((User)null);
+
+            var model = new LoginViewModel
+            {
+                Email = "invalidEmail",
+                Password = "invalidPassword"
+            };
 
             // Act
-            var result = _controller.Login(email, password);
+            var result = await _controller.Login(model);
 
             // Assert
             var viewResult = Assert.IsType<ViewResult>(result);
-            Assert.Equal("Ikke gyldig brukernavn eller passord", _controller.ViewBag.Error);
+            Assert.True(_controller.ModelState.ContainsKey("Email"));
         }
 
         [Fact]
@@ -80,31 +102,39 @@ namespace FoodRegistration.Tests
         }
 
         [Fact]
-        public void Profile_Get_ReturnsViewResult_WithProfileViewModel()
+        public async Task Profile_Get_ReturnsViewResult_WithUser()
         {
+            // Arrange
+            var user = new User { UserId = 1, Email = "currentEmail" };
+            _mockUserSet.Setup(m => m.FindAsync(1)).ReturnsAsync(user);
+            _controller.ControllerContext.HttpContext.Session.SetInt32("UserID", 1);
+
             // Act
-            var result = _controller.Profile();
+            var result = await _controller.Profile();
 
             // Assert
             var viewResult = Assert.IsType<ViewResult>(result);
-            var model = Assert.IsAssignableFrom<ProfileViewModel>(viewResult.ViewData.Model);
+            var model = Assert.IsAssignableFrom<User>(viewResult.ViewData.Model);
             Assert.Equal("currentEmail", model.Email);
         }
 
         [Fact]
-        public void UpdateProfile_Post_ReturnsRedirectToActionResult_WhenModelStateIsValid()
+        public async Task ChangePassword_Post_ReturnsRedirectToActionResult_WhenSuccessful()
         {
             // Arrange
-            var model = new ProfileViewModel
+            var user = new User { UserId = 1, Password = "hashedOldPassword" };
+            _mockUserSet.Setup(m => m.FindAsync(1)).ReturnsAsync(user);
+            _controller.ControllerContext.HttpContext.Session.SetInt32("UserID", 1);
+
+            var model = new ChangePasswordViewModel
             {
-                Email = "newEmail",
-                Password = "newPassword",
-                ConfirmPassword = "newPassword"
+                OldPassword = "oldPassword",
+                NewPassword = "newPassword",
+                ConfirmNewPassword = "newPassword"
             };
-            _controller.ModelState.Clear(); // Simulate a valid ModelState
 
             // Act
-            var result = _controller.UpdateProfile(model);
+            var result = await _controller.ChangePassword(model);
 
             // Assert
             var redirectToActionResult = Assert.IsType<RedirectToActionResult>(result);
@@ -112,24 +142,42 @@ namespace FoodRegistration.Tests
         }
 
         [Fact]
-        public void UpdateProfile_Post_ReturnsViewResult_WhenModelStateIsInvalid()
+        public async Task ChangePassword_Post_ReturnsViewResult_WhenOldPasswordIsIncorrect()
         {
             // Arrange
-            var model = new ProfileViewModel
+            var user = new User { UserId = 1, Password = "hashedDifferentPassword" };
+            _mockUserSet.Setup(m => m.FindAsync(1)).ReturnsAsync(user);
+            _controller.ControllerContext.HttpContext.Session.SetInt32("UserID", 1);
+
+            var model = new ChangePasswordViewModel
             {
-                Email = "newEmail",
-                Password = "newPassword",
-                ConfirmPassword = "differentPassword"
+                OldPassword = "wrongOldPassword",
+                NewPassword = "newPassword",
+                ConfirmNewPassword = "newPassword"
             };
-            _controller.ModelState.AddModelError("ConfirmPassword", "Passwords do not match");
 
             // Act
-            var result = _controller.UpdateProfile(model);
+            var result = await _controller.ChangePassword(model);
 
             // Assert
             var viewResult = Assert.IsType<ViewResult>(result);
-            var returnedModel = Assert.IsAssignableFrom<ProfileViewModel>(viewResult.ViewData.Model);
-            Assert.Equal(model, returnedModel);
+            Assert.True(_controller.ModelState.ContainsKey("OldPassword"));
+        }
+
+        [Fact]
+        public async Task DeleteUser_Post_RedirectsToLogin_AfterSuccessfulDeletion()
+        {
+            // Arrange
+            var user = new User { UserId = 1 };
+            _mockUserSet.Setup(m => m.FindAsync(1)).ReturnsAsync(user);
+            _controller.ControllerContext.HttpContext.Session.SetInt32("UserID", 1);
+
+            // Act
+            var result = await _controller.DeleteUser();
+
+            // Assert
+            var redirectToActionResult = Assert.IsType<RedirectToActionResult>(result);
+            Assert.Equal("Login", redirectToActionResult.ActionName);
         }
     }
 
