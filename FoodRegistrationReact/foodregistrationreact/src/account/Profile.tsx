@@ -96,7 +96,9 @@ const Profile: React.FC = () => {
             </p>
               <p>
                 This application allows you to register, track, and manage food items along with their nutritional
-                content. From here, you can:
+                content. 
+                <br/>
+                From here, you can: 
             </p>
             <ul>
                 <li>
@@ -111,11 +113,18 @@ const Profile: React.FC = () => {
             <div className="d-flex flex-column">
               <Button
                 className="mb-3"
-                variant="primary"
+                variant="success"
                 onClick={() => navigate('/change-password')}
                 style={{ color: 'white', fontSize: '1rem' }}
               >
                 Change Password
+              </Button>
+              <Button 
+              className="mb-3"
+              variant="secondary" onClick={handleLogout}
+              style={{ color: 'white', fontSize: '1rem' }}>
+
+                Log Out
               </Button>
               {/* Replace "Edit Profile" button with "Delete Account" button */}
               <Button
@@ -126,9 +135,7 @@ const Profile: React.FC = () => {
               >
                 Delete Account
               </Button>
-              <Button variant="secondary" onClick={handleLogout}>
-                Log Out
-              </Button>
+              
             </div>
           </>
         )}
