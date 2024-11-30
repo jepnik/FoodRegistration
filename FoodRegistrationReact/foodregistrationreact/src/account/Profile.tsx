@@ -114,9 +114,8 @@ const Profile: React.FC = () => {
             <div className="d-flex flex-column">
               <Button
                 className="mb-3"
-                variant="primary"
+                variant="success"
                 onClick={() => navigate('/change-password')}
-                style={{ color: 'white', fontSize: '1rem' }}
               >
                 Change Password
               </Button>
@@ -125,7 +124,6 @@ const Profile: React.FC = () => {
                 className="mb-3"
                 variant="danger"
                 onClick={() => navigate('/delete-user')}
-                style={{ color: 'white', fontSize: '1rem' }}
               >
                 Delete Account
               </Button>
