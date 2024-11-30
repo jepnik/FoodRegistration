@@ -17,7 +17,7 @@ public static class DBInit
 
         // Decide whether to keep or remove the following code for seeding initial items in the database.
         // This part is optional and only necessary if you want specific items to appear when the app starts.
-        /* if (!context.Items.Any())   // Sjekker om det allerede er data
+        if (!context.Items.Any())   // Sjekker om det allerede er data
         {
             var items = new List<Item>
             {
@@ -34,7 +34,7 @@ public static class DBInit
                     Sugar = 10,
                     Protein = 0.3,
                     Fat = 0.2,
-                    Saturatedfat = 0,
+                    Saturatedfat = 0.1,
                     Unsaturatedfat = 0.1,
                     Fibre = 2.4,
                     Salt = 0,
@@ -44,8 +44,6 @@ public static class DBInit
                     CountryOfProvenance = "Norway", // Opphavsland
                     CreatedDate = DateTime.Now,
                     UpdatedDate = DateTime.Now
-                    
-                   
                 },
                 new Item
                 {
@@ -70,14 +68,13 @@ public static class DBInit
                     CountryOfProvenance = "Ecuador",
                     CreatedDate = DateTime.Now,
                     UpdatedDate = DateTime.Now
-                   
                 }
             };
 
             // Add the items to the Items table
-            context.AddRange(items);   
+            context.AddRange(items);
             context.SaveChanges();
-        } */
+        }
 
         //Check if any user data exist; if not, add a default user for testing
         if (!context.Users.Any())
