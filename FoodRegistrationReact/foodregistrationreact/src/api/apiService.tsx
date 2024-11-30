@@ -64,11 +64,21 @@ export const logoutUser = (token: string) =>
   );
 
 // Register user
-export const registerUser = (email: string, password: string) =>
+export const registerUser = (
+  email: string,
+  password: string,
+  confirmPassword: string
+) =>
   fetchApi("/api/account/register", {
     method: "POST",
-    body: JSON.stringify({ email, password }),
+    body: JSON.stringify({
+      email,
+      password,
+      confirmPassword,
+    }),
   });
+
+
 
 // Profile API
 
