@@ -5,8 +5,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 
     var domain = Model.Email!.Split('@')[1];
-
-    var logo = domain == "anotherfoodcompany.com" ? "AlternativeUserLogo.png" : "UserLogo.png"; //Changes the picture on profile based on what the user is logged in as
+    var logo = domain == "foodcompany.com" ? "UserLogo.png" : "AlternativeUserLogo.png"; // Show the correct logo based on the domain
 }
 
 <head>
@@ -30,7 +29,6 @@
                     system.
                 </li>
             </ul>
-
         </div>
         <div>
             <a asp-action="ChangePassword" asp-route-id="@Model.UserId" class="btn btn-success">Change Password</a>
