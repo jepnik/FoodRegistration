@@ -16,17 +16,17 @@
             <div>
                 <label asp-for="Email">Email:</label>
                 <input asp-for="Email" type="email" required />
-                <span asp-validation-for="Email"></span>
+                <span asp-validation-for="Email" class="text-danger"></span>
             </div>
             <div>
                 <label asp-for="Password">Password:</label>
                 <input asp-for="Password" type="password" required />
-                <span asp-validation-for="Password"></span>
+                <span asp-validation-for="Password" class=" text-danger"></span>
             </div>
             <div>
                 <label asp-for="ConfirmPassword">Confirm Password:</label>
                 <input asp-for="ConfirmPassword" type="password" required />
-                <span asp-validation-for="ConfirmPassword"></span>
+                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
             </div>
             <button type="submit" class="btn btn-primary mt-3 mb-5">Register</button>
             <a asp-action="Profile" class="btn btn-danger mt-3 mb-5">Cancel</a>
