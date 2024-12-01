@@ -15,12 +15,11 @@ public static class DBInit
         //Ensures the database is created if it doesn't already exist
         context.Database.EnsureCreated();
 
-        // Decide whether to keep or remove the following code for seeding initial items in the database.
-        // This part is optional and only necessary if you want specific items to appear when the app starts.
-        if (!context.Items.Any())   // Sjekker om det allerede er data
+        if (!context.Items.Any())   //Check if data already exists
         {
             var items = new List<Item>
             {
+                // Example data for item table
                 new Item
                 {
                     Name = "Apple",
@@ -28,7 +27,7 @@ public static class DBInit
                     Certificate = "Organic",
                     ImageUrl = "/images/apple.jpg",
                     
-                    // Ernæringsfakta (nutritional information)
+                    // Nutritional information/values
                     Energy = 52,
                     Carbohydrates = 14,
                     Sugar = 10,
@@ -39,9 +38,9 @@ public static class DBInit
                     Fibre = 2.4,
                     Salt = 0,
 
-                    // Produktinfo                    
-                    CountryOfOrigin = "Norway",    // Opprinnelsesland
-                    CountryOfProvenance = "Norway", // Opphavsland
+                    // Product Information                    
+                    CountryOfOrigin = "Norway",    
+                    CountryOfProvenance = "Norway", 
                     CreatedDate = DateTime.Now,
                     UpdatedDate = DateTime.Now
                 },
@@ -52,7 +51,7 @@ public static class DBInit
                     Certificate = "Fair Trade",
                     ImageUrl = "/images/banana.jpg",
                     
-                    // Ernæringsfakta
+                    // Nutritional information/values
                     Energy = 89,
                     Carbohydrates = 23,
                     Sugar = 12,
@@ -63,7 +62,7 @@ public static class DBInit
                     Fibre = 2.6,
                     Salt = 0,
 
-                    // Produktinfo
+                    // Product Information
                     CountryOfOrigin = "Ecuador",
                     CountryOfProvenance = "Ecuador",
                     CreatedDate = DateTime.Now,
@@ -76,7 +75,7 @@ public static class DBInit
                     Certificate = "Best trade",
                     ImageUrl = "/images/beef.jpg",
                     
-                    // Ernæringsfakta
+                    // Nutritional information/values
                     Energy = 129,
                     Carbohydrates = 23,
                     Sugar = 0,
@@ -87,7 +86,7 @@ public static class DBInit
                     Fibre = 0,
                     Salt = 0,
 
-                    // Produktinfo
+                    // Product Information
                     CountryOfOrigin = "Ecuador",
                     CountryOfProvenance = "Ecuador",
                     CreatedDate = DateTime.Now,

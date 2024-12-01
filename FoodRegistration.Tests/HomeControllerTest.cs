@@ -93,8 +93,6 @@ namespace FoodRegistration.Tests
                 UpdatedDate = DateTime.Now
             };
             _mockRepo.Setup(repo => repo.Create(item)).ReturnsAsync(true);
-
-            // Set up ControllerContext
             _controller.ControllerContext = new ControllerContext
             {
                 HttpContext = new DefaultHttpContext()
@@ -132,7 +130,7 @@ namespace FoodRegistration.Tests
         {
             // Arrange
             var item = new Item { ItemId = 1, Name = "Test Item" };
-            _mockRepo.Setup(repo => repo.GetItemById(item.ItemId)).ReturnsAsync(item); // Ensure item is found
+            _mockRepo.Setup(repo => repo.GetItemById(item.ItemId)).ReturnsAsync(item); 
             _mockRepo.Setup(repo => repo.Update(item)).ReturnsAsync(true);
 
             // Simulate a valid ModelState
@@ -178,10 +176,10 @@ namespace FoodRegistration.Tests
 
         #region Updated Negative Test Cases
 
-        /// <summary>
-        /// Test Create POST action with invalid ModelState.
-        /// Expecting the view to be returned with the model and validation errors.
-        /// </summary>
+        //
+        // Test Create POST action with invalid ModelState.
+        // Expecting the view to be returned with the model and validation errors.
+        //
         [Fact]
         public async Task Create_Post_ReturnsViewResult_WithInvalidModelState()
         {
@@ -201,10 +199,10 @@ namespace FoodRegistration.Tests
             Assert.Equal(2, _controller.ModelState.ErrorCount);
         }
 
-        /// <summary>
-        /// Test Details action when item does not exist.
-        /// Expecting a NotFound result with a specific message.
-        /// </summary>
+      
+        // Test Details action when item does not exist.
+        // Expecting a NotFound result with a specific message.
+       
         [Fact]
         public async Task Details_ReturnsNotFound_WhenItemDoesNotExist()
         {
@@ -220,10 +218,10 @@ namespace FoodRegistration.Tests
             Assert.Equal($"Item not found for the ItemId", notFoundResult.Value);
         }
 
-        /// <summary>
+       
         /// Test Update POST action when item does not exist.
         /// Expecting a NotFound result with a specific message.
-        /// </summary>
+      
         [Fact]
         public async Task Update_Post_ReturnsNotFound_WhenItemDoesNotExist()
         {
@@ -231,7 +229,6 @@ namespace FoodRegistration.Tests
             var item = new Item { ItemId = 1, Name = "Non-Existent Item" };
             _mockRepo.Setup(repo => repo.GetItemById(item.ItemId)).ReturnsAsync((Item)null);
 
-            // Simulate a valid ModelState
             _controller.ModelState.Clear();
 
             // Act
@@ -251,7 +248,7 @@ namespace FoodRegistration.Tests
         {
             // Arrange
             int itemIdToDelete = 1;
-            _mockRepo.Setup(repo => repo.Delete(itemIdToDelete)).ReturnsAsync(false); // Simulate failure
+            _mockRepo.Setup(repo => repo.Delete(itemIdToDelete)).ReturnsAsync(false); 
 
             // Act
             var result = await _controller.DeleteConfirmed(itemIdToDelete);

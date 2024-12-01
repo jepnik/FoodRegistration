@@ -46,14 +46,12 @@ namespace FoodRegistration.Tests
             _context.Items.RemoveRange(_context.Items);
             _context.SaveChanges();
 
-            // Add unique users
             _context.Users.AddRange(new List<User>
             {
                 new User { UserId = 1, Email = "test1@foodcompany.com", Password = HashPassword("password1") },
                 new User { UserId = 2, Email = "test2@foodcompany.com", Password = HashPassword("password2") }
             });
 
-            // Add unique items with all required fields
             _context.Items.AddRange(new List<Item>
             {
                 new Item
@@ -109,7 +107,8 @@ namespace FoodRegistration.Tests
             var hashedBytes = sha256.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
             return BitConverter.ToString(hashedBytes).Replace("-", "").ToLower();
         }
-
+        
+        // Tests successful login with valid credentials
         [Fact]
         public async Task Login_Post_ReturnsRedirectToActionResult_WhenCredentialsAreValid()
         {
@@ -130,6 +129,7 @@ namespace FoodRegistration.Tests
             Assert.Equal("Home", redirectToActionResult.ControllerName);
         }
 
+        // Tests login failure with invalid credentials
         [Fact]
         public async Task Login_Post_ReturnsViewResult_WhenCredentialsAreInvalid()
         {
@@ -154,6 +154,7 @@ namespace FoodRegistration.Tests
             Assert.Equal("Invalid password", _controller.ModelState["Password"].Errors.First().ErrorMessage);
         }
         
+        // Tests that logout clears the session and redirects to login
         [Fact]
         public void Logout_ClearsSession_RedirectsToLogin()
         {
@@ -166,6 +167,7 @@ namespace FoodRegistration.Tests
             Assert.Null(_controller.ControllerContext.HttpContext.Session.GetInt32("UserID"));
         }
 
+        // Tests accessing profile with an authenticated user
         [Fact]
         public async Task Profile_AuthenticatedUser_ReturnsUserProfile()
         {
@@ -181,6 +183,7 @@ namespace FoodRegistration.Tests
             Assert.Equal("test1@foodcompany.com", user.Email);
         }
 
+        // Tests changing password with valid input
         [Fact]
         public async Task ChangePassword_ValidInput_UpdatesPassword()
         {
@@ -202,6 +205,7 @@ namespace FoodRegistration.Tests
             Assert.Equal(HashPassword("newpassword"), updatedUser.Password);
         }
 
+        // Tests deleting a user with a valid request
         [Fact]
         public async Task DeleteUser_ValidRequest_DeletesUser()
         {
@@ -219,6 +223,7 @@ namespace FoodRegistration.Tests
         }
     }
 
+    // Mock implementation of ISession for testing purposes
     public class MockHttpSession : ISession
     {
         private readonly Dictionary<string, byte[]> _sessionStorage = new Dictionary<string, byte[]>();

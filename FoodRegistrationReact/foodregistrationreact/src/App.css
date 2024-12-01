@@ -7,34 +7,34 @@ html, body {
   height: 100%;
 }
 
-/* Ensure the App fills the viewport height and uses flexbox */
+/* Ensure the app fills the screen height and uses flexbox */
 .App {
   display: flex;
   flex-direction: column;
-  min-height: 100vh; /* Fyll hele høyden av skjermen */
+  min-height: 100vh; 
 }
 
 /* Content area fills the available space */
 .content {
-  flex: 1; /* Lar innholdet ta opp all tilgjengelig plass over footer */
-  padding-top: 100px; /* Litt padding på topp og bunn */
+  flex: 1; /* Lets the content take up all available space above the footer */
+  padding-top: 100px; 
   padding-bottom: 0px;
-  overflow-y: auto; /* Tillater scrolling */
+  overflow-y: auto; /* allows scrolling */
 }
 
 /* Table container styling */
 .table-container {
-  max-width: 80%; /* Begrens tabellens bredde */
-  margin: 0 auto; /* Sentrer tabellen horisontalt */
+  max-width: 80%; 
+  margin: 0 auto; 
 }
 
 /* Create button container styling */
-.create-button-container {
+/* .create-button-container {
   display: flex;
-  justify-content: left; /* Justerer knappen til venstre */
-  margin-top: 20px; /* Gir avstand fra tabellen */
+  justify-content: left; 
+  margin-top: 20px; 
 }
-
+ */
 .create-button-container button {
   font-size: 1.1rem; /* Gjør knappen større */
 }
