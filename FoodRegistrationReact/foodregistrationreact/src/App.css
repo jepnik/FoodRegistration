@@ -1,5 +1,3 @@
-/* App.css */
-
 /* Reset default margins and paddings */
 html, body {
   margin: 0;
@@ -38,4 +36,3 @@ html, body {
 .custom-hover-table tbody tr:hover {
   background-color: #e9ecef !important; 
 }
-
