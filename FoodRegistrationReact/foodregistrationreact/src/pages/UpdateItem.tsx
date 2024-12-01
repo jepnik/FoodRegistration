@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react'; 
+import React, { useState, useEffect } from 'react';  
 import { useNavigate, useParams } from 'react-router-dom';
-import { Alert, Button, Spinner } from 'react-bootstrap';
+import { Spinner } from 'react-bootstrap';
 import { Item } from '../types/item';
 import { getItemById, updateItem } from '../api/apiService';
 import { useAuth } from '../components/AuthContext';
-import ItemForm from '../components/ItemForm'; // Import the ItemForm component
+import ItemForm from '../components/ItemForm'; 
 
 const UpdateItem: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -18,12 +18,12 @@ const UpdateItem: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
-  // Define required and nutritional fields
-  const requiredFields: Array<keyof Item> = ['name', 'category', 'countryOfOrigin', 'countryOfProvenance'];
-  const nutritionalFields: Array<keyof Item> = [
-    'energy', 'carbohydrates', 'sugar', 'protein',
-    'fat', 'saturatedfat', 'unsaturatedfat', 'fibre', 'salt'
-  ];
+  // Helper function to format field names for validation messages
+  const formatFieldName = (field: string): string => {
+    return field
+      .replace(/([A-Z])/g, ' ') // Insert space before capital letters
+      .replace(/^./, (str) => str.toUpperCase()); // Capitalize first letter
+  };
 
   // Fetch the item details when the component mounts
   useEffect(() => {
@@ -38,7 +38,6 @@ const UpdateItem: React.FC = () => {
         const data: Item = await getItemById(Number(id), token);
         if (!data) {
           setSubmissionError('Item not found.');
-          console.warn(`Item with ID ${id} not found.`);
         } else {
           setFormData(data);
         }
@@ -70,43 +69,62 @@ const UpdateItem: React.FC = () => {
 
     setFormData(prev => prev ? ({
       ...prev,
-      [name]: type === 'number' && value !== '' ? parseFloat(value) : value,
+      [name]: type === 'number' && value !== '' ? parseFloat(value) : type === 'number' ? 0 : value,
     }) : prev);
 
-    setErrors(prev => ({ ...prev, [name]: '' }));
+    // Clear the specific field error on change
+    setErrors(prevErrors => ({ ...prevErrors, [name]: '' }));
   };
-
-  // Helper function to format field names
-  const formatFieldName = (field: string) =>
-    field.replace(/([A-Z])/g, ' ').replace(/^./, str => str.toUpperCase());
 
   // Validate the form data
   const validateForm = () => {
     const newErrors: { [key: string]: string } = {};
 
-    // Validate required fields
-    requiredFields.forEach(field => {
-      const value = formData?.[field];
-      if (!value?.toString().trim()) {
-        newErrors[field] = `${formatFieldName(field)} is required.`;
-      }
-    });
+    // Required Fields
+    if (!formData?.name?.trim()) newErrors.name = 'Name is required.';
+    if (!formData?.category?.trim()) newErrors.category = 'Category is required.';
+    if (!formData?.countryOfOrigin?.trim())
+      newErrors.countryOfOrigin = 'Country of origin is required.';
+    if (!formData?.countryOfProvenance?.trim())
+      newErrors.countryOfProvenance = 'Country of provenance is required.';
 
-    // Validate nutritional fields
-    nutritionalFields.forEach(field => {
+    // Nutritional Fields Validation
+    const nutritionalFields: Array<keyof typeof formData> = [
+      'energy',
+      'carbohydrates',
+      'sugar',
+      'protein',
+      'fat',
+      'saturatedfat',
+      'unsaturatedfat',
+      'fibre',
+      'salt',
+    ];
+
+    nutritionalFields.forEach((field) => {
       const value = formData?.[field];
       if (typeof value !== 'number' || isNaN(value)) {
-        newErrors[field] = `${formatFieldName(field)} must have a valid number.`;
+        const fieldName = formatFieldName(field);
+        newErrors[field] = `${fieldName} must have a valid numerical value.`;
       } else if (value < 0) {
-        newErrors[field] = `${formatFieldName(field)} cannot be negative.`;
+        const fieldName = formatFieldName(field);
+        newErrors[field] = `${fieldName} cannot be negative.`;
       }
     });
 
-    // Validate fat composition
-    const { saturatedfat, unsaturatedfat, fat } = formData || {};
-    if (typeof saturatedfat === 'number' && typeof unsaturatedfat === 'number' && typeof fat === 'number') {
-      const calculatedFat = saturatedfat + unsaturatedfat;
-      if (Math.abs(calculatedFat - fat) > 0.0001) { // Allow minor floating-point discrepancies
+    // Validation: Sum of Saturated Fat and Unsaturated Fat Equals Fat
+    const saturatedFat = formData?.saturatedfat;
+    const unsaturatedFat = formData?.unsaturatedfat;
+    const totalFat = formData?.fat;
+
+    if (
+      typeof saturatedFat === 'number' &&
+      typeof unsaturatedFat === 'number' &&
+      typeof totalFat === 'number'
+    ) {
+      const calculatedFat = saturatedFat + unsaturatedFat;
+      // Allow a small margin for floating-point arithmetic
+      if (Math.abs(calculatedFat - totalFat) > 0.0001) {
         newErrors.saturatedfat = 'Sum of Saturated Fat and Unsaturated Fat must equal Fat.';
         newErrors.unsaturatedfat = 'Sum of Saturated Fat and Unsaturated Fat must equal Fat.';
       }
@@ -133,52 +151,38 @@ const UpdateItem: React.FC = () => {
     try {
       await updateItem(Number(id), formData, token);
       setSuccessMessage('Item updated successfully!');
+      // Optionally, navigate to another page after a short delay
       setTimeout(() => navigate('/'), 2000); // Redirect after 2 seconds
     } catch (error: any) {
       console.error('Update error:', error);
-      const status = error.response?.status;
-      if ([401, 403].includes(status) || 
-          error.message.includes('Unauthorized') || 
-          error.message.includes('Invalid token') || 
-          error.message.includes('jwt expired')) {
+      if (
+        error.response?.status === 401 ||
+        error.message.includes('Unauthorized') ||
+        error.message.includes('Invalid token') ||
+        error.message.includes('jwt expired')
+      ) {
         logout();
         navigate('/login');
-      } else if (status === 400 && error.response.data?.errors) {
+      } else if (error.response?.status === 400 && error.response.data) {
+        // Handle validation errors from the backend
         const backendErrors = error.response.data.errors;
-        const formattedErrors: { [key: string]: string } = {};
-        Object.keys(backendErrors).forEach(key => {
-          formattedErrors[key] = backendErrors[key].join(' ');
-        });
-        setErrors(formattedErrors);
-        setSubmissionError('Please correct the highlighted errors.');
-      } else if (status === 404) {
-        setSubmissionError('Item not found.');
+        if (backendErrors) {
+          const formattedErrors: { [key: string]: string } = {};
+          Object.keys(backendErrors).forEach((key) => {
+            formattedErrors[key] = backendErrors[key].join(' ');
+          });
+          setErrors(formattedErrors);
+          setSubmissionError('Please correct the highlighted errors.');
+        } else {
+          setSubmissionError(`Failed to update the item`);
+        }
       } else {
-        setSubmissionError(`Failed to update the item: ${error.message}`);
+        setSubmissionError(`Failed to update the item`);
       }
     } finally {
       setIsSubmitting(false);
     }
   };
-
-  // Define form fields for dynamic rendering
-  const formFields = [
-    { label: 'Name', name: 'name', type: 'text', required: true },
-    { label: 'Category', name: 'category', type: 'text', required: true },
-    { label: 'Certificate', name: 'certificate', type: 'text', required: false },
-    { label: 'Image URL', name: 'imageUrl', type: 'text', required: false },
-    { label: 'Country of Origin', name: 'countryOfOrigin', type: 'text', required: true },
-    { label: 'Country of Provenance', name: 'countryOfProvenance', type: 'text', required: true },
-  ];
-
-  const nutritionalFormFields = nutritionalFields.map(field => ({
-    label: formatFieldName(field),
-    name: field,
-    type: 'number',
-    required: true,
-    min: 0,
-    step: 'any',
-  }));
 
   // Render loading state
   if (loading)
@@ -186,42 +190,6 @@ const UpdateItem: React.FC = () => {
       <div className="text-center" style={{ marginTop: '50px' }}>
         <Spinner animation="border" />
         <p>Loading item details...</p>
-      </div>
-    );
-
-  // Render submission error with a "Go Back" option
-  if (submissionError)
-    return (
-      <div
-        className="d-flex justify-content-center align-items-center"
-        style={{ minHeight: '100vh', backgroundColor: '#f8f9fa' }}
-      >
-        <Alert variant="danger" className="w-50 text-center">
-          {submissionError}
-          <div className="mt-3">
-            <Button variant="primary" onClick={() => navigate('/')}>
-              Go Back
-            </Button>
-          </div>
-        </Alert>
-      </div>
-    );
-
-  // Render not found message if formData is null
-  if (!formData)
-    return (
-      <div
-        className="d-flex justify-content-center align-items-center"
-        style={{ minHeight: '100vh', backgroundColor: '#f8f9fa' }}
-      >
-        <Alert variant="warning" className="w-50 text-center">
-          Item not found.
-          <div className="mt-3">
-            <Button variant="primary" onClick={() => navigate('/')}>
-              Go Back
-            </Button>
-          </div>
-        </Alert>
       </div>
     );
 

@@ -11,23 +11,23 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container
 
-// 1. Add Controllers with NewtonsoftJson to handle JSON serialization
+// Add Controllers with NewtonsoftJson to handle JSON serialization
 builder.Services.AddControllers().AddNewtonsoftJson(options =>
 {
     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
 });
 
-// 2. Add Swagger/OpenAPI support
+// Add Swagger/OpenAPI support
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// 3. Configure SQLite Database Context
+// Configure SQLite database context
 builder.Services.AddDbContext<ItemDbContext>(options =>
 {
     options.UseSqlite(builder.Configuration["ConnectionStrings:ItemDbContextConnection"]);
 });
 
-// 4. Configure CORS policy
+// Configure CORS policy
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("CorsPolicy", policy =>
@@ -39,11 +39,11 @@ builder.Services.AddCors(options =>
     });
 });
 
-// 5. Register application services
+// Register application services
 builder.Services.AddScoped<IItemRepository, ItemRepository>();
 builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
 
-// 6. Configure JWT Authentication
+// Configure JWT Authentication
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -60,11 +60,11 @@ builder.Services.AddAuthentication(options =>
         ValidIssuer = builder.Configuration["Jwt:Issuer"],
         ValidAudience = builder.Configuration["Jwt:Audience"],
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
-        ClockSkew = TimeSpan.Zero // Eliminate default clock skew
+        ClockSkew = TimeSpan.Zero 
     };
 });
 
-// 7. Configure Serilog for logging
+// Configure Serilog for logging
 var loggerConfiguration = new LoggerConfiguration()
     .MinimumLevel.Information()
     .WriteTo.File($"APILogs/app_{DateTime.Now:yyyyMMdd_HHmmss}.log")
@@ -76,7 +76,7 @@ builder.Logging.AddSerilog(logger);
 
 var app = builder.Build();
 
-// 8. Seed the database and configure Swagger in development
+// Seed the database and configure Swagger in development
 if (app.Environment.IsDevelopment())
 {
     DBInit.Seed(app);
@@ -88,11 +88,11 @@ app.UseStaticFiles();
 app.UseRouting();
 app.UseCors("CorsPolicy");
 
-// 9. Configure Authentication and Authorization middleware
+// Configure Authentication and Authorization middleware
 app.UseAuthentication();
 app.UseAuthorization();
 
-// 10. Map controller routes
+// Map controller routes
 app.MapControllerRoute(name: "api", pattern: "{controller}/{action=Index}/{id?}");
 
 app.Run();
