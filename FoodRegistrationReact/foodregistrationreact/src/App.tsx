@@ -1,5 +1,3 @@
-// File: src/App.tsx
-
 import React, { useEffect } from 'react';
 import {
   BrowserRouter as Router,
@@ -17,7 +15,7 @@ import Login from './account/Login';
 import RegisterUser from './account/RegisterUser';
 import Profile from './account/Profile';
 import ChangePassword from './account/ChangePassword';
-import DeleteUser from './account/DeleteUser'; // Import the DeleteUser component
+import DeleteUser from './account/DeleteUser'; 
 import './App.css';
 
 const App: React.FC = () => (
