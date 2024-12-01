@@ -1,6 +1,4 @@
 @model IEnumerable<Item>
-
-
 <!-- Main page for displaying the table of items -->
 <div class="container">
     <table class='table table-striped'>
@@ -28,7 +26,7 @@
                         <img src="@item.ImageUrl" alt="@item.Name" class="img-fluid" style="max-width: 60px;" />
                     }
                 </td>
-                <!--  buttons for update and delete -->
+                <!--  buttons for update and delete in every row in table-->
                 <td>
                     <a asp-action="Update" asp-route-id="@item.ItemId" class="btn btn-success">Update</a>
                     <a asp-action="Delete" asp-route-id="@item.ItemId" class="btn btn-danger">Delete</a>
