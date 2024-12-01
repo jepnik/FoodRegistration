@@ -1,5 +1,3 @@
-// src/pages/CreateItem.tsx
-
 import React, { useState } from 'react'; 
 import { useNavigate } from 'react-router-dom';
 import { Alert, Spinner } from 'react-bootstrap';
@@ -163,10 +161,10 @@ const CreateItem: React.FC = () => {
           setErrors(formattedErrors);
           setSubmissionError('Please correct the highlighted errors.');
         } else {
-          setSubmissionError(`Failed to create the item: ${error.message}`);
+          setSubmissionError(`Failed to create the item.`);
         }
       } else {
-        setSubmissionError(`Failed to create the item: ${error.message}`);
+        setSubmissionError(`Failed to create the item.`);
       }
     } finally {
       setIsSubmitting(false); // End submission loading state

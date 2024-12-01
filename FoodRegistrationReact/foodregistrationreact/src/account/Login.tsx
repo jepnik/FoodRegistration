@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import API_URL from "../apiConfig";
 import { useAuth } from "../components/AuthContext";
 import { loginUser } from "../api/apiService";
-import "../styles/login.css"; // Ensure your CSS includes styles for login-container, form-group, etc.
+import "../styles/login.css";
 import { useNavigate } from "react-router-dom";
 import Footer from "../shared/Footer";
 import '../styles/Footer.css';
@@ -76,7 +76,7 @@ const Login: React.FC = () => {
           Register User
         </a>
       </div>
-      <Footer position="absolute" />
+      <Footer/>
     </>
   );
 };
