@@ -34,7 +34,6 @@ const Login: React.FC = () => {
   };
 
   return (
-    <>
       <div className="login-container">
         <img src={`${API_URL}/images/FoodTrace.png`} alt="Logo" className="login-logo" /> 
         <h2>Login</h2>
@@ -75,9 +74,12 @@ const Login: React.FC = () => {
         <a href="/register-user" className="btn btn-primary mt-2 buttons-button">
           Register User
         </a>
+       <p>
+        <br/>
+        FoodRegistration | Contact us: +47 999 99 999 | Email: 
+       <a href="mailto:vårbedrift@gmail.com"> FoodTrace@gmail.com</a></p>
       </div>
-      <Footer/>
-    </>
+      
   );
 };
 

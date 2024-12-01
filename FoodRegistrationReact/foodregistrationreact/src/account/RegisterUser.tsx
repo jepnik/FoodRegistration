@@ -129,6 +129,10 @@ const RegisterUser: React.FC = () => {
                 Cancel
               </Button>
             </div>
+            <p>
+        <br/>
+        FoodRegistration | Contact us: +47 999 99 999 | Email: 
+       <a href="mailto:vårbedrift@gmail.com"> FoodTrace@gmail.com</a></p>
           </Form>
         </Col>
       </Row>
