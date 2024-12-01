@@ -4,8 +4,9 @@
     ViewData["Title"] = "Profile";
     Layout = "~/Views/Shared/_Layout.cshtml";
 
+    // Show the correct logo based on the domain
     var domain = Model.Email!.Split('@')[1];
-    var logo = domain == "foodcompany.com" ? "UserLogo.png" : "AlternativeUserLogo.png"; // Show the correct logo based on the domain
+    var logo = domain == "foodcompany.com" ? "UserLogo.png" : "AlternativeUserLogo.png"; 
 }
 
 <head>
