@@ -1,9 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import '../styles/Header.css'; // Ensure the CSS is properly linked
+import '../styles/Header.css'; 
 import API_URL from '../apiConfig';
-import { useAuth } from '../components/AuthContext'; // Import useAuth
-import { getProfile } from '../api/apiService'; // Import profile API
+import { useAuth } from '../components/AuthContext'; 
+import { getProfile } from '../api/apiService'; 
 
 const Header: React.FC = () => {
   const navigate = useNavigate();
@@ -70,13 +70,13 @@ const Header: React.FC = () => {
       style={{ backgroundColor: '#83B271' }}
     >
       <div className="container-fluid">
-        {/* Brand Logo */}
+        {/* Brand logo */}
         <Link className="navbar-brand d-flex align-items-center" to="/">
           <img src={logo} alt="Logo" className="logo me-2" />
           FOODTRACE
         </Link>
 
-        {/* Desktop Navigation Links */}
+        {/* Desktop navigation links */}
         <ul className="navbar-nav d-none d-sm-flex flex-row align-items-center">
           <li className="nav-item">
             <Link className="nav-link" to="/">
@@ -95,10 +95,10 @@ const Header: React.FC = () => {
         {/* Spacer to push user icon to the right */}
         <div className="flex-grow-1"></div>
 
-        {/* User Icon and Dropdown */}
+        {/* User icon and dropdown */}
         {isAuthenticated && profile && (
           <div className="d-flex align-items-center" ref={dropdownRef}>
-            {/* User Icon */}
+            {/* User icon */}
             <div className="user-icon-wrapper">
               <img
                 src={getUserIcon(profile.email)}
@@ -117,7 +117,7 @@ const Header: React.FC = () => {
                     zIndex: 1000,
                   }}
                 >
-                  {/* Mobile Navigation Links */}
+                  {/* Mobile navigation links */}
                   <Link
                     to="/"
                     className="dropdown-item d-sm-none"
@@ -148,7 +148,7 @@ const Header: React.FC = () => {
           </div>
         )}
 
-        {/* Mobile View: Hamburger Menu for Unauthenticated Users */}
+        {/* Mobile view: hamburger menu for unauthenticated users */}
         {!isAuthenticated && (
           <button
             className="navbar-toggler ms-auto"
@@ -162,7 +162,7 @@ const Header: React.FC = () => {
           </button>
         )}
 
-        {/* Mobile View: Dropdown Menu for Unauthenticated Users */}
+        {/* Mobile view: dropdown menu for unauthenticated users */}
         {!isAuthenticated && dropdownOpen && (
           <div
             className="dropdown-menu dropdown-menu-end show custom-dropdown"

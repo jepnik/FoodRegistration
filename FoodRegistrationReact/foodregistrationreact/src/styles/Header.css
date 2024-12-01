@@ -1,6 +1,6 @@
 /* Header.css */
 
-/* Navbar Styles */
+/* Navbar styles */
 .navbar {
   position: fixed;
   top: 0;
@@ -15,7 +15,7 @@
   align-items: center;
 }
 
-/* Brand Logo */
+/* Brand logo */
 .navbar-brand {
   display: flex;
   align-items: center;
@@ -27,15 +27,16 @@
   margin-right: 10px;
 }
 
-/* Navigation Links */
+/* Navigation links */
 .navbar-nav {
   display: flex;
-  flex-direction: row; /* Ensure links are aligned horizontally */
-  align-items: center; /* Vertical alignment */
+  flex-direction: row; 
+  align-items: center; 
 }
 
+/* Adjust spacing between links */
 .navbar-nav .nav-item {
-  margin-right: 15px; /* Adjust spacing between links */
+  margin-right: 15px; 
 }
 
 .navbar-nav .nav-item:last-child {
@@ -55,12 +56,12 @@
   border-radius: 4px;
 }
 
-/* Spacer to push user icon to the right */
+/* Push user icon to the right */
 .flex-grow-1 {
   flex-grow: 1;
 }
 
-/* User Icon */
+/* User icon */
 .user-icon {
   width: 40px;
   height: 40px;
@@ -76,12 +77,12 @@
   border-color: #ffffff;
 }
 
-/* User Icon Wrapper */
+/* User icon wrapper */
 .user-icon-wrapper {
   position: relative;
 }
 
-/* Dropdown Menu */
+/* Dropdown menu */
 .custom-dropdown {
   position: absolute;
   top: calc(100% + 5px);
@@ -114,10 +115,9 @@
   color: #007bff;
 }
 
-/* Responsive Adjustments */
+/* Responsive adjustments, for screens under 575.98px */
 @media (max-width: 575.98px) {
-  /* This is the breakpoint for 'sm' (576px) */
-  .navbar-nav {
+    .navbar-nav {
     display: none; /* Hide navigation links on extra small screens */
   }
 

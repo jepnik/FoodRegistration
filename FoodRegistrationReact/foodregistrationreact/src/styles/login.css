@@ -1,3 +1,4 @@
+/* Contaienr for elements on login page */
 .login-container {
   max-width: 400px;
   margin: 0 auto;
@@ -5,7 +6,7 @@
   border-radius: 10px;
   background-color: #f9f9f9;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  text-align: center;
+  text-align: center; 
 }
 
 .login-logo {
@@ -19,20 +20,14 @@ h2 {
   color: #333;
 }
 
+/* Plasses text left side of input */
 .login-form .form-group {
   margin-bottom: 20px;
   text-align: left;
 }
 
-.form-label {
-  display: block;
-  font-weight: bold;
-  margin-bottom: 8px;
-  font-size: 0.9rem;
-  color: #333;
-}
-
-.form-control {
+/* Input field styling for email and password */
+ .form-control {
   width: 100%;
   padding: 10px;
   font-size: 1rem;
@@ -41,46 +36,11 @@ h2 {
   box-sizing: border-box;
 }
 
-.form-control:focus {
-  border-color: #007bff;
-  outline: none;
-}
-
+/* Shapes button to container */
 .buttons-button {
   width: 100%;
   color: white;
   border: none;
   outline: none;
-  /* padding: 10px;
-  font-size: 1rem;
-  font-weight: bold;
-  border: none;
-  border-radius: 5px;
-  background-color: #007bff;
-  color: #fff;
-  cursor: pointer; */
-}
+} 
 
-/* .buttons-button:hover {
-  background-color: #0056b3;
-} */
-
-/* .btn-primary {
-  text-decoration: none;
-  display: inline-block;
-  margin-top: 10px;
-  font-size: 0.9rem;
-  color: #007bff;
-} */
-
-/* .btn-primary:hover {
-  text-decoration: underline;
-  color: #0056b3;
-} */
-
-/* .alert {
-  color: red;
-  font-weight: bold;
-  margin-bottom: 15px;
-}
- */

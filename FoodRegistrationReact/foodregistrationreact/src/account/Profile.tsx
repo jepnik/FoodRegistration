@@ -1,5 +1,3 @@
-// File: src/account/Profile.tsx
-
 import React, { useEffect, useState } from 'react'; 
 import { useNavigate } from 'react-router-dom';
 import { Alert, Button, Spinner } from 'react-bootstrap';
@@ -20,12 +18,11 @@ const Profile: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Function to get user icon based on email domain
+  // Get user icon based on email domain
   const getUserIcon = (email: string): string => {
     // If no email, return default icon
     if (!email) return `${API_URL}/images/FoodTrace.png`;
 
-    // Extract domain from email
     const domain = email.split('@')[1];
 
     // Return icon based on domain
@@ -33,7 +30,6 @@ const Profile: React.FC = () => {
       ? `${API_URL}/images/UserLogo.png`
       : `${API_URL}/images/AlternativeUserLogo.png`;
   };
-
 
   useEffect(() => {
     const fetchProfileData = async () => {

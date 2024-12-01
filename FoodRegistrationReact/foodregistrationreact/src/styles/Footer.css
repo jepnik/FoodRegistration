@@ -9,7 +9,7 @@
   z-index: 100;
 }
 
-/* Footer moves it based on elemenmts on page */
+/* Footer moves based on elemenmts on page */
 .footer-relative {
   position: relative;
   bottom: 0px;

@@ -15,8 +15,7 @@ public static class DBInit
         //Ensures the database is created if it doesn't already exist
         context.Database.EnsureCreated();
 
-        // Decide whether to keep or remove the following code for seeding initial items in the database.
-        // This part is optional and only necessary if you want specific items to appear when the app starts.
+        
         if (!context.Items.Any())   // Sjekker om det allerede er data
         {
             var items = new List<Item>

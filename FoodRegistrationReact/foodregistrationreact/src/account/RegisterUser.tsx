@@ -1,5 +1,3 @@
-// File: src/account/RegisterUser.tsx
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Form, Button, Alert, Spinner, Container, Row, Col } from 'react-bootstrap';

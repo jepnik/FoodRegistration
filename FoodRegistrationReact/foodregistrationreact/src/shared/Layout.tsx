@@ -5,13 +5,12 @@ import Footer from './Footer';
 
 const Layout: React.FC = () => {
   const location = useLocation();
-  const isLoginPath = location.pathname === "/login"; // Juster denne logikken etter behov
-
+  const isLoginPath = location.pathname === "/login"; 
   return (
     <div className="App">
       <Header />
       <main className="content">
-        <Outlet /> {/* Main content, use Outlet for nested routes */}
+        <Outlet /> 
       </main>
       <Footer position={isLoginPath ? 'absolute' : 'relative'} />
     </div>
