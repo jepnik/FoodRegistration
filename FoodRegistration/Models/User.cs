@@ -4,6 +4,7 @@ namespace FoodRegistration.Models;
 
 public class User
 {
+    //All information stored about users in the database
     [Key]
     public int UserId { get; set; }
 
@@ -14,18 +15,3 @@ public class User
     [Required]
     public string? Password { get; set; }
 }
-
-/* CODE FOR Profile.cs (Som skal slettes)
-using System.ComponentModel.DataAnnotations;
-using FoodRegistration.Models;
-
-namespace FoodRegistration.Models;
-
-public class Profile
-{
-    public int UserId { get; set; }
-
-    [Required]
-    public string? Email { get; set; }
-}
-*/

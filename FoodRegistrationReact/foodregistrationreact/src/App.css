@@ -7,34 +7,37 @@ html, body {
   height: 100%;
 }
 
-/* Ensure the App fills the viewport height and uses flexbox */
+/* Ensure the app fills the screen height and uses flexbox */
 .App {
   display: flex;
   flex-direction: column;
+  min-height: 100vh; 
   min-height: 100vh; 
 }
 
 /* Content area fills the available space */
 .content {
-  flex: 1;
+  flex: 1; /* Lets the content take up all available space above the footer */
   padding-top: 100px; 
   padding-bottom: 0px;
-  overflow-y: auto; 
+  overflow-y: auto; /* allows scrolling */
 }
 
 /* Table container styling */
 .table-container {
-  max-width: 80%;
+  max-width: 80%; 
   margin: 0 auto; 
 }
 
 /* Create button container styling */
-.create-button-container {
+/* .create-button-container {
   display: flex;
   justify-content: left; 
   margin-top: 20px; 
+  justify-content: left; 
+  margin-top: 20px; 
 }
-
+ */
 .create-button-container button {
   font-size: 1.1rem; 
 }
