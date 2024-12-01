@@ -83,10 +83,22 @@ const UpdateItem: React.FC = () => {
     // Required Fields
     if (!formData?.name?.trim()) newErrors.name = 'Name is required.';
     if (!formData?.category?.trim()) newErrors.category = 'Category is required.';
-    if (!formData?.countryOfOrigin?.trim())
+    if (!formData.countryOfOrigin?.trim()) {
       newErrors.countryOfOrigin = 'Country of origin is required.';
-    if (!formData?.countryOfProvenance?.trim())
+    } else if (formData.countryOfOrigin.length > 50) {
+      newErrors.countryOfOrigin =
+        "Country of origin can't exceed 50 characters.";
+    } else if (!/^[a-zA-Z\s]+$/.test(formData.countryOfOrigin)) {
+      newErrors.countryOfOrigin = 'Only letters are allowed.';
+    }
+    if (!formData.countryOfProvenance?.trim()) {
       newErrors.countryOfProvenance = 'Country of provenance is required.';
+    } else if (formData.countryOfProvenance.length > 50) {
+      newErrors.countryOfProvenance =
+        "Country of provenance can't exceed 50 characters.";
+    } else if (!/^[a-zA-Z\s]+$/.test(formData.countryOfProvenance)) {
+      newErrors.countryOfProvenance = 'Only letters are allowed.';
+    }
 
     // Nutritional Fields Validation
     const nutritionalFields: Array<keyof typeof formData> = [
@@ -112,7 +124,7 @@ const UpdateItem: React.FC = () => {
       }
     });
 
-    // Validation: Sum of Saturated Fat and Unsaturated Fat Equals Fat
+    // Validation: Sum of saturated fat and unsaturated fat equals Fat
     const saturatedFat = formData?.saturatedfat;
     const unsaturatedFat = formData?.unsaturatedfat;
     const totalFat = formData?.fat;
@@ -123,6 +135,7 @@ const UpdateItem: React.FC = () => {
       typeof totalFat === 'number'
     ) {
       const calculatedFat = saturatedFat + unsaturatedFat;
+     
       // Allow a small margin for floating-point arithmetic
       if (Math.abs(calculatedFat - totalFat) > 0.0001) {
         newErrors.saturatedfat = 'Sum of Saturated Fat and Unsaturated Fat must equal Fat.';
@@ -177,7 +190,7 @@ const UpdateItem: React.FC = () => {
           setSubmissionError(`Failed to update the item`);
         }
       } else {
-        setSubmissionError(`Failed to update the item`);
+        setSubmissionError(`Failed to create the item.`);
       }
     } finally {
       setIsSubmitting(false);

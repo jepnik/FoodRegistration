@@ -13,7 +13,7 @@ const Layout: React.FC = () => {
       <main className="content">
         <Outlet /> 
       </main>
-      <Footer position={isLoginPath ? 'absolute' : 'relative'} />
+      <Footer />
     </div>
   );
 };

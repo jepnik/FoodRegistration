@@ -62,7 +62,7 @@ const ItemTable: React.FC<ItemTableProps> = ({
                 <button
                   className="btn btn-primary btn-sm me-2"
                   onClick={(e) => {
-                    e.stopPropagation(); // Prevent row click
+                    e.stopPropagation(); 
                     onUpdate(item.itemId);
                   }}
                 >
@@ -71,8 +71,7 @@ const ItemTable: React.FC<ItemTableProps> = ({
                 <button
                   className="btn btn-danger btn-sm"
                   onClick={(e) => {
-                    e.stopPropagation(); // Prevent row click
-                    onDelete(item.itemId);
+                    e.stopPropagation(); 
                   }}
                 >
                   Delete
