@@ -73,7 +73,7 @@ const DeleteUser: React.FC = () => {
                 <Alert variant="danger" className="text-center">
                   <ul className="mb-0">
                     {errors.map((err, idx) => (
-                      <li key={idx}>{err}</li>
+                      <div key={idx}>{err}</div>
                     ))}
                   </ul>
                 </Alert>

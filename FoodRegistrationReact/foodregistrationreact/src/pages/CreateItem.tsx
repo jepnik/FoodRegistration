@@ -4,7 +4,6 @@ import { Alert, Spinner } from 'react-bootstrap';
 import { Item } from '../types/item';
 import { createItem } from '../api/apiService';
 import { useAuth } from '../components/AuthContext'; 
-import '../styles/site.css'; 
 import ItemForm from '../components/ItemForm'; // Adjust the path as needed
 
 const CreateItem: React.FC = () => {

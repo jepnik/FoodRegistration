@@ -18,7 +18,7 @@
 
 /* Specific styling for the image inside the logo section */
 .profile-logo img {
-    width: 80%; /* Use percentage */
-    height: auto; /* Maintain aspect ratio */
-    max-width: 350px; /* Optional: set a max width */
+    width: 80%;
+    height: auto;
+    max-width: 350px; 
 }

@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { Alert, Button, Spinner } from 'react-bootstrap';
 import { getProfile, logoutUser } from '../api/apiService';
 import { useAuth } from '../components/AuthContext';
-import '../styles/site.css';
 import API_URL from '../apiConfig';
 
 interface UserProfile {
@@ -42,7 +41,7 @@ const Profile: React.FC = () => {
       }
 
       try {
-        const data = await getProfile(token); // Pass the token
+        const data = await getProfile(token);
         setProfile(data);
       } catch (err: any) {
         setError(err.message || 'An error occurred while fetching the profile.');
@@ -57,7 +56,7 @@ const Profile: React.FC = () => {
   const handleLogout = async () => {
     try {
       if (token) {
-        await logoutUser(token); // Pass the token
+        await logoutUser(token);
       }
       logout();
       navigate('/login');
