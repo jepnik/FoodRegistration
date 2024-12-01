@@ -109,7 +109,7 @@ public class AccountController : Controller
         //Makes sure the UserId is correct with the database
         var userId = CurrentUserId;
         var user = await _context.Users.FindAsync(userId);
-        var model = new User //Removed Profile.cs Model since it was identical to User.cs
+        var model = new User 
         {
             UserId = user!.UserId, //Using '!' because user never will be null at this point and it was giving a warning. Middleware ensures you have to be logged in to reach this method
             Email = user.Email

@@ -76,7 +76,7 @@ const Login: React.FC = () => {
           Register User
         </a>
       </div>
-      <Footer position="absolute" />
+      <Footer/>
     </>
   );
 };

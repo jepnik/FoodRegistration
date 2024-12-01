@@ -2,10 +2,10 @@ import React from 'react';
 import '../styles/Footer.css';
 
 interface FooterProps {
-  position: 'absolute' | 'relative'; 
+  position?: 'absolute' | 'relative' | 'fixed'; // Added 'fixed' as an option
 }
 
-const Footer: React.FC<FooterProps> = ({ position }) => {
+const Footer: React.FC<FooterProps> = ({ position = 'fixed' }) => {
   return (
     <footer className={`footer-base footer-${position}`}>
       <div className="container">
