@@ -71,11 +71,9 @@ const DeleteUser: React.FC = () => {
               <h2 className="text-center mb-4">Delete Account</h2>
               {errors.length > 0 && (
                 <Alert variant="danger" className="text-center">
-                  <ul className="mb-0">
                     {errors.map((err, idx) => (
                       <div key={idx}>{err}</div>
                     ))}
-                  </ul>
                 </Alert>
               )}
               {successMessage && <Alert variant="success" className="text-center">{successMessage}</Alert>}
