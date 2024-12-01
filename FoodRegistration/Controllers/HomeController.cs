@@ -15,8 +15,8 @@ public class HomeController : Controller
     // Constructor for dependency injection
     public HomeController(IItemRepository itemRepository, ILogger<HomeController> logger)
     {
-        _itemRepository = itemRepository ?? throw new ArgumentNullException(nameof(itemRepository)); // Ensure the DbContext is not null
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger)); // Ensure the logger is not null
+        _itemRepository = itemRepository ?? throw new ArgumentNullException(nameof(itemRepository)); 
+        _logger = logger ?? throw new ArgumentNullException(nameof(logger)); 
     }
 
     // Main index page showing table with added items
@@ -69,9 +69,9 @@ public class HomeController : Controller
             //returns to view with validation errors
             return View(item);
         }
-
-        item.CreatedDate = DateTime.Now; // Set created date to now
-        await _itemRepository.Create(item); // Save new item to database
+        
+        item.CreatedDate = DateTime.Now; 
+        await _itemRepository.Create(item); 
         return RedirectToAction(nameof(Index));
     }
 

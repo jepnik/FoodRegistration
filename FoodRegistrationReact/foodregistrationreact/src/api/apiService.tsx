@@ -1,5 +1,3 @@
-// File: src/api/apiService.ts
-
 import API_URL from "../apiConfig";
 import { Item } from "../types/item";
 

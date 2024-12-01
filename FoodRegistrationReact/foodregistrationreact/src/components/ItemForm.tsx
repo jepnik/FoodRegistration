@@ -1,5 +1,3 @@
-// src/components/ItemForm.tsx
-
 import React from 'react';
 import { Form, Button, Alert, Spinner } from 'react-bootstrap';
 import { Item } from '../types/item';
