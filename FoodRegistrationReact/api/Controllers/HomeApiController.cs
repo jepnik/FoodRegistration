@@ -17,6 +17,7 @@ namespace FoodRegistration.Controllers
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
+        // Retrieves a list of all items from the repository
         [HttpGet]
         public async Task<IActionResult> GetAllItems()
         {
@@ -32,6 +33,7 @@ namespace FoodRegistration.Controllers
             }
         }
 
+        // Retrieves a specific item by its ID
         [HttpGet("{id}")]
         public async Task<IActionResult> GetItemById(int id)
         {
@@ -51,6 +53,7 @@ namespace FoodRegistration.Controllers
             }
         }
 
+        // Creates a new item and adds it to the repository
         [HttpPost]
         public async Task<IActionResult> CreateItem([FromBody] Item item)
         {
@@ -75,6 +78,7 @@ namespace FoodRegistration.Controllers
             }
         }
 
+        // Updates an existing item by its ID
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateItem(int id, [FromBody] Item updatedItem)
         {
@@ -121,6 +125,7 @@ namespace FoodRegistration.Controllers
             }
         }
 
+        // Deletes an item by its ID
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteItem(int id)
         {
@@ -143,3 +148,4 @@ namespace FoodRegistration.Controllers
         }
     }
 }
+
