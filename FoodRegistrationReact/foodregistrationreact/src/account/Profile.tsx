@@ -31,6 +31,7 @@ const Profile: React.FC = () => {
       : `${API_URL}/images/AlternativeUserLogo.png`;
   };
 
+
   useEffect(() => {
     const fetchProfileData = async () => {
       // Check if the token exists

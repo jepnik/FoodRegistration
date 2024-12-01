@@ -1,4 +1,4 @@
-/* Contaienr for elements on login page */
+/* Container for elements on login page */
 .login-container {
   max-width: 400px;
   margin: 0 auto;
@@ -20,7 +20,7 @@ h2 {
   color: #333;
 }
 
-/* Plasses text left side of input */
+/* Places text left side of input */
 .login-form .form-group {
   margin-bottom: 20px;
   text-align: left;
