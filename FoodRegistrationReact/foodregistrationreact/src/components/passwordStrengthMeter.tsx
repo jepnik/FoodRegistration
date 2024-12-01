@@ -1,5 +1,3 @@
-// File: src/components/PasswordStrengthMeter.tsx
-
 import React from 'react';
 import zxcvbn from 'zxcvbn';
 import { ProgressBar, Form } from 'react-bootstrap';

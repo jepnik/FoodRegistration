@@ -32,12 +32,9 @@ namespace FoodRegistration.Controllers
             _logger = logger;
         }
 
-        /// <summary>
-        /// Hashes the provided password using SHA256.
-        /// </summary>
-        /// <param name="password">The plain text password.</param>
-        /// <returns>Hashed password as a string.</returns>
-        private string HashPassword(string password)
+        
+        // Hashes the provided password using SHA256.
+              private string HashPassword(string password)
         {
             if (string.IsNullOrEmpty(password))
             {
@@ -54,12 +51,7 @@ namespace FoodRegistration.Controllers
             }
         }
 
-        /// <summary>
-        /// Generates a JWT token for the authenticated user.
-        /// </summary>
-        /// <param name="userId">User's unique identifier.</param>
-        /// <param name="email">User's email address.</param>
-        /// <returns>JWT token as a string.</returns>
+        // Generates a token for the authenticated user.
         private string GenerateJwtToken(int userId, string email)
         {
             if (string.IsNullOrEmpty(email))
@@ -98,11 +90,7 @@ namespace FoodRegistration.Controllers
             return tokenString;
         }
 
-        /// <summary>
-        /// Registers a new user.
-        /// </summary>
-        /// <param name="model">Registration details.</param>
-        /// <returns>Action result indicating success or failure.</returns>
+        // Registers a new user.
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterUserViewModel model)
         {
@@ -135,7 +123,6 @@ namespace FoodRegistration.Controllers
                 {
                     Email = model.Email,
                     Password = HashPassword(model.Password)
-                    // Initialize other necessary fields here
                 };
 
                 await _context.Users.AddAsync(user);
@@ -152,11 +139,7 @@ namespace FoodRegistration.Controllers
             }
         }
 
-        /// <summary>
-        /// Logs in a user and returns a JWT token upon successful authentication.
-        /// </summary>
-        /// <param name="model">Login credentials.</param>
-        /// <returns>JWT token if successful.</returns>
+        // Logs in a user and returns a JWT token upon successful authentication.
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginViewModel model)
         {
@@ -200,10 +183,7 @@ namespace FoodRegistration.Controllers
             }
         }
 
-        /// <summary>
-        /// Retrieves the profile of the authenticated user.
-        /// </summary>
-        /// <returns>User profile details.</returns>
+        // Retrieves the profile of the authenticated user.
         [Authorize]
         [HttpGet("profile")]
         public async Task<IActionResult> GetProfile()
@@ -244,11 +224,7 @@ namespace FoodRegistration.Controllers
             }
         }
 
-        /// <summary>
-        /// Changes the password of the authenticated user.
-        /// </summary>
-        /// <param name="request">Password change details.</param>
-        /// <returns>Action result indicating success or failure.</returns>
+        // Changes the password of the authenticated user.
         [Authorize]
         [HttpPost("change-password")]
         public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequest request)
@@ -320,11 +296,8 @@ namespace FoodRegistration.Controllers
             }
         }
 
-        /// <summary>
-        /// Deletes the authenticated user's account.
-        /// </summary>
-        /// <param name="request">Deletion confirmation and password.</param>
-        /// <returns>Action result indicating success or failure.</returns>
+  
+        // Deletes the authenticated user's account.
         [Authorize]
         [HttpPost("delete-user")]
         public async Task<IActionResult> DeleteUser([FromBody] DeleteUserRequest request)
@@ -346,7 +319,7 @@ namespace FoodRegistration.Controllers
 
             try
             {
-                // Retrieve user ID from JWT claims
+                // Retrieve user ID 
                 var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "UserID");
                 if (userIdClaim == null)
                 {
@@ -391,18 +364,10 @@ namespace FoodRegistration.Controllers
             }
         }
 
-        /// <summary>
-        /// Logs out the user by informing the client to discard the JWT token.
-        /// </summary>
-        /// <returns>Action result indicating successful logout.</returns>
         [HttpPost("logout")]
         public IActionResult Logout()
         {
             _logger.LogInformation("Logout requested.");
-
-            // Since JWTs are stateless, the client should handle token disposal.
-            // Optionally, implement token blacklisting if needed.
-
             _logger.LogInformation("User logged out successfully.");
             return Ok(new { message = "Logged out successfully." });
         }
@@ -424,16 +389,12 @@ public class AccountController : Controller
             _logger.LogInformation("AccountController instantiated.");
         }
 
-        /// <summary>
-        /// Retrieves the current user's ID from the session.
-        /// </summary>
+      
+        // Retrieves the current user's ID from the session.
         private int? CurrentUserId => HttpContext.Session.GetInt32("UserID");
-
-        /// <summary>
-        /// Hashes the provided password using SHA256.
-        /// </summary>
-        /// <param name="password">The plain text password.</param>
-        /// <returns>Hashed password as a string.</returns>
+    
+        // <param name="password">The plain text password.</param>
+        // <returns>Hashed password as a string.</returns>
         private string HashPassword(string password)
         {
             if (string.IsNullOrEmpty(password))

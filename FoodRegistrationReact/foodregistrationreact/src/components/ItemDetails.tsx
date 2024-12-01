@@ -6,7 +6,7 @@ import API_URL from '../apiConfig';
 interface ItemDetailsProps {
   show: boolean;
   onHide: () => void;
-  itemId: number; // Only the ID is passed
+  itemId: number; 
 }
 
 const ItemDetails: React.FC<ItemDetailsProps> = ({ show, onHide, itemId }) => {

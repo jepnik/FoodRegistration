@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using FoodRegistration.Models;
 using FoodRegistration.DAL;
-using Microsoft.Extensions.Logging;
 
 namespace FoodRegistration.Controllers
 {

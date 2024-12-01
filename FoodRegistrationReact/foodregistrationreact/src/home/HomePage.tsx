@@ -22,17 +22,17 @@ const HomePage: React.FC = () => {
   useEffect(() => {
     const fetchItems = async () => {
       setLoading(true);
-      setError(null); // Clear any previous errors
+      setError(null); 
 
       try {
         // Check if the token exists
         if (!token) {
           throw new Error('User is not authenticated. Please log in.');
         }
-
-        const data = await getItems(token); // Pass the token
+         // Pass the token
+        const data = await getItems(token);
         setItems(data);
-        console.log(data); // Logging data here
+        console.log(data); 
       } catch (error: any) {
         console.error(
           `There was a problem with the fetch operation: ${error.message}`
@@ -42,9 +42,9 @@ const HomePage: React.FC = () => {
           error.message === 'Invalid token.' ||
           error.message === 'User is not authenticated. Please log in.'
         ) {
-          // Token might be invalid or expired
-          logout(); // Clear authentication state
-          navigate('/login'); // Redirect to login page
+         
+          logout(); 
+          navigate('/login'); 
         } else {
           setError('Failed to fetch items.');
         }
@@ -63,8 +63,9 @@ const HomePage: React.FC = () => {
       if (!token) {
         throw new Error('User is not authenticated. Please log in.');
       }
-
-      await deleteItem(id, token); // Pass the token
+      
+      //pass the token 
+      await deleteItem(id, token); 
       setItems((prevItems) => prevItems.filter((item) => item.itemId !== id));
     } catch (err: any) {
       console.error('Delete error:', err);
@@ -74,8 +75,8 @@ const HomePage: React.FC = () => {
         err.message === 'User is not authenticated. Please log in.'
       ) {
         // Token might be invalid or expired
-        logout(); // Clear authentication state
-        navigate('/login'); // Redirect to login page
+        logout(); 
+        navigate('/login'); 
       } else {
         alert(err.message || 'Failed to delete item.');
       }
@@ -102,7 +103,7 @@ const HomePage: React.FC = () => {
         return newSortDirection === 'asc' ? aValue - bValue : bValue - aValue;
       }
 
-      return 0; // Default no sorting
+      return 0; 
     });
 
     setItems(sortedItems);
@@ -217,7 +218,7 @@ const HomePage: React.FC = () => {
                   }}
                 >
                   Update
-                </Button>{' '} {/* Hva er dette for noe? */}
+                </Button>
                 <Button
                   variant="danger"
                   size="sm"

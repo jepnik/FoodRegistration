@@ -64,8 +64,8 @@ public static class DBInit
                     Salt = 0,
 
                     // Produktinfo                    
-                    CountryOfOrigin = "Norway",    // Opprinnelsesland
-                    CountryOfProvenance = "Norway", // Opphavsland
+                    CountryOfOrigin = "Norway",    
+                    CountryOfProvenance = "Norway",
                     CreatedDate = DateTime.Now,
                     UpdatedDate = DateTime.Now
                 },

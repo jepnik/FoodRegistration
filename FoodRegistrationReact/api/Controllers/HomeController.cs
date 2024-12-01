@@ -17,9 +17,8 @@ namespace FoodRegistration.Controllers
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        /// <summary>
-        /// Displays the main index page with a list of items.
-        /// </summary>
+       
+        // Displays the main index page with a list of items.
         public async Task<IActionResult> Index()
         {
             try
@@ -41,9 +40,8 @@ namespace FoodRegistration.Controllers
             }
         }
 
-        /// <summary>
-        /// Displays the details of an item by its ID.
-        /// </summary>
+        
+        // Displays the details of an item by its ID.
         public async Task<IActionResult> Details(int id)
         {
             try
@@ -64,18 +62,14 @@ namespace FoodRegistration.Controllers
             }
         }
 
-        /// <summary>
-        /// Displays the Create Item form.
-        /// </summary>
+        // Displays the Create Item form.
         [HttpGet]
         public IActionResult Create()
         {
             return View();
         }
 
-        /// <summary>
-        /// Handles the creation of a new item after form submission.
-        /// </summary>
+        // Handles the creation of a new item after form submission.
         [HttpPost]
         public async Task<IActionResult> Create(Item item)
         {
@@ -88,7 +82,7 @@ namespace FoodRegistration.Controllers
                         _logger.LogWarning($"Validation error: {error.ErrorMessage}");
                     }
                 }
-                return View(item); // Return the form with validation errors.
+                return View(item);
             }
 
             try
@@ -104,9 +98,7 @@ namespace FoodRegistration.Controllers
             }
         }
 
-        /// <summary>
-        /// Displays the Update Item form for a specific item ID.
-        /// </summary>
+        // Displays the Update Item form for a specific item ID.
         [HttpGet]
         public async Task<IActionResult> Update(int id)
         {
@@ -128,15 +120,13 @@ namespace FoodRegistration.Controllers
             }
         }
 
-        /// <summary>
-        /// Handles the update of an existing item after form submission.
-        /// </summary>
+        // Handles the update of an existing item after form submission.
         [HttpPost]
         public async Task<IActionResult> Update(Item item)
         {
             if (!ModelState.IsValid)
             {
-                return View(item); // Return the form with validation errors.
+                return View(item); 
             }
 
             try
@@ -176,9 +166,7 @@ namespace FoodRegistration.Controllers
             }
         }
 
-        /// <summary>
-        /// Displays a confirmation page before deleting an item.
-        /// </summary>
+        // Displays a confirmation page before deleting an item.
         [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
@@ -200,9 +188,7 @@ namespace FoodRegistration.Controllers
             }
         }
 
-        /// <summary>
-        /// Handles the deletion of an item after confirmation.
-        /// </summary>
+        // Handles the deletion of an item after confirmation.
         [HttpPost]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {

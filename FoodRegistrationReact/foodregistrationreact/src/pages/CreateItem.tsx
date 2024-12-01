@@ -271,22 +271,22 @@ const CreateItem: React.FC = () => {
               'sugar',
               'protein',
               'fat',
-              'saturatedfat', // Correct key
-              'unsaturatedfat', // Correct key
+              'saturatedfat', 
+              'unsaturatedfat', 
               'fibre',
               'salt',
             ].map((field) => (
               <Form.Group className="mb-3" key={field}>
                 <Form.Label>{formatFieldName(field)} *</Form.Label>
                 <Form.Control
-                  type="number" // Changed to 'number' for numerical inputs
+                  type="number" 
                   name={field}
                   value={formData[field as keyof typeof formData] ?? ''}
                   onChange={handleChange}
                   isInvalid={!!errors[field]}
-                  min="0" // Prevent negative numbers
-                  step="any" // Allow decimal values
-                  onWheel={(e) => e.currentTarget.blur()} // Prevent scrolling from changing value
+                  min="0" 
+                  step="any" 
+                  onWheel={(e) => e.currentTarget.blur()} 
                 />
                 <Form.Control.Feedback type="invalid">
                   {errors[field]}

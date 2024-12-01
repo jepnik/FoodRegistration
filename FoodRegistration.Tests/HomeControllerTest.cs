@@ -9,6 +9,7 @@ using FoodRegistration.ViewModels;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System;
 
 namespace FoodRegistration.Tests
 {
@@ -174,5 +175,92 @@ namespace FoodRegistration.Tests
             var redirectToActionResult = Assert.IsType<RedirectToActionResult>(result);
             Assert.Equal("Index", redirectToActionResult.ActionName);
         }
+
+        #region Updated Negative Test Cases
+
+        /// <summary>
+        /// Test Create POST action with invalid ModelState.
+        /// Expecting the view to be returned with the model and validation errors.
+        /// </summary>
+        [Fact]
+        public async Task Create_Post_ReturnsViewResult_WithInvalidModelState()
+        {
+            // Arrange
+            var item = new Item(); // Missing required fields
+            _controller.ModelState.AddModelError("Name", "The Name field is required.");
+            _controller.ModelState.AddModelError("Category", "The Category field is required.");
+
+            // Act
+            var result = await _controller.Create(item);
+
+            // Assert
+            var viewResult = Assert.IsType<ViewResult>(result);
+            var returnedItem = Assert.IsType<Item>(viewResult.ViewData.Model);
+            Assert.Equal(item, returnedItem);
+            Assert.False(_controller.ModelState.IsValid);
+            Assert.Equal(2, _controller.ModelState.ErrorCount);
+        }
+
+        /// <summary>
+        /// Test Details action when item does not exist.
+        /// Expecting a NotFound result with a specific message.
+        /// </summary>
+        [Fact]
+        public async Task Details_ReturnsNotFound_WhenItemDoesNotExist()
+        {
+            // Arrange
+            int nonExistentId = 999;
+            _mockRepo.Setup(repo => repo.GetItemById(nonExistentId)).ReturnsAsync((Item)null);
+
+            // Act
+            var result = await _controller.Details(nonExistentId);
+
+            // Assert
+            var notFoundResult = Assert.IsType<NotFoundObjectResult>(result);
+            Assert.Equal($"Item not found for the ItemId", notFoundResult.Value);
+        }
+
+        /// <summary>
+        /// Test Update POST action when item does not exist.
+        /// Expecting a NotFound result with a specific message.
+        /// </summary>
+        [Fact]
+        public async Task Update_Post_ReturnsNotFound_WhenItemDoesNotExist()
+        {
+            // Arrange
+            var item = new Item { ItemId = 1, Name = "Non-Existent Item" };
+            _mockRepo.Setup(repo => repo.GetItemById(item.ItemId)).ReturnsAsync((Item)null);
+
+            // Simulate a valid ModelState
+            _controller.ModelState.Clear();
+
+            // Act
+            var result = await _controller.Update(item);
+
+            // Assert
+            var notFoundResult = Assert.IsType<NotFoundObjectResult>(result);
+            Assert.Equal($"Item not found.", notFoundResult.Value);
+        }
+
+
+        // Test DeleteConfirmed action when deletion fails.
+        // Expecting a NotFound result with a specific message.
+
+        [Fact]
+        public async Task DeleteConfirmed_ReturnsBadRequest_WhenDeletionFails()
+        {
+            // Arrange
+            int itemIdToDelete = 1;
+            _mockRepo.Setup(repo => repo.Delete(itemIdToDelete)).ReturnsAsync(false); // Simulate failure
+
+            // Act
+            var result = await _controller.DeleteConfirmed(itemIdToDelete);
+
+            // Assert
+            var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
+            Assert.Equal("Item deletion failed", badRequestResult.Value);
+        }
+        #endregion
     }
+
 }
