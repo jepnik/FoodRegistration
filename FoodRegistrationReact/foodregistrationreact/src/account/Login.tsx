@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import API_URL from "../apiConfig";
 import { useAuth } from "../components/AuthContext";
+import { loginUser } from "../api/apiService";
 import "../styles/login.css"; // Ensure your CSS includes styles for login-container, form-group, etc.
 import { useNavigate } from "react-router-dom";
 import Footer from "../shared/Footer";
@@ -17,26 +18,18 @@ const Login: React.FC = () => {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await fetch(`${API_URL}/api/account/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
+      // Use the loginUser function from the apiService
+      const data = await loginUser(email, password);
+      const token = data.token;
 
-      if (response.ok) {
-        const data = await response.json();
-        const token = data.token;
+      // Store the token in AuthContext
+      login(token);
 
-        // Store the token in AuthContext
-        login(token);
-
-        // Navigate users to the homepage on successful login
-        navigate("/");
-      } else {
-        setError("Invalid credentials");
-      }
-    } catch (err) {
-      setError("An error occurred");
+      // Navigate users to the homepage on successful login
+      navigate("/");
+    } catch (error: any) {
+      // Set error message based on the error caught
+      setError(error.message || "Invalid ");
     }
   };
 

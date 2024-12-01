@@ -60,11 +60,9 @@ const ChangePassword: React.FC = () => {
           <h2 className="text-center mb-4">Change Password</h2>
           {errors.length > 0 && (
             <Alert variant="danger" className="text-center">
-              <ul>
                 {errors.map((err, idx) => (
-                  <li key={idx}>{err}</li>
+                  <div key={idx}>{err}</div>
                 ))}
-              </ul>
             </Alert>
           )}
           {successMessage && <Alert variant="success" className="text-center">{successMessage}</Alert>}

@@ -23,6 +23,11 @@ const RegisterUser: React.FC = () => {
     e.preventDefault();
     setError('');
     setSuccess('');
+
+    if (password.length < 6) {
+      setError('Password must be 6 characters or longer');
+      return;
+    }
   
     if (password !== confirmPassword) {
       setError('Passwords do not match');
