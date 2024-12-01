@@ -9,7 +9,7 @@ interface ItemTableProps {
   onUpdate: (id: number) => void; // Callback to handle update action
   onRowClick: (id: number) => void; // Callback to handle row click (ItemDetails)
 }
-
+// ItemTable for showing all items with fewer rows than actual parameters of an item. 
 const ItemTable: React.FC<ItemTableProps> = ({
   items,
   onDelete,

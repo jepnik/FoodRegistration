@@ -5,7 +5,7 @@ import { ProgressBar, Form } from 'react-bootstrap';
 interface PasswordStrengthMeterProps {
   password: string;
 }
-
+// Intigates Strength Meter for Password generation in register user and change Password
 const PasswordStrengthMeter: React.FC<PasswordStrengthMeterProps> = ({ password }) => {
   const testResult = zxcvbn(password);
   const num = (testResult.score * 100) / 4;

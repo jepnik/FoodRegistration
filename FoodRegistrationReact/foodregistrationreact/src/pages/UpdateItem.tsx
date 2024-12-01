@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react'; 
 import { useNavigate, useParams } from 'react-router-dom';
-import { Form, Button, Alert, Spinner } from 'react-bootstrap';
+import { Alert, Button, Spinner } from 'react-bootstrap';
 import { Item } from '../types/item';
 import { getItemById, updateItem } from '../api/apiService';
 import { useAuth } from '../components/AuthContext';
+import ItemForm from '../components/ItemForm'; // Import the ItemForm component
 
 const UpdateItem: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -225,118 +226,16 @@ const UpdateItem: React.FC = () => {
     );
 
   return (
-    <>
-      {/* Inject CSS to remove number input spinners */}
-      <style>
-        {`
-          /* Chrome, Safari, Edge, Opera */
-          input[type=number]::-webkit-outer-spin-button,
-          input[type=number]::-webkit-inner-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
-          }
-
-          /* Firefox */
-          input[type=number] {
-            -moz-appearance: textfield;
-          }
-        `}
-      </style>
-
-      <div
-        className="d-flex justify-content-center align-items-center"
-        style={{ minHeight: '100vh', backgroundColor: '#f8f9fa' }}
-      >
-        <div className="card p-4 shadow" style={{ width: '600px' }}>
-          <h1 className="text-center mb-4">Update Item</h1>
-
-          {/* Success Message */}
-          {successMessage && <Alert variant="success">{successMessage}</Alert>}
-
-          {/* Submission Error Message */}
-          {submissionError && <Alert variant="danger">{submissionError}</Alert>}
-
-          <Form onSubmit={handleSubmit}>
-            {/* Text Fields */}
-            {formFields.map(field => (
-              <Form.Group className="mb-3" key={field.name}>
-                <Form.Label>
-                  {field.label}{field.required && ' *'}
-                </Form.Label>
-                <Form.Control
-                  type={field.type}
-                  name={field.name}
-                  value={(formData[field.name as keyof Item] || '')}
-                  onChange={handleChange}
-                  isInvalid={!!errors[field.name]}
-                  placeholder={
-                    field.required
-                      ? `Enter ${field.label.toLowerCase()}`
-                      : `Enter ${field.label.toLowerCase()} (optional)`
-                  }
-                />
-                {field.required && (
-                  <Form.Control.Feedback type="invalid">
-                    {errors[field.name]}
-                  </Form.Control.Feedback>
-                )}
-              </Form.Group>
-            ))}
-
-            <h2 className="text-center">Nutritional Information per 100g</h2>
-
-            {/* Nutritional Fields */}
-            {nutritionalFormFields.map(field => (
-              <Form.Group className="mb-3" key={field.name}>
-                <Form.Label>
-                  {field.label} *
-                </Form.Label>
-                <Form.Control
-                  type={field.type}
-                  name={field.name}
-                  value={formData[field.name as keyof Item] ?? ''}
-                  onChange={handleChange}
-                  isInvalid={!!errors[field.name]}
-                  min={field.min}
-                  step={field.step}
-                  placeholder={`Enter ${field.label.toLowerCase()}`}
-                  onWheel={(e) => e.currentTarget.blur()} // Prevent scrolling from changing value
-                />
-                <Form.Control.Feedback type="invalid">
-                  {errors[field.name]}
-                </Form.Control.Feedback>
-              </Form.Group>
-            ))}
-
-            {/* Submit and Cancel Buttons */}
-            <div className="d-flex justify-content-between align-items-center">
-              <Button
-                variant="primary"
-                type="submit"
-                disabled={isSubmitting}
-                className="create-button"
-                style={{ width: '130px', height: '40px' }}
-              >
-                {isSubmitting ? (
-                  <>
-                    <Spinner as="span" animation="border" size="sm" /> Updating...
-                  </>
-                ) : (
-                  'Update Item'
-                )}
-              </Button>
-              <Button
-                variant="secondary"
-                onClick={() => navigate('/')}
-                style={{ width: '130px', height: '40px' }}
-              >
-                Cancel
-              </Button>
-            </div>
-          </Form>
-        </div>
-      </div>
-    </>
+    <ItemForm
+      formData={formData}
+      errors={errors}
+      handleChange={handleChange}
+      handleSubmit={handleSubmit}
+      isSubmitting={isSubmitting}
+      submissionError={submissionError}
+      successMessage={successMessage}
+      mode="update" // Set the mode to 'update'
+    />
   );
 };
 
