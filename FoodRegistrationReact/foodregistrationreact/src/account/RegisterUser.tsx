@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { Form, Button, Alert, Spinner, Container, Row, Col } from 'react-bootstrap';
 import PasswordStrengthMeter from '../components/passwordStrengthMeter'; // Ensure correct casing
 import { registerUser } from '../api/apiService'; // Import the function
-import '../styles/registerAndPassword.css';
 import Footer from "../shared/Footer";
 import '../styles/Footer.css';
 

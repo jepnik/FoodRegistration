@@ -1,5 +1,3 @@
-// File: src/account/DeleteUser.tsx
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Alert, Spinner, Button, Form, Container, Row, Col, Card, Modal } from 'react-bootstrap';

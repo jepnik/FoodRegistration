@@ -1,12 +1,9 @@
-// File: src/account/ChangePassword.tsx
-
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Alert, Spinner, Button, Form, Container, Row, Col } from "react-bootstrap";
 import { changePassword } from "../api/apiService";
 import { useAuth } from "../components/AuthContext";
 import PasswordStrengthMeter from "../components/passwordStrengthMeter"; // Import the component
-import "../styles/registerAndPassword.css";
 
 const ChangePassword: React.FC = () => {
   const [oldPassword, setOldPassword] = useState("");
