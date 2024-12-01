@@ -2,11 +2,12 @@
 
 import React, { useState } from 'react'; 
 import { useNavigate } from 'react-router-dom';
-import { Form, Button, Alert, Spinner } from 'react-bootstrap';
+import { Alert, Spinner } from 'react-bootstrap';
 import { Item } from '../types/item';
 import { createItem } from '../api/apiService';
-import { useAuth } from '../components/AuthContext'; // Import AuthContext for token and logout
-import '../styles/site.css'; // Ensure the correct path to your CSS
+import { useAuth } from '../components/AuthContext'; 
+import '../styles/site.css'; 
+import ItemForm from '../components/ItemForm'; // Adjust the path as needed
 
 const CreateItem: React.FC = () => {
   const navigate = useNavigate();
@@ -28,14 +29,21 @@ const CreateItem: React.FC = () => {
     unsaturatedfat: undefined, // Correct key
     fibre: undefined,
     salt: undefined,
-    countryOfOrigin: undefined,
-    countryOfProvenance: undefined,
+    countryOfOrigin: '',
+    countryOfProvenance: '',
   });
 
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [submissionError, setSubmissionError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+
+  // Helper function to format field names
+  const formatFieldName = (field: string): string => {
+    return field
+      .replace(/([A-Z])/g, ' ') // Insert space before capital letters
+      .replace(/^./, (str) => str.toUpperCase()); // Capitalize first letter
+  };
 
   // Handle input changes
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -51,13 +59,6 @@ const CreateItem: React.FC = () => {
       ...prevErrors,
       [name]: '',
     }));
-  };
-
-  // Helper function to format field names
-  const formatFieldName = (field: string) => {
-    return field
-      .replace(/([A-Z])/g, ' ') // Insert space before capital letters
-      .replace(/^./, (str) => str.toUpperCase()); // Capitalize first letter
   };
 
   // Validate the form data
@@ -174,187 +175,16 @@ const CreateItem: React.FC = () => {
   };
 
   return (
-    <>
-      {/* Inject CSS to remove number input spinners */}
-      <style>
-        {`
-          /* Chrome, Safari, Edge, Opera */
-          input[type=number]::-webkit-outer-spin-button,
-          input[type=number]::-webkit-inner-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
-          }
-
-          /* Firefox */
-          input[type=number] {
-            -moz-appearance: textfield;
-          }
-        `}
-      </style>
-
-      <div
-        className="d-flex justify-content-center align-items-center"
-        style={{ minHeight: '100vh', backgroundColor: '#f8f9fa' }}
-      >
-        <div className="card p-4 shadow" style={{ width: '600px' }}>
-          <h1 className="text-center mb-4">Create New Item</h1>
-
-          {/* Success Message */}
-          {successMessage && <Alert variant="success">{successMessage}</Alert>}
-
-          {/* Submission Error Message */}
-          {submissionError && <Alert variant="danger">{submissionError}</Alert>}
-
-          <Form onSubmit={handleSubmit}>
-            {/* Name Field */}
-            <Form.Group className="mb-3">
-              <Form.Label>Name *</Form.Label>
-              <Form.Control
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                isInvalid={!!errors.name}
-                // Removed placeholder
-              />
-              <Form.Control.Feedback type="invalid">
-                {errors.name}
-              </Form.Control.Feedback>
-            </Form.Group>
-
-            {/* Category Field */}
-            <Form.Group className="mb-3">
-              <Form.Label>Category *</Form.Label>
-              <Form.Control
-                type="text"
-                name="category"
-                value={formData.category}
-                onChange={handleChange}
-                isInvalid={!!errors.category}
-                // Removed placeholder
-              />
-              <Form.Control.Feedback type="invalid">
-                {errors.category}
-              </Form.Control.Feedback>
-            </Form.Group>
-
-            {/* Certificate Field */}
-            <Form.Group className="mb-3">
-              <Form.Label>Certificate</Form.Label>
-              <Form.Control
-                type="text"
-                name="certificate"
-                value={formData.certificate || ''}
-                onChange={handleChange}
-                // Removed placeholder
-              />
-            </Form.Group>
-
-            {/* Image URL Field */}
-            <Form.Group className="mb-3">
-              <Form.Label>Image URL</Form.Label>
-              <Form.Control
-                type="text"
-                name="imageUrl"
-                value={formData.imageUrl || ''}
-                onChange={handleChange}
-                // Removed placeholder
-              />
-            </Form.Group>
-
-            <h2 className="text-center">Nutritional Information per 100g</h2>
-
-            {/* Nutritional Fields */}
-            {[
-              'energy',
-              'carbohydrates',
-              'sugar',
-              'protein',
-              'fat',
-              'saturatedfat', 
-              'unsaturatedfat', 
-              'fibre',
-              'salt',
-            ].map((field) => (
-              <Form.Group className="mb-3" key={field}>
-                <Form.Label>{formatFieldName(field)} *</Form.Label>
-                <Form.Control
-                  type="number" 
-                  name={field}
-                  value={formData[field as keyof typeof formData] ?? ''}
-                  onChange={handleChange}
-                  isInvalid={!!errors[field]}
-                  min="0" 
-                  step="any" 
-                  onWheel={(e) => e.currentTarget.blur()} 
-                />
-                <Form.Control.Feedback type="invalid">
-                  {errors[field]}
-                </Form.Control.Feedback>
-              </Form.Group>
-            ))}
-
-            {/* Country of Origin Field */}
-            <Form.Group className="mb-3">
-              <Form.Label>Country of Origin *</Form.Label>
-              <Form.Control
-                type="text"
-                name="countryOfOrigin"
-                value={formData.countryOfOrigin}
-                onChange={handleChange}
-                isInvalid={!!errors.countryOfOrigin}
-                // Removed placeholder
-              />
-              <Form.Control.Feedback type="invalid">
-                {errors.countryOfOrigin}
-              </Form.Control.Feedback>
-            </Form.Group>
-
-            {/* Country of Provenance Field */}
-            <Form.Group className="mb-3">
-              <Form.Label>Country of Provenance *</Form.Label>
-              <Form.Control
-                type="text"
-                name="countryOfProvenance"
-                value={formData.countryOfProvenance}
-                onChange={handleChange}
-                isInvalid={!!errors.countryOfProvenance}
-                // Removed placeholder
-              />
-              <Form.Control.Feedback type="invalid">
-                {errors.countryOfProvenance}
-              </Form.Control.Feedback>
-            </Form.Group>
-
-            {/* Submit and Cancel Buttons */}
-            <div className="d-flex justify-content-between align-items-center">
-              <Button
-                variant="primary"
-                type="submit"
-                disabled={isSubmitting}
-                className="create-button"
-                style={{ width: '130px', height: '40px' }}
-              >
-                {isSubmitting ? (
-                  <>
-                    <Spinner as="span" animation="border" size="sm" /> Creating...
-                  </>
-                ) : (
-                  'Create Item'
-                )}
-              </Button>
-              <Button
-                variant="secondary"
-                onClick={() => navigate('/')}
-                style={{ width: '130px', height: '40px' }}
-              >
-                Cancel
-              </Button>
-            </div>
-          </Form>
-        </div>
-      </div>
-    </>
+    <ItemForm
+      formData={formData}
+      errors={errors}
+      handleChange={handleChange}
+      handleSubmit={handleSubmit}
+      isSubmitting={isSubmitting}
+      submissionError={submissionError}
+      successMessage={successMessage}
+      mode="create" // Pass the mode prop
+    />
   );
 };
 

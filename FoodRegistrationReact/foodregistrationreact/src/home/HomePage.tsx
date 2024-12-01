@@ -8,7 +8,7 @@ import ItemDetails from '../components/ItemDetails';
 import { useAuth } from '../components/AuthContext';
 
 const HomePage: React.FC = () => {
-  const { token, logout } = useAuth(); // Include token
+  const { token, logout } = useAuth(); 
   const [items, setItems] = useState<Item[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);

@@ -8,7 +8,7 @@ interface ItemDetailsProps {
   onHide: () => void;
   itemId: number; 
 }
-
+// Detailed view of a single item 
 const ItemDetails: React.FC<ItemDetailsProps> = ({ show, onHide, itemId }) => {
   const [item, setItem] = useState<Item | null>(null);
   const [loading, setLoading] = useState<boolean>(true);

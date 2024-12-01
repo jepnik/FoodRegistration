@@ -2,7 +2,7 @@ import React from 'react';
 import '../styles/Footer.css';
 
 interface FooterProps {
-  position: 'absolute' | 'relative'; // Definerer prop-typen
+  position: 'absolute' | 'relative'; 
 }
 
 const Footer: React.FC<FooterProps> = ({ position }) => {
