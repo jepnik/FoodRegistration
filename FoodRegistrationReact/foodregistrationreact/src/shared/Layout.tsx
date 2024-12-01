@@ -6,6 +6,7 @@ import Footer from './Footer';
 const Layout: React.FC = () => {
   const location = useLocation();
   const isLoginPath = location.pathname === "/login"; 
+
   return (
     <div className="App">
       <Header />

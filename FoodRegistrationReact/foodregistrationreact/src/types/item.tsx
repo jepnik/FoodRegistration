@@ -15,6 +15,6 @@ export interface Item {
   salt?: number;
   countryOfOrigin: string;
   countryOfProvenance: string;
-  createdDate?: string;  // Date should be in string format for consistency
-  updatedDate?: string;  // Date should be in string format for consistency
+  createdDate?: string;  
+  updatedDate?: string;  
 }

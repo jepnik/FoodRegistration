@@ -18,7 +18,7 @@ public class AccountController : Controller
             _context = context;
         }
     
-    /*Sets a variable to retrieve the users ID from the session, this is used in many methods*/
+    //Sets a variable to retrieve the users ID from the session, this is used in many methods
     private int? CurrentUserId => HttpContext.Session.GetInt32("UserID");
 
     private string HashPassword(string password) //Method for hashing password. Using SHA256 because it's quick and we're not using ASP.NET Core Identity
@@ -64,7 +64,6 @@ public class AccountController : Controller
         return View(model);
     }
 
-    //GET: Account/Login
     [HttpGet]
     public IActionResult Login()
     {
@@ -76,17 +75,20 @@ public class AccountController : Controller
     {
         if (ModelState.IsValid)
         {
+            //Compares input with data in database
             var user = await _context.Users
             .FirstOrDefaultAsync(u => u.Email == model.Email && u.Password == HashPassword(model.Password!)); //Hashes written password to compare to hashed password in database
 
             if (user != null)
             {
+                //Assigns UserID and Email
                 HttpContext.Session.SetInt32("UserID", user.UserId);
                 HttpContext.Session.SetString("UserEmail", user.Email!);
                 return RedirectToAction("Index", "Home");
             }
             else
             {
+                //Error messages
                 ModelState.AddModelError("Email", "Invalid email");
                 ModelState.AddModelError("Password", "Invalid password");
             }
@@ -104,11 +106,12 @@ public class AccountController : Controller
     [HttpGet]
     public async Task<IActionResult> Profile()
     {
+        //Makes sure the UserId is correct with the database
         var userId = CurrentUserId;
         var user = await _context.Users.FindAsync(userId);
         var model = new User //Removed Profile.cs Model since it was identical to User.cs
         {
-            UserId = user!.UserId, //Using '!' because user never will be null at this point, since you have to be logged in to reach this method
+            UserId = user!.UserId, //Using '!' because user never will be null at this point and it was giving a warning. Middleware ensures you have to be logged in to reach this method
             Email = user.Email
         };
         return View(model);
@@ -126,11 +129,13 @@ public class AccountController : Controller
         if (ModelState.IsValid)
         {
             var userId = CurrentUserId;
+            //Simple example of authorization
             if (userId.HasValue)
             {
                 var user = await _context.Users.FindAsync(userId.Value);
                 if (user != null && user.Password == HashPassword(model.OldPassword!))
                 {
+                    //Hash new password
                     user.Password = HashPassword(model.NewPassword!);
                     await _context.SaveChangesAsync();
 
@@ -149,10 +154,11 @@ public class AccountController : Controller
     public async Task<IActionResult> DeleteUser()
     {
         var userId = CurrentUserId;
-        var user = await _context.Users.FindAsync(userId!.Value);
+        var user = await _context.Users.FindAsync(userId!.Value); //! to safely remove warning as userId will never be null at this point  
 
         if (user != null)
         {
+            //Deletes user from database and logs you out
             _context.Users.Remove(user);
             await _context.SaveChangesAsync();
             HttpContext.Session.Clear();

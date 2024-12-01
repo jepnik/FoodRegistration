@@ -1,15 +1,11 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using Xunit;
 using FoodRegistration.Controllers;
 using FoodRegistration.Models;
 using FoodRegistration.DAL;
 using FoodRegistration.ViewModels;
 using Microsoft.Extensions.Logging;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System;
 
 namespace FoodRegistration.Tests
 {
@@ -25,7 +21,7 @@ namespace FoodRegistration.Tests
             _mockLogger = new Mock<ILogger<HomeController>>();
             _controller = new HomeController(_mockRepo.Object, _mockLogger.Object);
         }
-
+        // Tests showing list of items
         [Fact]
         public async Task Index_ReturnsViewResult_WithListOfItems()
         {
@@ -41,7 +37,7 @@ namespace FoodRegistration.Tests
             var model = Assert.IsAssignableFrom<ItemsViewModel>(viewResult.ViewData.Model);
             Assert.Single(model.Items);
         }
-
+        // Tests showing details of an Item
         [Fact]
         public async Task Details_ReturnsViewResult_WithItem()
         {
@@ -57,7 +53,7 @@ namespace FoodRegistration.Tests
             var model = Assert.IsAssignableFrom<Item>(viewResult.ViewData.Model);
             Assert.Equal(item.ItemId, model.ItemId);
         }
-
+        // Tests create item
         [Fact]
         public void Create_ReturnsViewResult()
         {
@@ -67,7 +63,7 @@ namespace FoodRegistration.Tests
             // Assert
             Assert.IsType<ViewResult>(result);
         }
-
+        // Tests the Create method to ensure it redirects to the Index action when the model state is valid
         [Fact]
         public async Task Create_Post_ReturnsRedirectToActionResult_WhenModelStateIsValid()
         {
@@ -108,7 +104,7 @@ namespace FoodRegistration.Tests
             var redirectToActionResult = Assert.IsType<RedirectToActionResult>(result);
             Assert.Equal("Index", redirectToActionResult.ActionName);
         }
-
+        // Tests update item with Viewresult
         [Fact]
         public async Task Update_Get_ReturnsViewResult_WithItem()
         {
@@ -124,13 +120,13 @@ namespace FoodRegistration.Tests
             var model = Assert.IsAssignableFrom<Item>(viewResult.ViewData.Model);
             Assert.Equal(item.ItemId, model.ItemId);
         }
-
+        // Tests the Update method to ensure it redirects to the Index action when the model state is valid
         [Fact]
         public async Task Update_Post_ReturnsRedirectToActionResult_WhenModelStateIsValid()
         {
             // Arrange
             var item = new Item { ItemId = 1, Name = "Test Item" };
-            _mockRepo.Setup(repo => repo.GetItemById(item.ItemId)).ReturnsAsync(item); 
+            _mockRepo.Setup(repo => repo.GetItemById(item.ItemId)).ReturnsAsync(item);
             _mockRepo.Setup(repo => repo.Update(item)).ReturnsAsync(true);
 
             // Simulate a valid ModelState
@@ -143,7 +139,7 @@ namespace FoodRegistration.Tests
             var redirectToActionResult = Assert.IsType<RedirectToActionResult>(result);
             Assert.Equal("Index", redirectToActionResult.ActionName);
         }
-
+        // Test Delete item
         [Fact]
         public async Task Delete_Get_ReturnsViewResult_WithItem()
         {
@@ -159,7 +155,7 @@ namespace FoodRegistration.Tests
             var model = Assert.IsAssignableFrom<Item>(viewResult.ViewData.Model);
             Assert.Equal(item.ItemId, model.ItemId);
         }
-
+      // Test confirmation of deleting item with redirect to actionresult
         [Fact]
         public async Task DeleteConfirmed_ReturnsRedirectToActionResult()
         {
@@ -176,10 +172,8 @@ namespace FoodRegistration.Tests
 
         #region Updated Negative Test Cases
 
-        //
+
         // Test Create POST action with invalid ModelState.
-        // Expecting the view to be returned with the model and validation errors.
-        //
         [Fact]
         public async Task Create_Post_ReturnsViewResult_WithInvalidModelState()
         {
@@ -199,10 +193,9 @@ namespace FoodRegistration.Tests
             Assert.Equal(2, _controller.ModelState.ErrorCount);
         }
 
-      
+
         // Test Details action when item does not exist.
-        // Expecting a NotFound result with a specific message.
-       
+
         [Fact]
         public async Task Details_ReturnsNotFound_WhenItemDoesNotExist()
         {
@@ -218,10 +211,8 @@ namespace FoodRegistration.Tests
             Assert.Equal($"Item not found for the ItemId", notFoundResult.Value);
         }
 
-       
-        /// Test Update POST action when item does not exist.
-        /// Expecting a NotFound result with a specific message.
-      
+
+        // Test Update POST action when item does not exist.
         [Fact]
         public async Task Update_Post_ReturnsNotFound_WhenItemDoesNotExist()
         {
@@ -241,14 +232,13 @@ namespace FoodRegistration.Tests
 
 
         // Test DeleteConfirmed action when deletion fails.
-        // Expecting a NotFound result with a specific message.
 
         [Fact]
         public async Task DeleteConfirmed_ReturnsBadRequest_WhenDeletionFails()
         {
             // Arrange
             int itemIdToDelete = 1;
-            _mockRepo.Setup(repo => repo.Delete(itemIdToDelete)).ReturnsAsync(false); 
+            _mockRepo.Setup(repo => repo.Delete(itemIdToDelete)).ReturnsAsync(false);
 
             // Act
             var result = await _controller.DeleteConfirmed(itemIdToDelete);

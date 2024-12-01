@@ -1,13 +1,14 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '../styles/Header.css'; 
+import '../styles/Header.css'; 
 import API_URL from '../apiConfig';
 import { useAuth } from '../components/AuthContext'; 
 import { getProfile } from '../api/apiService'; 
 
 const Header: React.FC = () => {
   const navigate = useNavigate();
-  const { isAuthenticated, logout, token } = useAuth(); // Get authentication state, logout function, and token
+  const { isAuthenticated, logout, token } = useAuth(); 
   const logo = `${API_URL}/images/logoHvit.ico`;
 
   // State for dropdown and user profile
@@ -17,7 +18,7 @@ const Header: React.FC = () => {
 
   // Function to get user icon based on email domain
   const getUserIcon = (email: string): string => {
-    if (!email) return `${API_URL}/images/FoodTrace.png`; // Default icon
+    if (!email) return `${API_URL}/images/FoodTrace.png`; 
     const domain = email.split('@')[1];
     return domain === 'foodcompany.com'
       ? `${API_URL}/images/UserLogo.png`
@@ -29,7 +30,7 @@ const Header: React.FC = () => {
     const fetchUserProfile = async () => {
       if (isAuthenticated && token) {
         try {
-          const userProfile = await getProfile(token); // Fetch profile from API
+          const userProfile = await getProfile(token); 
           setProfile(userProfile);
         } catch (error) {
           console.error('Error fetching profile:', error);
