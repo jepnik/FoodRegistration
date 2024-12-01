@@ -64,8 +64,8 @@ namespace FoodRegistration.DAL
         {
             try
             {
-                _db.Items.Update(item); // Update item in database
-                await _db.SaveChangesAsync(); // Save changes
+                _db.Items.Update(item); 
+                await _db.SaveChangesAsync(); 
                 return true;
             }
             catch (Exception e)

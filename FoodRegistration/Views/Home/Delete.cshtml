@@ -36,7 +36,7 @@
         </table>
     </div>
 
-    <!--buttons delete and cancel-->
+    <!--buttons for delete and cancel-->
     <form asp-action="DeleteConfirmed" asp-route-id="@Model.ItemId" method="post">
         <input type="hidden" asp-for="ItemId" />
         <button type="submit" class="btn btn-danger mt-3 mb-5">Delete</button>

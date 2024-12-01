@@ -54,7 +54,7 @@ for details on configuring this project to bundle and minify static web assets. 
   margin-left: auto;
 }
 
-/* Hamburger/box menu dropdown positioning*/
+/* Hamburger menu dropdown positioning*/
 .dropdown-menu {
   left: auto;
   right: 0;
@@ -65,7 +65,7 @@ for details on configuring this project to bundle and minify static web assets. 
   font-size: 1.2rem;
 }
 
-/* Footer styles */
+/* Footer style and placment*/
 .footer {
   background-color: #83B271;
   color: #ffffff;

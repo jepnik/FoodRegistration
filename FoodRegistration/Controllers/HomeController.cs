@@ -32,7 +32,7 @@ public class HomeController : Controller
         return View(itemsViewModel);
     }
 
-    // Details page for an item by ID
+    // Details page for an item by ItemID
     public async Task<IActionResult> Details(int id)
     {
         var item = await _itemRepository.GetItemById(id);
@@ -52,7 +52,7 @@ public class HomeController : Controller
         return View();
     }
 
-    //Submit the Create item form with validation
+    //Submit the create item form with validation
     [HttpPost]
     public async Task<IActionResult> Create(Item item)
     {
@@ -66,7 +66,7 @@ public class HomeController : Controller
                     _logger.LogError($"Field: {state.Key}, Error: {error.ErrorMessage}");
                 }
             }
-            //retunrs to view with validation errors
+            //returns to view with validation errors
             return View(item);
         }
 
@@ -75,7 +75,7 @@ public class HomeController : Controller
         return RedirectToAction(nameof(Index));
     }
 
-    //Render the Update item form for a specific item by it's ItemId
+    //Update specific item by it's ItemId
     [HttpGet]
     public async Task<IActionResult> Update(int id)
     {
@@ -88,7 +88,7 @@ public class HomeController : Controller
         return View(item);
     }
 
-    //Submit the Update form and save changes to the item
+    //Save changes to the item from update
     [HttpPost]
     public async Task<IActionResult> Update(Item item)
     {
@@ -119,7 +119,7 @@ public class HomeController : Controller
             existingItem.Salt = item.Salt;
             existingItem.CountryOfOrigin = item.CountryOfOrigin;
             existingItem.CountryOfProvenance = item.CountryOfProvenance;
-            //Sett UpdatedDate til nåværende tidspunkt
+            //Set updatet date to now
             existingItem.UpdatedDate = DateTime.Now;
 
             // Saves updates to database
