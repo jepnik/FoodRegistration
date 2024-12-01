@@ -66,7 +66,6 @@ const RegisterUser: React.FC = () => {
   };
 
   return (
-    <>
     <Container className="d-flex justify-content-center align-items-center min-vh-100">
       <Row className="w-100">
         <Col xs={12} sm={8} md={6} lg={5} className="mx-auto">
@@ -137,8 +136,6 @@ const RegisterUser: React.FC = () => {
         </Col>
       </Row>
     </Container>
-    <Footer/> 
-    </>
   );
 };
 

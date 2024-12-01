@@ -79,7 +79,6 @@ const Login: React.FC = () => {
         FoodRegistration | Contact us: +47 999 99 999 | Email: 
        <a href="mailto:vårbedrift@gmail.com"> FoodTrace@gmail.com</a></p>
       </div>
-      
   );
 };
 
