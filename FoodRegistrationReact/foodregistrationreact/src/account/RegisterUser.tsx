@@ -133,7 +133,7 @@ const RegisterUser: React.FC = () => {
         </Col>
       </Row>
     </Container>
-    <Footer position="absolute" /> 
+    <Footer/> 
     </>
   );
 };

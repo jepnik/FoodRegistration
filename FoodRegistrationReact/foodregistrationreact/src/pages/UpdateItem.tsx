@@ -112,7 +112,7 @@ const UpdateItem: React.FC = () => {
       }
     });
 
-    // Validation: Sum of Saturated Fat and Unsaturated Fat Equals Fat
+    // Validation: Sum of saturated fat and unsaturated fat equals Fat
     const saturatedFat = formData?.saturatedfat;
     const unsaturatedFat = formData?.unsaturatedfat;
     const totalFat = formData?.fat;
@@ -123,6 +123,7 @@ const UpdateItem: React.FC = () => {
       typeof totalFat === 'number'
     ) {
       const calculatedFat = saturatedFat + unsaturatedFat;
+     
       // Allow a small margin for floating-point arithmetic
       if (Math.abs(calculatedFat - totalFat) > 0.0001) {
         newErrors.saturatedfat = 'Sum of Saturated Fat and Unsaturated Fat must equal Fat.';
