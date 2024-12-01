@@ -15,7 +15,8 @@ public static class DBInit
         //Ensures the database is created if it doesn't already exist
         context.Database.EnsureCreated();
 
-        if (!context.Items.Any())   //Check if data already exists
+        //Check if data already exists
+        if (!context.Items.Any())   
         {
             var items = new List<Item>
             {
@@ -113,7 +114,9 @@ public static class DBInit
             context.SaveChanges();
         }
     }
-    private static string HashPassword(string password) //Method for hashing password. Using SHA256 because it's quick and we're not using ASP.NET Core Identity
+
+    //Method for hashing password. Using SHA256 because it's quick and we're not using ASP.NET Core Identity
+    private static string HashPassword(string password) 
     {
         using (var sha256 = SHA256.Create())
         {
